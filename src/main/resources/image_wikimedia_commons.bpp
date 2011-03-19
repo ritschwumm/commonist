@@ -1,0 +1,28 @@
+#
+#// encoding: UTF-8
+#// in: common:Common, upload:Upload
+#
+== {{int:filedesc}} ==
+# if (!upload.description.startsWith("{{Information")) {
+{{Information
+|Description=$(common.description)
+$(upload.description)
+|Source=$(common.source)
+|Date=$(upload.date.equals("") ? common.date : upload.date)
+|Author=$(common.author)
+|Permission=$(common.permission)
+|other_versions=
+}}
+# } else {
+$(upload.description)	
+#}
+# if (upload.latitude != null && upload.longitude != null) {
+{{Location dec|$(upload.latitude)|$(upload.longitude)|}}
+# }
+# else if (!upload.coordinates.equals("")) {
+$(upload.coordinates)
+# }
+== {{int:license}} ==
+$(common.licenseTemplate)
+$(common.categories)
+$(upload.categories)

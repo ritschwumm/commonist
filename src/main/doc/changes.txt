@@ -1,0 +1,626 @@
+0.4.27
+	change		one requester per upload to display mutliple warnings at once
+				if necessary
+	unfeature	removed broken translations except en and de,
+				these may be re-added some day
+	feature		displays upload warnings in the requester and the gallery
+	change		moved out API into an own project scmw
+	change		included source jars for libraries
+	
+0.4.26	06dec10
+	bugfix		api.php changed the format of it's sessionkey which broke
+				overwriting files
+	bugfix		commonist.bat was broken
+
+0.4.25	30nov10
+	bugfix		next/previous links in image_default.bpp did not contain
+				a leading colon
+	bugfix		reading EXIF data sometimes failed with an IOException
+	feature		the settings directory is now configurable by setting the
+				java VM's system property "commonist.settings"
+
+0.4.24	28nov10
+	bugfix		the exif date was formatted to a 12 hour clock instead of a
+				24 hour clock
+
+0.4.23	20nov10
+	change		date and time are read from EXIF data now, not only the date
+	change		upgraded to scala-2.8.1
+
+0.4.22	12oct10
+	bugfix		0.4.21 broke JRE 1.5 compatibility
+	change		moved the permission field from image to general settings.
+				attention: in custom image description templates,
+				$(upload.permission) has to be replaced with 
+				$(common.permission)
+
+0.4.21	11oct10
+	change		added ml (malayalam) to the wiki list
+	change		added {{GFDL-1.2}} and {{PD-USGov-Military}} to the licenses
+	
+0.4.20	17sep10
+	bugfix		GPS coordinates with 4 rational numbers instead of 3 could 
+				not be parsed
+	feature		image date is take from the EXIF tags DateTimeOriginal or
+				DateTimeDigitized or DateTime instead of from DateTime  alone 
+	feature		the exif tag ImageDescription is now used to fill the
+				description field
+
+0.4.19	06sep10
+	bugfix		a typo in messages_es.properties made the commonist
+				unusable on spanish systems
+
+0.4.18	11aug10
+	feature		in addition to preconfigured licenses, a license template
+				can now be entered manually
+	change		categories are now separated with a newline in the image
+				template
+	change		started migration to sbt, split distribution into
+				binary and sourcecode variant. zip files do not contain
+				a top-level directory.
+
+0.4.17	23jul10
+	bugfix		0.4.16 was dry-running and not uploading any files at all	
+
+0.4.16	23jul10
+	feature		allow raw markup in the coordinates field of an image
+	
+0.4.15	03jun10
+	feature		duplicate and duplicate-archive warnings can be ignored
+				now, too
+	change		added {{int:filedesc}} and {{int:license}} to image
+				description pages on wikimedia commons
+
+0.4.14	29may10
+	bugfix		really updated to scala-2.8.0.RC3
+
+0.4.13	28may10
+	change		updated to scala-2.8.0.RC3
+	change		added license {{PD-GDR stamps}}
+	
+0.4.12	19may10
+	feature		TAB and shift-TAB can now be used to move the focus over
+				multiline textareas, too. additionally all data for one 
+				image become visible when one of its text fields gains
+				focus.
+				
+0.4.11	14may10
+	feature		the gallery text is stored in a file "gallery.txt" in the
+				settings directory after upload
+	feature		the license combobox has a tooltip with the full text now		
+	feature		added upload success indicator for files
+	change		ported to scala-2.8.0.RC2
+	
+0.4.10	05may10
+	bugfix		reading GPS coordinates from EXIF failed for
+				non-terminating decimals
+				
+0.4.9	04may10
+	feature		GPS coordinates can now be edited in the GUI
+				as a comma-separated pair of decimal values
+	change		upload.latitude and upload.longitude within templates
+				are now null instead of "" if no coordinates are
+				available
+
+0.4.8	02may10
+	bugfix		loading licenses and templates from the settings directory
+				did not work
+	feature		added {{PD-GermanGov}} to licenses.txt
+
+0.4.7	28apr10
+	feature		every site can have a different template now. 
+				image_commons.bpp is now image_wikimedia_commons.bpp
+				gallery_commons.bpp is now gallery_wikimedia_commons.bpp
+				to make them fit into the new naming scheme
+	bugfix		having a german umlaut in a template file lead to an OOME
+				because of a bug in minibpp
+	
+0.4.6	27apr10
+	change		filename mangling was much too restrictive
+	bugfix		made bin/commonist symlink-aware
+
+0.4.5	25apr10
+	bugfix		the JSON parser produced a stack overflow
+	change		removes leading and trailing blanks in input fields
+	feature		added the version number to the window title and the
+				gallery edit summary
+	change		added a template variable upload.name for the file name
+				without a namespace prefix
+	bugfix		overwriting an existing file didn't update the description
+
+0.4.4	24apr10
+	feature		added GPS data from EXIF, not editable in the GUI yet
+	change		improved filename preset mangling: all illegal chars are 
+				replaced with '-', multiple consecutive spaces are reduced 
+				to a single one
+
+0.4.3	22apr10
+	feature		added a date field to individual files overriding the common
+				date if not empty. the date field is preset from EXIF
+				data if available. image templates have changed to include 
+				the new upload.date
+
+0.4.2	21apr10
+	bugfix		wouldn't start with a corrupted thumbnails.txt
+	feature		permission has an own editor now
+	change		in the default template the batch section and the description
+				section have been swapped
+	feature		added support for wikisource:ar
+
+0.4.1	18apr10
+	bugfix		used the wrong template for image description pages on commons
+	change		uploaded images are now automatically watched
+	change		displays an uploaded file's name instead of its full path in 
+				the progress bar
+
+0.4.0	17apr10
+	rewrite		rewritten in scala
+	change		uses api.php instead of mwapi.jar so mediawiki < 1.16 is no 
+				longer supported. 
+	feature		supporting a new wiki is reduced to adding a single line to 
+				etc/wikis.txt
+	change		image- and gallery-templates in in etc/*.bpp have changed.
+				own templates need to be adapted.
+	change		etc/startup.bsh is no longer supported.
+--------------------------------------------------------------------------------
+0.3.43
+	bugfix		templates used TextUtil which had been renamed to TextUtil2
+
+0.3.42
+	change		updated jarfiles signature
+	change		not choosing any license is no longer possible
+	bugfix		opening images in full size via mouse-click on the 
+				thumbnail did not work any more
+
+0.3.41
+	change		updated etc/licenses.txt from 
+				[[Commons:Tools/Commonist/licenses.txt]]
+	change		updated to mwapi-0.7.30 containing updated sitefiles for
+				a lot of wikimedia wikis
+				
+0.3.40
+	change		updated to mwapi-0.7.29 containing an updated sitefile 
+				for fotowiki 
+
+0.3.39
+	change		updated to mwapi-0.7.28 containing updated sitefiles for 
+				wikibooks:fr, wikibooks:pl, wikinews:fr, wikipedia:da, 
+				wikipedia:fr, wikipedia:zh, wikiquote:fr, wikisource:fr, 
+				wiktionary:es and wiktionary:fr and adding support for
+				wikia's fotowiki
+
+0.3.38
+	change		updated localization from translatewiki.net
+
+0.3.37
+	change		updated to mwapi-0.7.27 containing updated sitefiles for all 
+				wikimedia sites and a workaround for
+				http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6746185
+
+0.3.36
+	bugfix		added fallback to messages.properties for incomplete 
+				translations
+
+0.3.35
+	change		added message_*.properties from betawiki, see
+				http://translatewiki.net/wiki/Translating:Commonist
+	change		fullscreen images are opened on LMB klick in the thumbnail only
+
+0.3.34
+	change		updated to mwapi-0.7.26 containing a workaround for 
+				http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6746185
+				
+0.3.33
+	feature		added a script using retroweaver to make a commonist version
+				working with JDK 1.4
+	change		updated to mwapi-0.7.25 which renamed the Image-namespace to File
+				and contains new sitefiles for most wikimedia projects
+	
+0.3.32
+	feature		better layout for big displays, made the thumbnail size 
+				configurable in the settings.properties	as property 
+				thumbnails.maxSize
+	change		updated to mwapi-0.7.24 containing updated sitefiles for all 
+				wikimedia sites and additionally supporting wikipedia:hu
+	
+0.3.31
+	change		updated to mwapi-0.7.23 containing updated sitefiles for all 
+				wikimedia sites
+			
+0.3.30
+	change		created a new snakeoil certificate for webstart 
+	change		updated to mwapi-0.7.22 containing updated sitefiles for all 
+				wikimedia sites and uncyclopedia
+	bugfix		updated the Info.plist for the mac-dist target
+	
+0.3.29
+	change		updated to mwapi-0.7.21 using jericho-html-2.6 and containing
+				new sitefiles for all wikimedia 
+
+0.3.28
+	change		does no longer log out after upload. this sucked with SUL.
+
+0.3.27
+	change		updated to mwapi-0.7.20 fixing login problems
+
+0.3.26
+	change		updated to mwapi-0.7.19 fixing login problems
+
+0.3.25
+	change		updated to mwapi-0.7.18 with new sitefiles for all wikimedia
+				wikis
+
+0.3.24
+	change		updated to mwapi-0.7.17 with new sitefiles for all wikimedia
+				wikis and uncyclopedia
+	
+0.3.23
+	change		updated to mwapi-0.7.16 with new sitefiles for all wikimedia
+				wikis and a bugfix for overwriting images
+	change		tries a logout after uploading files
+	
+0.3.22
+	change		updated to mwapi-0.7.15 with new sitefiles for all wikimedia 
+				wikis
+
+0.3.21
+	change		added the number of errors to the edit summary for the gallery 
+				page
+	change		updated to mwapi-0.7.14 with new sitefiles for uncyclopedia 
+				and all wikimedia wikis
+	
+0.3.20
+	change		updated to mwapi-0.7.13 with new sitefiles for all wikimedia 
+				sites
+	change		added predefined licenses {{cc-by-sa-3.0}} and {{cc-by-3.0}}
+
+0.3.19
+	change		updated to mwapi-0.7.12 with new sitefiles for all wikimedia 
+				sites
+
+0.3.18
+	change		updated to mwapi-0.7.11 with new sitefiles for all wikimedia 
+				sites
+
+0.3.17
+	change		added a hack uppercasing the first letter of every file name
+	change		updated to mwapi-0.7.10 with new sitefiles for all wikimedia 
+				sites
+
+0.3.16
+	change		updated to mwapi-0.7.9 with new sitefiles for all wikimedia 
+				sites
+	
+0.3.15
+	change		updated to mwapi-0.7.8 with new namespaces for wikisource:sv
+	
+0.3.14
+	change		updated to mwapi-0.7.7 using jericho-html-2.5.jar and 
+				commons-httpclient-3.1.jar
+0.3.13
+	change		updated to mwapi-0.7.6 with new sitefiles for all wikimedia 
+				sites
+	
+0.3.12
+	change		updated to mwapi-0.7.5. if you have own sitefiles you should 
+				add the messages uploadcorrupt and uploaddisabled.
+	change		improved javadoc comments on classes
+	
+0.3.11
+	change		updated to mwapi-0.7.4 with new sitefiles
+	change		klicking the upload button without any images selected
+				will no longer create a gallery page on the server
+
+0.3.10
+	bugfix		unexpected HTML is no longer put on the gallery page
+	change		updated to mwapi-0.7.3 with new sitefiles
+	
+0.3.9
+	change		updated to mwapi-0.7.1 with more core reworks
+
+0.3.8
+	change		removed the borders around file and image
+	change		updated to mwapi-0.7.0 with new sitefiles and major code
+				reworks
+
+0.3.7
+	change		updated to mwapi-0.6.7 with new sitefiles for wikibooks:sv, 
+				wikinews:sv, wikipedia:sv, wikiquote:de, wikiquote:sv, 
+				wikisource:sv, wiktionary:it and wiktionary:sv
+
+0.3.6
+	feature		updated to mwapi-0.6.6 which adds support for wikipedia:no
+				and has updated sitefiles for wikibooks:nl and wikisource:sv
+	
+0.3.5
+	change		updated to mwapi-0.6.5 with support for mediawiki 
+				(www.mediawiki.org) and new sitefiles for wikipedia:da and
+				wikipedia:pl
+
+0.3.4
+	change		updated to mwapi-0.6.4 with new sitefiles for wikibooks:en, 
+				wikinews:ja, wikipedia:da, wikipedia:es, wikipedia:fi and 
+				wiktionary:sv
+				
+0.3.3
+	change		updated to mwapi-0.6.3 with new sitefiles for wikibooks:nl, 
+				wikinews:nl, wikipedia:nl, wikiquote:nl wikisource:nl and
+				wiktionary:nl
+
+0.3.2
+	change		updated to mwapi-0.6.2 with new sitefiles for all wikimedia
+				sites
+
+0.3.1
+	change		updated to mwapi-0.6.1 fixing the problem that the	badfiletype
+				message no longer exists. contains extended sitefiles
+
+0.3.0
+	bugfix		the image description textarea no longer grows when the texts 
+				gets too long to be displayed completely 
+	change		needs JDK 1.5 now
+	change		updated to mwapi-0.6.0 with new sitefiles
+--------------------------------------------------------------------------------
+0.2.16
+	change		hacked gallery_commons.bpp and image_commons.bpp to avoid
+				problems when a user uses an information-template as
+				image description
+	change		split gallery-template gallery.bpp into gallery_commons.bpp
+				and gallery_default.bpp
+
+0.2.15
+	change		updated to mwapi-0.5.1 with new sitefiles
+	feature		added slovak localization made by commons:User:Helix84 (thanks!)
+
+0.2.14
+	change		updated to mwapi-0.5.0 with specialPage-names in the sitefiles.
+				please update all your hand-written ones. in case you don't 
+				have the newest mediawiki, copying the specialPage-section 
+				from wikipedia_en.site should suffice.
+
+0.2.13
+	change		updated to mwapi-0.4.5 with updated sitefiles for 
+				wikipedia:da, wikibooks:en, wikiversity:de, uncyclopedia, 
+				wikipedia:fi and wikiquote:fr
+
+0.2.12
+	change		updated to mwapi-0.4.4 with updated sitefiles for wikibooks:sv,
+				wikinews:sv, wikipedia:sv, wikiquote:sv, wikisource:sv and 
+				wiktionary:sv, wikipedia:pt and wikisource:pt, wikipedia:fr 
+				and wikinews:fr, wikpiedia:da and wikipedia:en. 
+
+0.2.11
+	bugfix		updated to mwapi-0.4.3, setupProxy did not work on JDK 1.4
+
+0.2.10
+	feature		with mwapi-0.4.2 the environment variable $http_proxy
+				is honored when http.proxyHost and http.proxyPort are
+				not set
+	bugfix		with mwapi-0.4.2 using a proxy should work again
+	change		updated to mwapi-0.4.2 with new sitefiles for wikibooks:fr, 
+				wikipedia:it, wikiquote:pl, wikisource:pl and wikisource:pt
+	change		updated sitefiles for  wikibooks:fr, wikipedia:it, wikiquote:pl, 
+				wikisource:pl and  wikisource:pt
+	bugfix		typo in the german locale (arnomane)
+	change		removes spaces from the ends of filenames (arnomane)
+
+0.2.9
+	change		updated to mwapi-0.4.1 which includes support for 
+				wikiversity:en and wikiversity:de and has changed sitefiles
+				for wikisource:fr, meta, wikinews:it and wikinews:pt
+	
+0.2.8
+	change		updated to mwapi-0.4.0 which includes support for 
+				many more language-versions of wikimedia projects
+
+0.2.7
+	change		changed the template logic so everything about
+				an upload is contained in a single object now
+	change		the image description templates can now access
+				the previous and next upload 
+	change		updated to mwapi-0.3.6 with new block parameters 
+				which depends on jericho-html-2.2
+
+0.2.6
+	change		failed uploads are now added to the gallery, too
+
+0.2.5
+	change		updated to mwapi-0.3.5 with updated languagefiles for all
+				wikimedia projects
+
+0.2.4
+	change		uses minibpp-templated for image description pages now
+	feature		Jo�l Brogniart provided a french localization, thanks! 
+	feature		can load additional family descriptors from 
+				$HOME/.commonist/family
+	change		gets lib-util from mwapi now
+	change		updated to mwapi-0.3.1 with updated languagefiles for
+				wikipedia:ia, wikipedia:sl and uncyclopedia
+
+0.2.3
+	change		licenses are configured in licenses.txt instead of startup.bsh
+	change		updated to mwapi-0.3.3 with a new languagefile for wikipedia:he
+	change		the commonist is completely written in java now
+	bugfix		the system properties http.proxyHost, http.proxyPort and
+				http.nonProxyHosts were not read as the should
+
+0.2.2
+	workaround	removed window icons to stuff the memleak described in
+				http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6317336
+	change		thumbnail rendering is quite a bit faster now
+	bugfix		renders thumbs for more types of image now
+	change		doesn't ask for A:\ at startup on windows any more, i hope		
+	change		ported much of the code to java to shorten the startup time
+	change		updated to mwapi-0.3.2 with another little bit different
+				*.site-file format and languagefile for wikipedia:ca and 
+				wikipedia:zh. if you have custom *.site-files, copy the new
+				lines from commons.site 
+
+0.2.1
+	change		switched to mwapi-0.3.1 with different config files, 
+				if you have configured own wikis,  you'll have to 
+				write new *.family and *.site files
+	change		renamed configuration.bsh to startup.bsh
+	change		renamed locale_xxx.properties to messages_xxx.properties
+
+0.2.0
+	bugfix		errors in the gallery lacked the image-namespace prefix
+	feature		honors the JDK system properties for proxy settings
+	feature		added a german translation of all UI texts
+	feature		added a confirmation dialog so existing and previously
+				deleted files can be uploaded after the user acknowledged
+	change		configuration takes place in etc/configuration.bsh now.
+				this file contains license-templates and example code for
+				using a proxy, http basic authentication untrusted SSL-servers
+	change		switched to mwapi-0.3.0 implemented in pure java and uses 
+				commons-httpclient-3.0
+--------------------------------------------------------------------------------
+0.1.18
+	change		replaced the permission template in [[Template:Information]] 
+				with its textual representation; the permission template itself
+				is now appended after [[Template:Information]]. 
+				thanks to [[commons:User:JVinocur]] for the patch.  
+
+0.1.17
+	change		updated to mwapi-0.2.17 with new languagefiles for wikibooks:de 
+				and wikipedia:he
+
+0.1.16
+	bugfix		updated to mwapi-0.2.16: failed uploads did not work correctly
+	
+0.1.15
+	change		[[Template:Information]] is used on commons only now,
+				other wikis use the handmade template again
+	feature		uploaded images are added to the watchlist now
+	change		updated to mwapi-0.2.15
+
+0.1.14
+	change		better textes
+	change		removed global versions field which was useless and did not work
+	bugfix		image textfields were not cleared when changing the directory
+
+0.1.13
+	feature		added textfield for source, date and other versions
+	feature		uses [[commons:Template:Information]] now
+
+0.1.12
+	change		updated to mwapi-0.2.14 with new languagefiles for 
+				wikipedia:sv, wikipedia:sl, wikipedia:ro, wikipedia:ja, 
+				wikipedia:hr and uncyclopedia
+0.1.11
+	feature		the format of the image page is more readable now
+	bugfix		removes linefeeds from galleries which broke the display
+
+0.1.10
+	change		updated to mwapi-0.2.13 with updated languagefiles for 
+				wiktionary:de, wikipedia:nl, wikipedia:ar and uncyclopedia
+
+0.1.9
+	change		updated to mwapi-0.2.10:
+				[[MediaWiki:page]] does work now, [[Commons:Test]] (the namespace)
+				however does not. includes updated languagefiles.
+
+0.1.8
+	change		updated to mwapi-0.2.8: fresh languagefiles
+
+0.1.7
+	feature		provides all categories from [[commons:Mediawiki:Licenses]]
+	feature		additionally, an empty license is possible
+	change		swapped author and description
+
+0.1.6
+	change		updated to mwapi-0.2.7: loading fresh pages works again
+	change		updated to mwapi-0.2.6: smushTitle bugfix
+
+0.1.5
+	change		updated to mwapi-0.2.5
+
+0.1.4
+	change		common description is now multiline
+	change		updated to mwapi-0.2.4
+
+0.1.3
+	change		updated to mwapi-0.2.3
+	
+0.1.2
+	bugfix		full size image view did not work on java 1.4
+	change		updated to mwapi-0.2.3
+	
+0.1.1
+	change		the imageList scrolls to whole images now
+	change		converted more classes to java
+	
+0.1.0
+	feature		the GUI is and feels a lot faster now
+	feature		caches all thumbnails in $HOME/.commonist/cache now 
+	change		settings are stored in $HOME/.commonist/settings.properties now
+	change		updated to mwapi-0.2.2
+	feature		clicking on a thumbnail opens the image in its original size now
+--------------------------------------------------------------------------------
+0.0.15
+	change		updated to mwapi-0.2.1
+
+0.0.14
+	change		removed support for wikidev
+	bugfix		updated to mwapi-0.2.0 so you can change the UI language now
+				without breaking the program
+
+0.0.13
+	bugfix		recognizes forbidden file types in the upload
+	change		updated to mwapi-0.1.8 with new languagefiles and bugfixes
+
+0.0.12
+	bugfix		did not work with java 1.4 any more
+	feature		caches its thumbnails in a directory names .commonist-thumbs
+	change		updated to mwapi-0.1.7
+
+0.0.11
+	change		more code cleanups, faster updates on directory changes
+	change		updated to mwapi-0.1.6 with language-split wikisource
+
+0.0.10
+	change		updated to mwapi-0.1.5 which has support the uncyclopedia
+
+0.0.9
+	feature		compiling a mac os x application with ant app works now (on a mac)
+	change		new galleries are added at the top now instead of the bottom
+	change		more code cleanups
+
+0.0.8
+	change		code cleanups
+	change		added a icon
+	change		uses a gallery tag now
+	bugfix		inserted unnamed category tags before
+
+0.0.7
+	feature		the last visited directory is persistent now
+	change		updated to mwapi-0.1.4
+
+0.0.6
+	change		updated to mwapi-0.1.3
+	feature		common data fields are persisted now
+	feature		adds all images uploaded on a /gallery page
+	feature		added a categories field for every file
+	change		features are now separated with '|' instead of ',' (comma)
+
+0.0.5
+	feature		upload progress is now displayed in the progress bar
+	change		updated to mwapi-0.1.2 to enable upload progress measuring
+	feature		access to all a lot of mediawiki sites instead of just commons
+	change		better text formatting
+
+0.0.4
+	change		updated to mwapi-0.1.1 to fix character encoding problems in
+				filenames
+
+0.0.3
+	bugfix		thumbs are no longer stretched when only a few are displayed
+	change		updated to mwapi-0.1.0 which loads pages quite a bit faster
+				and contains bugfixes for mediawiki 1.6alpha support 
+
+0.0.2
+	change		mediawiki 1.6alpha is supported now wie mwapi-0.0.10
+	change		multi-rooted systems like windows are properly supported now
+
+0.0.1
+	initial release

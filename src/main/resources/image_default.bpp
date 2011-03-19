@@ -1,0 +1,47 @@
+#
+#// encoding: UTF-8
+#// in: common:Common, upload:Upload
+#
+# if (upload.previous != null) {
+[[:$(upload.previous)|&lt;&lt;&lt;]]
+# } else {
+&lt;&lt;&lt;
+#}
+# if (upload.next != null) {
+[[:$(upload.next)|&gt;&gt;&gt;]]
+# } else {
+&gt;&gt;&gt;
+# }
+
+== batch ==
+$(common.description)
+
+== description ==
+$(upload.description)
+
+== source ==
+$(common.source)
+
+== date ==
+$(upload.date.equals("") ? common.date : upload.date)
+
+== author ==
+$(common.author)
+
+== permission ==
+$(common.permission)
+
+== license ==
+$(common.licenseDescription)
+$(common.licenseTemplate)
+
+# // see http://microformats.org/wiki/geo
+# if (upload.latitude != null && upload.longitude!= null) {
+<div class="geo">
+	<span class="latitude">$(upload.latitude)</span>, 
+	<span class="longitude">$(upload.longitude)</span>
+</div>
+# }
+
+$(common.categories)
+$(upload.categories)

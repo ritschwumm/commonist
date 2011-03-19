@@ -1,0 +1,66 @@
+# ATTENTION: this file is UTF-8 encoded
+# see http://commons.wikimedia.org/wiki/Commons:Copyright_tags
+
+# unknown
+{{subst:nld}}							I don't know what the license is
+
+# Your own work (best practices)
+{{self|GFDL|cc-by-sa-3.0,2.5,2.0,1.0}}	Own work, copyleft: Multi-license with GFDL and Creative Commons CC-BY-SA-3.0 and older versions (2.5, 2.0 and 1.0)
+{{self|GFDL|cc-by-3.0}}					Own work, attribution required (Multi-license with GFDL and Creative Commons CC-BY 3.0)
+{{self|cc-by-sa-3.0}}					Own work, share alike, attribution required (Creative Commons CC-BY-SA-3.0)
+{{PD-self}}								Own work, all rights released (Public domain)
+
+# Free licenses:
+
+## GNU Licenses:
+{{GFDL}}								GNU Free Documentation License
+{{GFDL-1.2}} 							for works released under the GNU Free Documentation License version 1.2 specifically.
+{{GFDL-en}}								GFDL content from English Wikipedia
+{{GFDL-OpenGeoDB}}						GFDL images from http://opengeodb.de
+{{GPL}}									GNU General Public License
+{{LGPL}}								GNU Lesser General Public License
+
+## Creative Commons licenses:
+{{cc-by-sa-3.0}}						Creative Commons Attribution ShareAlike 3.0
+{{cc-by-sa-2.5}}						Creative Commons Attribution ShareAlike 2.5
+{{cc-by-sa-2.0}}						Creative Commons Attribution ShareAlike 2.0
+{{cc-by-sa-1.0}}						Creative Commons Attribution ShareAlike 1.0
+{{cc-by-3.0}}							Creative Commons Attribution 3.0
+{{cc-by-2.5}}							Creative Commons Attribution 2.5
+{{cc-by-2.0}}							Creative Commons Attribution 2.0
+{{cc-by-1.0}}							Creative Commons Attribution 1.0
+{{cc-sa-1.0}}							Creative Commons ShareAlike 1.0
+
+# Public Domain / not copyrighted:
+{{Copyrighted free use}}				Copyrighted but use of the file for any purpose is allowed
+{{PD-old}}								Author died more than 70 years ago - public domain
+{{PD-Art}}								Reproduction of a painting that is in the public domain because of its age
+{{PD-AR-Photo}}							Argentina's Law 11723 for all photographic works 25 years after their first publication
+{{PD-GDR stamps}} 						For German stamps released as Deutsche Post der DDR.
+{{PD-GermanGov}}						For public domain images from Germany statutes or other regulations
+{{PD-US}}								First published in the United States before 1923 - public domain
+{{PD-USGov}}							Original work of the US Federal Government - public domain
+{{PD-USGov-Military}}					For public domain images from the US military or Department of Defense 
+{{PD-USGov-NASA}}						Original work of NASA - public domain
+{{PD-Soviet}}							Work published in the Soviet Union before May 27, 1973 - public domain
+{{PD}}									Public domain (generic - please give a reason in the description field!)
+{{patent}}								Patent material - public domain
+
+# Non-free licenses:
+{{Copyright by Wikimedia}}				Wikimedia logos
+
+## OLD
+#{{self2|GFDL|cc-by-sa-2.5,2.0,1.0}}	Own work, copyleft: Multi-license with GFDL and Creative Commons CC-BY-SA-2.5 and older versions (2.0 and 1.0)
+#{{self2|GFDL|cc-by-2.5}}			Own work, attribution required (Multi-license with GFDL and Creative Commons CC-BY 2.5)
+#{{self|cc-by-sa-2.5}}				Own work, share alike, attribution required (Creative Commons CC-BY-SA-2.5)
+#{{Self GFDL and cc-by-sa-2.5,2.0,1.0}} - Selfmade, dual license
+#{{cc-by-sa-2.5}} - Attribution-Sharealike 2.5
+#{{cc-by-2.5}} - Attribution 2.5
+#{{cc-sa-1.0}} - ShareAlike 1.0
+#{{GFDL}} - GNU Free Documentation License
+#{{PD}} - Public domain
+#{{PD-self}} - Own work donated to public domain / all rights released
+#{{PD-USGov-NASA}} - Original work of NASA - public domain
+#{{PD-USGov}} - Original work of the US Federal Government - public domain
+#{{CopyrightByWikimedia}} - Copyright by Wikimedia
+#{{Copyrighted}} - Copyrighted

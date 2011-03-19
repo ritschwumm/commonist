@@ -1,0 +1,19 @@
+#
+#// encoding: UTF-8
+#// in: common:Common, batch:Batch
+#
+== $(new Date().toString()) ==
+#if (!batch.failures.empty) {
+=== errors ===
+#for (var upload : batch.failures) {
+*[[:$(upload.title)]] $(upload.error)
+#}
+
+#}
+#if (!batch.uploads.empty) {
+<gallery>
+#for (var upload : batch.uploads) {
+$(upload.title)|$(upload.description.replaceAll("\n", " "))
+#}
+</gallery>
+#}

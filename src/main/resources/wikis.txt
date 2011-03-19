@@ -1,0 +1,104 @@
+# other
+kamelopedia		_			http://kamelopedia.mormo.org/api.php
+mediawiki		_			http://www.mediawiki.org/w/api.php
+
+# wikia
+# wikia is still using mediawiki 1.15
+#wikia		foto			http://foto.wikia.com/api.php
+#wikia		uncyclopedia	http://uncyclopedia.wikia.com/api.php
+
+# wikimedia
+wikimedia	commons			http://commons.wikimedia.org/w/api.php
+wikimedia	meta			http://meta.wikimedia.org/w/api.php
+
+# wikibooks
+wikibooks	de				http://de.wikibooks.org/w/api.php
+wikibooks	en				http://en.wikibooks.org/w/api.php
+wikibooks	es				http://es.wikibooks.org/w/api.php
+wikibooks	fr				http://fr.wikibooks.org/w/api.php
+wikibooks	it				http://it.wikibooks.org/w/api.php
+wikibooks	ja				http://ja.wikibooks.org/w/api.php
+wikibooks	nl				http://nl.wikibooks.org/w/api.php
+wikibooks	pl				http://pl.wikibooks.org/w/api.php
+wikibooks	pt				http://pt.wikibooks.org/w/api.php
+wikibooks	sv				http://sv.wikibooks.org/w/api.php
+
+# wikinews
+wikinews	de				http://de.wikinews.org/w/api.php
+wikinews	en				http://en.wikinews.org/w/api.php
+wikinews	es				http://es.wikinews.org/w/api.php
+wikinews	fr				http://fr.wikinews.org/w/api.php
+wikinews	it				http://it.wikinews.org/w/api.php
+wikinews	ja				http://ja.wikinews.org/w/api.php
+wikinews	nl				http://nl.wikinews.org/w/api.php
+wikinews	pl				http://pl.wikinews.org/w/api.php
+wikinews	pt				http://pt.wikinews.org/w/api.php
+wikinews	sv				http://sv.wikinews.org/w/api.php
+
+# wikipedia
+wikipedia	ar				http://ar.wikipedia.org/w/api.php
+wikipedia	ca				http://ca.wikipedia.org/w/api.php
+wikipedia	da				http://da.wikipedia.org/w/api.php
+wikipedia	de				http://de.wikipedia.org/w/api.php
+wikipedia	en				http://en.wikipedia.org/w/api.php
+wikipedia	eo				http://eo.wikipedia.org/w/api.php
+wikipedia	es				http://es.wikipedia.org/w/api.php
+wikipedia	et				http://et.wikipedia.org/w/api.php
+wikipedia	fi				http://fi.wikipedia.org/w/api.php
+wikipedia	fr				http://fr.wikipedia.org/w/api.php
+wikipedia	he				http://he.wikipedia.org/w/api.php
+wikipedia	hr				http://hr.wikipedia.org/w/api.php
+wikipedia	hu				http://hu.wikipedia.org/w/api.php
+wikipedia	ia				http://ia.wikipedia.org/w/api.php
+wikipedia	it				http://it.wikipedia.org/w/api.php
+wikipedia	ja				http://ja.wikipedia.org/w/api.php
+wikipedia	ml				http://ml.wikipedia.org/w/api.php
+wikipedia	nl				http://nl.wikipedia.org/w/api.php
+wikipedia	no				http://no.wikipedia.org/w/api.php
+wikipedia	pl				http://pl.wikipedia.org/w/api.php
+wikipedia	pt				http://pt.wikipedia.org/w/api.php
+wikipedia	ro				http://ro.wikipedia.org/w/api.php
+wikipedia	sl				http://sl.wikipedia.org/w/api.php
+wikipedia	sv				http://sv.wikipedia.org/w/api.php
+wikipedia	zh				http://zh.wikipedia.org/w/api.php
+
+# wikiquote
+wikiquote	de				http://de.wikiquote.org/w/api.php
+wikiquote	en				http://en.wikiquote.org/w/api.php
+wikiquote	es				http://es.wikiquote.org/w/api.php
+wikiquote	fr				http://fr.wikiquote.org/w/api.php
+wikiquote	it				http://it.wikiquote.org/w/api.php
+wikiquote	ja				http://ja.wikiquote.org/w/api.php
+wikiquote	nl				http://nl.wikiquote.org/w/api.php
+wikiquote	pl				http://pl.wikiquote.org/w/api.php
+wikiquote	pt				http://pt.wikiquote.org/w/api.php
+wikiquote	sv				http://sv.wikiquote.org/w/api.php
+
+# wikisource
+wikisource	ar				http://ar.wikisource.org/w/api.php
+wikisource	de				http://de.wikisource.org/w/api.php
+wikisource	en				http://en.wikisource.org/w/api.php
+wikisource	es				http://es.wikisource.org/w/api.php
+wikisource	fr				http://fr.wikisource.org/w/api.php
+wikisource	it				http://it.wikisource.org/w/api.php
+wikisource	ja				http://ja.wikisource.org/w/api.php
+wikisource	nl				http://nl.wikisource.org/w/api.php
+wikisource	pl				http://pl.wikisource.org/w/api.php
+wikisource	pt				http://pt.wikisource.org/w/api.php
+wikisource	sv				http://sv.wikisource.org/w/api.php
+
+# wikiversity
+wikiversity	de				http://de.wikiversity.org/w/api.php
+wikiversity	en				http://en.wikiversity.org/w/api.php
+
+# wiktionary
+wiktionary	de				http://de.wiktionary.org/w/api.php
+wiktionary	en				http://en.wiktionary.org/w/api.php
+wiktionary	es				http://es.wiktionary.org/w/api.php
+wiktionary	fr				http://fr.wiktionary.org/w/api.php
+wiktionary	it				http://it.wiktionary.org/w/api.php
+wiktionary	ja				http://ja.wiktionary.org/w/api.php
+wiktionary	nl				http://nl.wiktionary.org/w/api.php
+wiktionary	pl				http://pl.wiktionary.org/w/api.php
+wiktionary	pt				http://pt.wiktionary.org/w/api.php
+wiktionary	sv				http://sv.wiktionary.org/w/api.php
