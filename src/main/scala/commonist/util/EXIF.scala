@@ -67,15 +67,15 @@ object EXIF extends Logging {
 	
 	private def getGPS(metaData:JpegImageMetadata):Option[GPS] =
 			for {
-				exif			<- metaData.getExif.nullOption
-				gpsDir			<- (exif findDirectory DIRECTORY_TYPE_GPS).nullOption
+				exif			<- metaData.getExif.guardNotNull
+				gpsDir			<- (exif findDirectory DIRECTORY_TYPE_GPS).guardNotNull
 				
-				latitudeRef		<- (gpsDir findField GPS_TAG_GPS_LATITUDE_REF).nullOption
-				latitudeVal		<- (gpsDir findField GPS_TAG_GPS_LATITUDE).nullOption
+				latitudeRef		<- (gpsDir findField GPS_TAG_GPS_LATITUDE_REF).guardNotNull
+				latitudeVal		<- (gpsDir findField GPS_TAG_GPS_LATITUDE).guardNotNull
 				latitude		<- part(latitudeVal, latitudeRef, scala.collection.immutable.Map("n" -> 1, "s" -> -1))
 				
-				longitudeRef	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE_REF).nullOption
-				longitudeVal	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE).nullOption
+				longitudeRef	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE_REF).guardNotNull
+				longitudeVal	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE).guardNotNull
 				longitude		<- part(longitudeVal, longitudeRef, scala.collection.immutable.Map("e" -> 1, "w" -> -1))
 			}
 			yield {

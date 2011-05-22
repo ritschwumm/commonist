@@ -3,9 +3,8 @@ kamelopedia		_			http://kamelopedia.mormo.org/api.php
 mediawiki		_			http://www.mediawiki.org/w/api.php
 
 # wikia
-# wikia is still using mediawiki 1.15
-#wikia		foto			http://foto.wikia.com/api.php
-#wikia		uncyclopedia	http://uncyclopedia.wikia.com/api.php
+wikia		foto			http://foto.wikia.com/api.php
+wikia		uncyclopedia	http://uncyclopedia.wikia.com/api.php
 
 # wikimedia
 wikimedia	commons			http://commons.wikimedia.org/w/api.php

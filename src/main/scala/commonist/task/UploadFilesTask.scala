@@ -5,6 +5,7 @@ import java.nio.charset.Charset
 
 import javax.swing.JOptionPane
 
+import scutil.Charsets
 import scutil.log.Logging
 import scutil.gui.SwingUtil._
 import scutil.ext.FileImplicits._
@@ -225,7 +226,7 @@ final class UploadFilesTask(
 		// backup gallery text
 		val backup	= settingsDir / "gallery.txt"
 		INFO("writing gallery to: " + backup)
-		backup toTextFile (Charset forName "UTF-8") write text
+		backup writeString (Charsets.utf_8, text)
 		
 		statusUILater indeterminate ("status.gallery.loading", "[[" + title + "]]")
 		val editResult	= api edit (title, summary, None, { oldText =>

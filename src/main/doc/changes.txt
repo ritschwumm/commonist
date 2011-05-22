@@ -1,4 +1,11 @@
-0.4.27
+0.4.28	22may11
+	bugfix		aborted when trying to ask the user to ignore non-existing 
+				problems
+	change		uses scala 2.9.0 now
+	change		requires java 1.6 now
+	feature		added startscript commonist.vmd for OS/2
+	
+0.4.27	19mar11
 	change		one requester per upload to display mutliple warnings at once
 				if necessary
 	unfeature	removed broken translations except en and de,

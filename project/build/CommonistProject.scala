@@ -1,14 +1,18 @@
 import sbt._
       
+import SbtUtil._
+
 final class CommonistProject(info:ProjectInfo) extends DefaultWebstartProject(info) {
 	// dependencies
-	val scutil	= "de.djini"	%% "scutil"	% "0.0.1"	% "compile" withSources;
-	val scjson	= "de.djini"	%% "scjson"	% "0.0.1"	% "compile" withSources;
-	val scmw	= "de.djini"	%% "scmw"	% "0.0.1"	% "compile" withSources;
+	val scutil	= "de.djini"	%% "scutil"	% "0.0.3"	% "compile"
+	val scjson	= "de.djini"	%% "scjson"	% "0.0.3"	% "compile"
+	val scmw	= "de.djini"	%% "scmw"	% "0.0.2"	% "compile"
 
 	// @see http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/WebstartOptions.html
 	
 	override def mainClass	= Some("commonist.Commonist")
+	
+	val memory	= "192m"
 	
 	// issue compiler warnings
 	override def compileOptions	= super.compileOptions ++ Seq(Unchecked)
@@ -17,24 +21,16 @@ final class CommonistProject(info:ProjectInfo) extends DefaultWebstartProject(in
 	// lazy val demo = runTask(Some("sample.Main"), testClasspath).dependsOn(testCompile) describedAs "Runs the demo."
 	 
 	//------------------------------------------------------------------------------
-	//## constants
-	
-	val utf8		= java.nio.charset.Charset forName "UTF-8"
-	val iso88591	= java.nio.charset.Charset forName "ISO-8859-1"
-	 
-	//------------------------------------------------------------------------------
 	//## version
 	
 	val versionPath	= outputPath / "version"
 	lazy val versionSource	= task {
-		val prgVersion	= version.toString
 		// val gitVersion	= (Process(Seq("git", "rev-parse", "HEAD")) !! log).trim
-		FileUtilities clean (versionPath, log)
 		FileUtilities write (
 				versionPath / "Version.scala" asFile, 
-				"package commonist; object Version { def project:String = \"" + prgVersion + "\" }",
-				utf8, 
-				 log)
+				versionCode("commonist", "Version", version.toString),
+				utf_8, 
+				log)
 		None
 	}
 	override def mainSourceRoots	= super.mainSourceRoots +++ versionPath.##
@@ -53,6 +49,7 @@ final class CommonistProject(info:ProjectInfo) extends DefaultWebstartProject(in
 		log.info("zipping src dist to " + srcDistZipPath)
 	
 		val srcDistExcludes	=
+				info.projectPath / ".git"							+++
 				info.projectPath / "build.properties"				+++
 				info.projectPath / "build.xml"						+++
 				info.projectPath / "doc"							+++
@@ -89,63 +86,79 @@ final class CommonistProject(info:ProjectInfo) extends DefaultWebstartProject(in
 		val relativeLibs		= ((binDir ##) / "lib" ** "*.jar").get
 		val unixClassPath		= relativeLibs map { _ relativePathString "/" } mkString ":"
 		val windowsClassPath	= relativeLibs map { _ relativePathString "\\" } mkString ";"
+		val os2ClassPath		= windowsClassPath
 		
 		val mainClassName	= mainClass getOrElse error("missing main class")
 	
-		val Strip	= new scala.util.matching.Regex("""^\s*\|\t(.*)$""")
-		def strip(s:String):String	= s.lines.toList flatMap { case Strip(it:String) => Some(it); case _ => None } mkString "\n"
-		def template(args:Iterable[Pair[String,String]], s:String):String	= 
-				args.toList.foldLeft(strip(s)) { case (s,(k,v)) =>
-					s replace ("{{"+k+"}}", v)
-				}
-				
 		// TODO add a parameter for -Dcommonist.settings=
 		val unixScript	= template(
 			Map(
 				"classPath"		-> unixClassPath,
-				"mainClassName"	-> mainClassName
+				"mainClassName"	-> mainClassName,
+				"memory"		-> memory
 			),
-			"""
-			|	#!/bin/bash
-			|	
-			|	# change into this script's directory
-			|	if which realpath >/dev/null; then
-			|		cd "$(dirname "$(realpath "$0")")"
-			|	elif which readlink >/dev/null; then
-			|		cur="$0"
-			|		while [ -n "$cur" ]; do
-			|			dir="$(dirname "$cur")"
-			|			[ -n "$dir" ] && cd "$dir"
-			|			cur="$(readlink "$(basename "$cur")")"
-			|		done
-			|	elif which perl >/dev/null; then
-			|		cd "$(dirname "$(echo "$0" | perl -ne 'use Cwd "abs_path";chomp;print abs_path($_) . "\n"')")"
-			|	else
-			|		cd "$(dirname "$0")"
-			|	fi
-			|	
-			|	# run the java vm
-			|	cd ..
-			|	exec java -Xmx192m -cp {{classPath}} {{mainClassName}} "$@"
-			"""
+			strip(
+				"""
+				|	#!/bin/bash
+				|	
+				|	# change into this script's directory
+				|	if which realpath >/dev/null; then
+				|		cd "$(dirname "$(realpath "$0")")"
+				|	elif which readlink >/dev/null; then
+				|		cur="$0"
+				|		while [ -n "$cur" ]; do
+				|			dir="$(dirname "$cur")"
+				|			[ -n "$dir" ] && cd "$dir"
+				|			cur="$(readlink "$(basename "$cur")")"
+				|		done
+				|	elif which perl >/dev/null; then
+				|		cd "$(dirname "$(echo "$0" | perl -ne 'use Cwd "abs_path";chomp;print abs_path($_) . "\n"')")"
+				|	else
+				|		cd "$(dirname "$0")"
+				|	fi
+				|	
+				|	# run the java vm
+				|	cd ..
+				|	exec java -Xmx{{memory}} -cp {{classPath}} {{mainClassName}} "$@"
+				"""
+			)
 		)
 		
 		val windowsScript	= template(
 			Map(
 				"classPath"		-> windowsClassPath,
-				"mainClassName"	-> mainClassName
+				"mainClassName"	-> mainClassName,
+				"memory"		-> memory
 			),
-			"""
-			|	cd /d %~dp0%
-			|	cd ..
-			|	java -Xmx192m -cp {{classPath}} {{mainClassName}}
-			"""
-		)
+			strip(
+				"""
+				|	cd /d %~dp0%
+				|	cd ..
+				|	java -Xmx{{memory}} -cp {{classPath}} {{mainClassName}}
+				"""
+			)
+		)  replace ("\n", "\r\n")
+		
+		val os2Script	= template(
+			Map(
+				"classPath"		-> os2ClassPath,
+				"mainClassName"	-> mainClassName,
+				"memory"		-> memory
+			),
+			strip(
+				"""
+				|	cd ..
+				|	java -Xmx{{memory}} -cp {{classPath}} {{mainClassName}}
+				"""
+			)
+		) replace ("\n", "\r\n")
 		
 		val unixScriptFile		= (binDistBinPath / normalizedName).asFile
 		val windowsScriptFile	= (binDistBinPath / (normalizedName + ".bat")).asFile
-		FileUtilities write	(unixScriptFile,	unixScript,		iso88591, log)
-		FileUtilities write	(windowsScriptFile,	windowsScript,	iso88591, log)
+		val os2ScriptFile		= (binDistBinPath / (normalizedName + ".cmd")).asFile
+		FileUtilities write	(unixScriptFile,	unixScript,		iso_8859_1, log)
+		FileUtilities write	(windowsScriptFile,	windowsScript,	iso_8859_1, log)
+		FileUtilities write	(os2ScriptFile,		os2Script,		iso_8859_1, log)
 		
 		// TODO useless if the zip task doesn't support it
 		/*
@@ -164,6 +177,42 @@ final class CommonistProject(info:ProjectInfo) extends DefaultWebstartProject(in
 	} dependsOn (`package`) describedAs "Creates an binary distribution."
 	
 	//------------------------------------------------------------------------------
+	//## website
+	
+	/*
+	lazy val website	= task {
+		val siteDir		= outputPath / "website"
+		
+		log.info("compiling website to to " + siteDir)
+		
+		def documents() = {
+			def document(name:String):Option[String]	= {
+				val slots	= Map(
+						"project"	-> projectName.value,
+						"version"	-> version.toString)
+				FileUtilities readString (mainSourcePath / "doc" / name asFile, utf_8, log) match {
+					case Right(text)	=> 
+						val	cooked	= template(slots, text)
+						FileUtilities write (siteDir / name asFile, cooked, utf_8, log)
+					case Left(problem)	=>
+						Some(problem)
+				}
+			}
+			document("changes.txt")	orElse
+			document("index.html")
+		}
+		def webstart() = {
+			val wsDir		= siteDir / "ws"
+			val wsFiles		= (webstartOutputDirectory ##) ** "*" get;
+			(FileUtilities copy (wsFiles, wsDir, log)).left.toOption
+		}
+		
+		documents orElse webstart
+		
+	} dependsOn (`packageBinary`) describedAs "Creates the website distribution."
+	*/
+
+	//------------------------------------------------------------------------------
 	//## webstart
 	
 	val keyStoreFile	= (info.projectPath / "etc" / "keyStore").asFile.getAbsoluteFile
@@ -172,7 +221,7 @@ final class CommonistProject(info:ProjectInfo) extends DefaultWebstartProject(in
 	val storePass		= "0xDEADBEEF"
 	val keyAlias		= "signFiles"
 	
-	lazy val genKey = task {
+	lazy val keyGen = task {
 		import Process._
 		val res	= List("keytool", "-genkey", "-alias", keyAlias, "-dname", keyDname, "-keystore", keyStoreFile.getPath, "-storePass", storePass, "-keypass", keyPass)	! log
 		if (res == 0)	None
@@ -202,7 +251,7 @@ final class CommonistProject(info:ProjectInfo) extends DefaultWebstartProject(in
 					<all-permissions/>
 				</security> 
 				<resources>
-					<j2se version="1.5+" max-heap-size="192m"/>
+					<j2se version="1.6+" max-heap-size={memory}/>
 					{ defaultElements(libraries) }
 				</resources>
 				<application-desc main-class={mainClass getOrElse error("missing main class")}/>

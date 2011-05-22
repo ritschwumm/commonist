@@ -87,7 +87,7 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 		val	text	= licenseEditor.getSelectedItem match {
 			case x:LicenseData	=> x.description
 			case x:String		=> x
-			case x				=> error("unexpected license type: " + x)
+			case x				=> sys error ("unexpected license type: " + x)
 		}
 		licenseEditor.setToolTipText(text)
 	}
@@ -160,7 +160,7 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 			licenseEditor.getSelectedItem match {
 				case x:String		=> LicenseData(x, "")
 				case x:LicenseData	=> x
-				case x				=> error("unexpected license type: " + x)
+				case x				=> sys error ("unexpected license type: " + x)
 			},
 			categoriesEditor.getText)
 	
@@ -207,7 +207,7 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 		val	licenseSel	= licenseEditor.getSelectedItem match {
 			case x:LicenseData	=> x.template
 			case x:String		=> x
-			case x				=> error("unexpected license type: " + x)
+			case x				=> sys error ("unexpected license type: " + x)
 		}
 		settings set ("licenseEditor.SelectedItem",	licenseSel)
 	}

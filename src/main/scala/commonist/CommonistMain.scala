@@ -41,7 +41,7 @@ import scutil.ext.FileImplicits._
 
 /** the main application class */
 final class CommonistMain extends Logging {
-	private val settingsProp	= (System getProperty "commonist.settings").nullOption
+	private val settingsProp	= (System getProperty "commonist.settings").guardNotNull
 	private val settingsDir		= settingsProp map { new File(_) } getOrElse (HOME / ".commonist")
 	private val etcDir			= PWD / "etc"
 	private val resourcesDir	= PWD / "src" / "main" / "resources"
@@ -141,7 +141,7 @@ final class CommonistMain extends Logging {
 	/** Action: quit the program */
 	private def doQuit() {
 		exit()
-		System.exit(0)
+		System exit 0
 	}
 	
 	private var changeDirectory	= new TaskVar[ChangeDirectoryTask]

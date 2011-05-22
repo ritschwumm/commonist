@@ -165,7 +165,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 			val cached	= directory / name
 			if (!cached.exists)	return cached
 		}
-		error("silence! i kill you!")
+		sys error "silence! i kill you!"
 	}
 
 	// TODO clone of StringUtil.randomString	

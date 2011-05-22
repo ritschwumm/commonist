@@ -23,8 +23,8 @@ final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePre
 			}
 	
 	def directoryURL(directory:File, path:String):Option[URL] =
-			new File(directory, path).existsOption map { _.toURI.toURL }
+			new File(directory, path).guardExists map { _.toURI.toURL }
 			
 	def classloaderURL(resourcePrefix:String, path:String):Option[URL] =
-			getClass getResource (resourcePrefix + path) nullOption
+			getClass getResource (resourcePrefix + path) guardNotNull
 }
