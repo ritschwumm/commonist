@@ -12,6 +12,8 @@ import javax.swing.JPanel
 import javax.swing.JSplitPane
 import javax.swing.WindowConstants
 
+import scutil.gui.CasterInstances._
+
 import commonist.util.Settings
 import commonist.util.UIUtil2
 
@@ -29,7 +31,7 @@ final class MainWindow(
 	//------------------------------------------------------------------------------
 	//## panels
 	
-	private val commonPanel	= new JPanel()
+	private val commonPanel	= new JPanel
 	commonPanel setLayout	new BorderLayout
 	commonPanel add	(commonUI,		BorderLayout.NORTH)
 	commonPanel add	(directoryUI,	BorderLayout.CENTER)
@@ -37,12 +39,12 @@ final class MainWindow(
 	private val mainSplit	= new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, commonPanel, imageListUI)
 	mainSplit.setResizeWeight(0)
 	
-	private val	uploadPanel	= new JPanel()
+	private val	uploadPanel	= new JPanel
 	uploadPanel setLayout	new BorderLayout
 	uploadPanel add	(statusUI,	BorderLayout.CENTER)
 	uploadPanel add	(uploadUI,	BorderLayout.EAST)
 	
-	private val	windowPanel	= new JPanel()
+	private val	windowPanel	= new JPanel
 	windowPanel setLayout	new BorderLayout
 	windowPanel add	(mainSplit, 	BorderLayout.CENTER)
 	windowPanel add	(uploadPanel,	BorderLayout.SOUTH)
@@ -60,11 +62,9 @@ final class MainWindow(
 	window.setLocationRelativeTo(null)
 	
 	// quit on window close 
-	window addWindowListener new WindowAdapter {
-		override def windowClosing(ev:WindowEvent) {
-			window.dispose()
-			callback.quit()
-		}
+	window onWindowClosing { _ =>
+		window.dispose()
+		callback.quit()
 	}
 	
 	/** should be called after loadProperties */

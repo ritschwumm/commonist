@@ -32,15 +32,15 @@ object EXIF extends Logging {
 	
 	def extract(file:File):EXIF = 
 			try {
-				(Sanselan getMetadata file).instanceOption[JpegImageMetadata] match {
-					case Some(meta)	=>
+				(Sanselan getMetadata file) match {
+					case meta:JpegImageMetadata	=>
 						INFO("found EXIF data", file)
 						EXIF(
 								getDocumentName(meta), 
 								getImageDescription(meta), 
 								getDate(meta),
 								getGPS(meta))
-					case None =>
+					case _ =>
 						INFO("no EXIF data found", file)
 						NONE
 				}

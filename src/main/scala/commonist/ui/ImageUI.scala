@@ -26,6 +26,7 @@ import javax.swing.ScrollPaneConstants
 import scutil.ext.OptionImplicits._
 import scutil.ext.DateImplicits._
 import scutil.gui.GridBagDSL._
+import scutil.gui.CasterInstances._
 
 import scmw._
 
@@ -115,7 +116,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	//------------------------------------------------------------------------------
 	//## layout
 	
-	setLayout(new GridBagLayout())
+	setLayout(new GridBagLayout)
 	
 	// labels and editors
 	
@@ -146,16 +147,13 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	//## wiring
 	
 	// update select status on upload checkbox changes
-	uploadEditor addActionListener new ActionListener {
-		def actionPerformed(ev:ActionEvent) { 
-			callback.updateSelectStatus() 
-		}
+	uploadEditor onActionPerformed { _ => 
+		callback.updateSelectStatus() 
 	}
 	// open full size view on click
-	imageView addMouseListener new MouseAdapter {
-		override def mouseClicked(ev:MouseEvent) {
-			// LMB only
-			if (ev.getButton != MouseEvent.BUTTON1)	return
+	imageView onMouseClicked { ev =>
+		// LMB only
+		if (ev.getButton == MouseEvent.BUTTON1)	{
 			//if (imageView.Icon != null)
 			displayFullImage()
 		}

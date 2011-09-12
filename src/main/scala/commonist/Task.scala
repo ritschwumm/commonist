@@ -18,7 +18,7 @@ final class TaskVar[T <: Task] {
 }
 
 /** base class for UI tasks */
-abstract class Task extends Logging {
+abstract class Task extends Logging { outer =>
 	class AbortedException extends Exception
 	
 	private var alive:Boolean	= false
@@ -27,7 +27,7 @@ abstract class Task extends Logging {
 	private val thread:Thread = new Thread(
 		new Runnable {
 			def run() {
-				Task.this.run()
+				outer.run()
 			}
 		}
 	)

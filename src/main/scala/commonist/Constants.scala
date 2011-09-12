@@ -4,7 +4,7 @@ import javax.swing.BorderFactory
 
 /** constants used throughout the application */
 object Constants {
-	val VERSION						= Version.project
+	val VERSION						= Reflect.version
 	val ENABLE_API_WRITE			= true	// if false the API is dry-running
 	val ENABLE_GALLERY				= true
 	

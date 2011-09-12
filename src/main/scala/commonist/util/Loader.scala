@@ -5,10 +5,8 @@ import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
 
+import scutil.Implicits._
 import scutil.log.Logging
-import scutil.ext.AnyRefImplicits._
-import scutil.ext.OptionImplicits._
-import scutil.ext.FileImplicits._
 
 /** loads resources from a set of URL-paths */
 final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePrefix:String) extends Logging {
@@ -26,5 +24,5 @@ final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePre
 			new File(directory, path).guardExists map { _.toURI.toURL }
 			
 	def classloaderURL(resourcePrefix:String, path:String):Option[URL] =
-			getClass getResource (resourcePrefix + path) guardNotNull
+			getClass resourceOption (resourcePrefix + path)
 }

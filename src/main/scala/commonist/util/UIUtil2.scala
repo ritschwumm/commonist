@@ -19,16 +19,15 @@ import javax.swing.JViewport
 import javax.swing.JComponent
 import javax.swing.KeyStroke
 
+import scutil.gui.CasterInstances._
 
 /** swing UI utility functions */
 object UIUtil2 {
 	def scrollVisibleOnFocus(focusSource:JComponent, visibleTarget:JComponent) {
-		focusSource addFocusListener new FocusAdapter {
-			override def focusGained(ev:FocusEvent) {
-				val bounds	= new Rectangle(0, 0, visibleTarget.getWidth, visibleTarget.getHeight)
-				visibleTarget scrollRectToVisible bounds
-				visibleTarget.repaint()
-			}
+		focusSource onFocusGained { _ =>
+			val bounds	= new Rectangle(0, 0, visibleTarget.getWidth, visibleTarget.getHeight)
+			visibleTarget scrollRectToVisible bounds
+			visibleTarget.repaint()
 		}
 	}
 	

@@ -28,9 +28,10 @@ import commonist.util.Messages
 import commonist.util.TextUtil2
 
 import scutil.gui.GridBagDSL._
+import scutil.gui.CasterInstances._
 
 /** displays a scrollable List of ImageUIs */
-final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel {
+final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel { outer =>
 	private val imageUIs	= new scala.collection.mutable.ListBuffer[ImageUI]
 	
 	//------------------------------------------------------------------------------
@@ -48,7 +49,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	private val	selectAllButton		= new JButton(Messages text "imageList.select.all")
 	private val	selectNoneButton	= new JButton(Messages text "imageList.select.none")
 	private val	selectFailedButton	= new JButton(Messages text "imageList.select.failed")
-	private val selectStatus		= new JLabel()
+	private val selectStatus		= new JLabel
 	
 	//------------------------------------------------------------------------------
 	//## layout
@@ -66,20 +67,14 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	//------------------------------------------------------------------------------
 	//## wiring
 	
-	selectAllButton addActionListener new ActionListener {
-		def actionPerformed(ev:ActionEvent) { 
-			selectAll() 
-		}
+	selectAllButton onActionPerformed { _ =>
+		selectAll() 
 	}
-	selectNoneButton addActionListener new ActionListener {
-		def actionPerformed(ev:ActionEvent) { 
-			selectNone() 
-		}
+	selectNoneButton onActionPerformed { _ =>
+		selectNone() 
 	}
-	selectFailedButton addActionListener new ActionListener {
-		def actionPerformed(ev:ActionEvent) { 
-			selectFailed() 
-		}
+	selectFailedButton onActionPerformed { _ =>
+		selectFailed() 
 	}
 	
 	//------------------------------------------------------------------------------
@@ -95,8 +90,8 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	
 	/** adds a File UI */
 	def add(file:File, icon:Option[Icon], thumbnailMaxSize:Int) {
-		val	imageUI	= new ImageUI(file, icon, thumbnailMaxSize, programHeading, programIcon, new ImageUICallback() {
-			def updateSelectStatus() { ImageListUI.this.updateSelectStatus() }
+		val	imageUI	= new ImageUI(file, icon, thumbnailMaxSize, programHeading, programIcon, new ImageUICallback {
+			def updateSelectStatus() {  outer.updateSelectStatus() }
 		})
 		
 		imageUIs += imageUI

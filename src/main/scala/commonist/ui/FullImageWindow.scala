@@ -46,7 +46,7 @@ object FullImageWindow extends Logging {
 /** displays a single image in full size */
 final class FullImageWindow(file:File, programHeading:String, programIcon:Image, image:Image) {
 	val icon	= new ImageIcon(image)
-	val label	= new ScrollablePicture()
+	val label	= new ScrollablePicture
 	label setHorizontalAlignment	SwingConstants.CENTER
 	label setVerticalAlignment		SwingConstants.CENTER
 	label setIcon icon

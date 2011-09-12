@@ -1,9 +1,12 @@
 A file upload tool for mediawiki using its api.php interface.
 
 To build this code, get and install SBT from 
-	http://code.google.com/p/simple-build-tool/ .
+	https://github.com/harrah/xsbt
 
 Get and install these library/libraries before building:
+	https://github.com/ritschwumm/xsbt-webstart
+	https://github.com/ritschwumm/xsbt-scriptstart
+	https://github.com/ritschwumm/xsbt-reflect
 	https://github.com/ritschwumm/scutil
 	https://github.com/ritschwumm/scjson
 	https://github.com/ritschwumm/scmw
@@ -11,4 +14,4 @@ Get and install these library/libraries before building:
 Use these commands to build:
 	git clone git@github.com:ritschwumm/commonist.git
 	cd commonist
-	sbt update publish-local
+	sbt publish-local

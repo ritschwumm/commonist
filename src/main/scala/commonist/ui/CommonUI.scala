@@ -18,6 +18,7 @@ import javax.swing.ScrollPaneConstants
 import scutil.ext.AnyRefImplicits._
 import scutil.ext.BooleanImplicits._
 import scutil.gui.GridBagDSL._
+import scutil.gui.CasterInstances._
 
 import commonist.Constants
 import commonist.data.WikiData
@@ -71,8 +72,8 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 	licenseEditor setEditable true
 	
 	// separators
-	private val separator1	= new JPanel()
-	private val separator2	= new JPanel()
+	private val separator1	= new JPanel
+	private val separator2	= new JPanel
 	separator1 setPreferredSize	new Dimension(0,0)
 	separator2 setPreferredSize	new Dimension(0,0)
 
@@ -91,10 +92,8 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 		}
 		licenseEditor.setToolTipText(text)
 	}
-	licenseEditor addActionListener new ActionListener {
-		def actionPerformed(ev:ActionEvent) {
-			updateLicenseTooltip() 
-		}
+	licenseEditor onActionPerformed { _ =>
+		updateLicenseTooltip() 
 	}
 	updateLicenseTooltip()
 	
@@ -102,7 +101,7 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 	//## layout
 	
 	setBorder(Constants.PANEL_BORDER)
-	setLayout(new GridBagLayout())
+	setLayout(new GridBagLayout)
 	
 	// header label 
 	add(commonLabel,		GBC pos (1,0) size (1,1) weight (0,0) anchor WEST		fill NONE		insets (0,0,4,0))

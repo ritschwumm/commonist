@@ -9,6 +9,7 @@ import javax.swing.JButton
 import javax.swing.JPanel
 
 import scutil.gui.GridBagDSL._
+import scutil.gui.CasterInstances._
 
 import commonist.util.Messages
 
@@ -22,18 +23,14 @@ final class UploadUI(callback:UploadUICallback) extends JPanel {
 	private val uploadButton	= new JButton(Messages text "upload.upload")
 	private val abortButton		= new JButton(Messages text "upload.abort")
 	
-	setLayout(new GridBagLayout())
+	setLayout(new GridBagLayout)
 	add(abortButton,	GBC pos (0,0) size (1,1) weight (1,0) fill HORIZONTAL)
 	add(uploadButton,	GBC pos (1,0) size (1,1) weight (1,0) fill HORIZONTAL)
 	
-	uploadButton addActionListener new ActionListener {
-		def actionPerformed(ev:ActionEvent) { 
-			callback.startUpload() 
-		}
+	uploadButton onActionPerformed { _ => 
+		callback.startUpload() 
 	}
-	abortButton addActionListener new ActionListener {
-		def actionPerformed(ev:ActionEvent) { 
-			callback.stopUpload() 
-		}
+	abortButton onActionPerformed { _ => 
+		callback.stopUpload() 
 	}
 }

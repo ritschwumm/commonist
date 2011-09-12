@@ -18,6 +18,7 @@ import commonist.util.Settings
 
 import scutil.Files._
 import scutil.log.Logging
+import scutil.gui.CasterInstances._
 
 /** action events this UI sends */
 trait DirectoryUICallback {
@@ -53,7 +54,7 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 	//## components
 	
 	private val directoryModel	= new DefaultTreeModel(baseNode)
-	private val directoryTree	= new JTree()
+	private val directoryTree	= new JTree
 	directoryTree setModel directoryModel
 	//directoryTree setRootVisible false
 	directoryTree.getSelectionModel setSelectionMode TreeSelectionModel.SINGLE_TREE_SELECTION
@@ -64,22 +65,16 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 	//------------------------------------------------------------------------------
 	//##  wiring
 	
-	directoryTree.addTreeExpansionListener(new TreeExpansionListener {
-		def treeExpanded(ev:TreeExpansionEvent) {
-			val path	= ev.getPath
-			val node	= path.getLastPathComponent.asInstanceOf[FileNode]
-			node.update()
-			directoryModel nodeStructureChanged node
-		}
-		def treeCollapsed(ev:TreeExpansionEvent) {}
-	})
-	directoryTree.addTreeSelectionListener(new TreeSelectionListener {
-		def valueChanged(ev:TreeSelectionEvent) {
-			val node	= ev.getPath.getLastPathComponent.asInstanceOf[FileNode]
-			currentDirectory	= node.getFile
-			callback.changeDirectory(currentDirectory)
-		}
-	})
+	directoryTree onTreeExpanded { ev =>
+		val node	= ev.getPath.getLastPathComponent.asInstanceOf[FileNode]
+		node.update()
+		directoryModel nodeStructureChanged node
+	}
+	directoryTree onValueChanged { ev =>
+		val node	= ev.getPath.getLastPathComponent.asInstanceOf[FileNode]
+		currentDirectory	= node.getFile
+		callback.changeDirectory(currentDirectory)
+	}
 	
 	//------------------------------------------------------------------------------
 	//## BrowseDirectory action

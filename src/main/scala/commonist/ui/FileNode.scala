@@ -3,6 +3,8 @@ package commonist.ui
 import java.io.File
 import javax.swing.tree.DefaultMutableTreeNode
 
+import scala.collection.mutable
+
 import scutil.ext.FileImplicits._
 
 /** a TreeNode for a File in the DirectoryTree */
@@ -16,7 +18,7 @@ final class FileNode(file:File) extends DefaultMutableTreeNode {
 	// API
 	
 	def childNodes:List[FileNode] = {
-		val	out	= new scala.collection.mutable.ListBuffer[FileNode]
+		val	out	= new mutable.ListBuffer[FileNode]
 		val it	= children()
 		while (it.hasMoreElements) {
 			val element = it.nextElement.asInstanceOf[FileNode]
