@@ -1,18 +1,11 @@
 package commonist.util
 
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
+import java.io._
 
 import scala.collection.JavaConversions._
 
+import scutil.Implicits._
 import scutil.log.Logging
-import scutil.ext.OptionImplicits._
-import scutil.ext.AnyRefImplicits._
-import scutil.ext.FileImplicits._
 
 /** encapsulates a properties file */
 class Settings(file:File) extends Logging {

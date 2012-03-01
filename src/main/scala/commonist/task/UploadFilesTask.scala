@@ -2,28 +2,21 @@ package commonist.task
 
 import java.io.File
 import java.nio.charset.Charset
-
 import javax.swing.JOptionPane
 
+import scutil.Implicits._
 import scutil.Charsets
 import scutil.log.Logging
 import scutil.gui.SwingUtil._
-import scutil.ext.FileImplicits._
 
 import scmw._
 
-import commonist.Task
-import commonist.Parser
-import commonist.Constants
+import commonist._
 import commonist.data._
 import commonist.task.upload._
-import commonist.ui.MainWindow
-import commonist.ui.ImageListUI
-import commonist.ui.StatusUI
+import commonist.ui._
 import commonist.ui.later._
-import commonist.util.Loader
-import commonist.util.Messages
-import commonist.util.TextUtil2
+import commonist.util._
 
 /** upload files selected in the ImageListUI */
 final class UploadFilesTask(
@@ -136,8 +129,8 @@ final class UploadFilesTask(
 			val next		= titleAt(index+1)
 			val coords		= imageData.coordinates
 			val coordParts	= Parser parseCoordinates imageData.coordinates
-			val latitude	= coordParts map { _._1 } getOrElse null
-			val longitude	= coordParts map { _._2 } getOrElse null
+			val latitude	= coordParts map { _._1 } orNull;
+			val longitude	= coordParts map { _._2 } orNull;
 			val categories	= Parser parseCategories imageData.categories
 			
 			val upload	= Upload(

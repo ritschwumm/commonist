@@ -1,30 +1,23 @@
 package commonist.task.upload
 
-import java.io.InputStreamReader
-import java.io.PrintWriter
-import java.io.Reader
-import java.io.StringReader
-import java.io.StringWriter
-import java.net.URL
+import java.io._
+import java.net._
 
 import net.psammead.minibpp.Compiler
 import bsh.Interpreter
 
+import scutil.Implicits._
 import scutil.Resource._
 import scutil.log.Logging
-import scutil.ext.Function1Implicits._
-import scutil.ext.OptionImplicits._
-import scutil.ext.BooleanImplicits._
 
 import commonist.data._
-import commonist.util.Loader
-import commonist.util.TextUtil2
+import commonist.util._
 
 /** compiles image metadata into a [[Template:Information]] for commons or something similar for other wikis */
 final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 	/** edit summary for writing a gallery */
 	def gallerySummary(version:String, failureCount:Int):String =
-			"commonist " + version + ((failureCount != 0) fold (", " + failureCount + " errors", ""))
+			"commonist " + version + ((failureCount != 0) cata (", " + failureCount + " errors", ""))
 	
 	/** compiles into wikitext */
 	def galleryDescription(common:Common, batch:Batch):String =

@@ -1,17 +1,10 @@
 package commonist.thumb
 
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.io.Writer
+import java.io._
 
+import scutil.Implicits._
 import scutil.Resource._
 import scutil.log.Logging
-import scutil.ext.FileImplicits._
 
 /** caches drived Files indexed by their original Files */
 final class FileCache(list:File, directory:File, cachedFiles:Int) extends Logging {

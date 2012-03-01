@@ -1,17 +1,13 @@
 package commonist.ui
 
-import java.awt.GridBagLayout
-import java.awt.GridBagConstraints
-import java.awt.event.ActionListener
-import java.awt.event.ActionEvent
-
-import javax.swing.JButton
-import javax.swing.JPanel
+import java.awt.{ List => AwtList, _ }
+import java.awt.event._
+import javax.swing._
 
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 
-import commonist.util.Messages
+import commonist.util._
 
 /** action events this UI sends */
 trait UploadUICallback {

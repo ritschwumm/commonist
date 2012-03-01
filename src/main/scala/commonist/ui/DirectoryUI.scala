@@ -1,24 +1,16 @@
 package commonist.ui
 
 import java.io.File
-
-import javax.swing.JScrollPane
-import javax.swing.JTree
-import javax.swing.event.TreeExpansionEvent
-import javax.swing.event.TreeExpansionListener
-import javax.swing.event.TreeSelectionEvent
-import javax.swing.event.TreeSelectionListener
-import javax.swing.tree.DefaultTreeModel
-import javax.swing.tree.TreePath
-import javax.swing.tree.TreeSelectionModel
-import javax.swing.tree.DefaultMutableTreeNode
-
-import commonist.Constants
-import commonist.util.Settings
+import javax.swing._
+import javax.swing.event._
+import javax.swing.tree._
 
 import scutil.Files._
 import scutil.log.Logging
 import scutil.gui.CasterInstances._
+
+import commonist.Constants
+import commonist.util._
 
 /** action events this UI sends */
 trait DirectoryUICallback {
@@ -95,7 +87,7 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 		directory	= stack.pop()
 		node	=
 				if (baseNode.getFile == directory)	baseNode
-				else 								baseNode.childNodes find { _.getFile == directory } getOrElse null
+				else 								baseNode.childNodes find { _.getFile == directory } orNull;
 		// TODO use Option	
 		if (node == null)	{ WARN("first node not found!"); return }
 	
@@ -107,7 +99,7 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 		while (!stack.empty()) {
 			directory	= stack.pop()
 			// TODO use Option
-			node	= node.childNodes find { _.getFile == directory } getOrElse null
+			node	= node.childNodes find { _.getFile == directory } orNull;
 			if (node == null)	{ WARN("child node not found!"); return; }
 			
 			val path2	= cloneTreePath(node)

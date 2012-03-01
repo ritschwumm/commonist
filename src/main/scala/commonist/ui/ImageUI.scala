@@ -1,41 +1,19 @@
 package commonist.ui
 
 import java.io.File
+import java.awt.{ List => AwtList, _ }
+import java.awt.event._
+import javax.swing._
 
-import java.awt.Color
-import java.awt.Dimension
-import java.awt.GridBagLayout
-import java.awt.GridBagConstraints
-import java.awt.Image
-import java.awt.event.ActionListener
-import java.awt.event.ActionEvent
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-
-import javax.swing.BorderFactory
-import javax.swing.Icon
-import javax.swing.JCheckBox
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JScrollPane
-import javax.swing.JTextArea
-import javax.swing.JTextField
-import javax.swing.SwingConstants
-import javax.swing.ScrollPaneConstants
-
-import scutil.ext.OptionImplicits._
-import scutil.ext.DateImplicits._
+import scutil.Implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 
 import scmw._
 
 import commonist.Constants
-import commonist.data.ImageData
-import commonist.util.UIUtil2
-import commonist.util.Messages
-import commonist.util.TextUtil2
-import commonist.util.EXIF
+import commonist.data._
+import commonist.util._
 
 trait ImageUICallback {
 	def updateSelectStatus()
@@ -78,11 +56,11 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	private val categoriesLabel		= new JLabel(Messages text "image.categories")
 	
 	private val uploadEditor		= new JCheckBox(null.asInstanceOf[Icon], false)
-	private val nameEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH)
-	private val descriptionEditor	= new JTextArea(Constants.INPUT_FIELD_HEIGHT, Constants.INPUT_FIELD_WIDTH)
-	private val dateEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH)
-	private val coordinatesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH)
-	private val categoriesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH)
+	private val nameEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH)	with TextComponentUndo
+	private val descriptionEditor	= new JTextArea(Constants.INPUT_FIELD_HEIGHT, Constants.INPUT_FIELD_WIDTH)		with TextComponentUndo
+	private val dateEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH)	with TextComponentUndo
+	private val coordinatesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH)	with TextComponentUndo
+	private val categoriesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH)	with TextComponentUndo
 	
 	UIUtil2 tabMovesFocus descriptionEditor
 	descriptionEditor setLineWrap		true
@@ -163,8 +141,8 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	//## init
 	
 	imageView setToolTipText (Messages message ("image.tooltip", file.getName, TextUtil2.human(file.length)))
-	imageView setIcon		(icon getOrElse null)
-	imageView setText		(icon.fold(_ => "", Messages text "image.nothumb"))
+	imageView setIcon		icon.orNull
+	imageView setText		(icon cata (_ => "", Messages text "image.nothumb"))
 	
 	// TODO move unparsers and parsers together
 	

@@ -22,7 +22,9 @@ $(upload.description)
 # else if (!upload.coordinates.equals("")) {
 $(upload.coordinates)
 # }
+# if (!common.licenseTemplate.equals("")) {
 == {{int:license}} ==
 $(common.licenseTemplate)
+# }
 $(common.categories)
 $(upload.categories)

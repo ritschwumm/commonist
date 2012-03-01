@@ -5,7 +5,7 @@ import javax.swing.tree.DefaultMutableTreeNode
 
 import scala.collection.mutable
 
-import scutil.ext.FileImplicits._
+import scutil.Implicits._
 
 /** a TreeNode for a File in the DirectoryTree */
 final class FileNode(file:File) extends DefaultMutableTreeNode {
@@ -38,10 +38,7 @@ final class FileNode(file:File) extends DefaultMutableTreeNode {
 		allowsChildrenValue	= listed.isDefined
 		listed foreach { files =>
 			// TODO duplicate
-			files.toList 
-			.sortWith { (a,b) => a.getPath < b.getPath } 
-			.map { new FileNode(_) } 
-			.foreach { add(_) }
+			files sortBy { _.getPath } map { new FileNode(_) } foreach add
 		}
 	}
 	

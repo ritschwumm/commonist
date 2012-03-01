@@ -2,9 +2,9 @@ name			:= "commonist"
 
 organization	:= "de.djini"
 
-version			:= "0.4.29"
+version			:= "0.4.30"
 
-scalaVersion	:= "2.9.0-1"
+scalaVersion	:= "2.9.1"
 
 //publishArtifact in (Compile, packageBin)	:= false
 
@@ -13,11 +13,11 @@ publishArtifact in (Compile, packageDoc)	:= false
 publishArtifact in (Compile, packageSrc)	:= false
 
 libraryDependencies	++= Seq(
-	"de.djini"	%% "scutil"		% "0.0.4"	% "compile",
-	"de.djini"	%% "scjson"		% "0.0.4"	% "compile",
-	"de.djini"	%% "scmw"		% "0.0.3"	% "compile",
-	"org.apache.httpcomponents"	% "httpclient"	% "4.1.1"			% "compile",
-	"org.apache.httpcomponents"	% "httpmime"	% "4.1.1"			% "compile",
+	"de.djini"	%% "scutil"		% "0.0.5"	% "compile",
+	"de.djini"	%% "scjson"		% "0.0.5"	% "compile",
+	"de.djini"	%% "scmw"		% "0.0.4"	% "compile",
+	"org.apache.httpcomponents"	% "httpclient"	% "4.1.2"			% "compile",
+	"org.apache.httpcomponents"	% "httpmime"	% "4.1.2"			% "compile",
 	"org.apache.sanselan"		%  "sanselan"	% "0.97-incubator"	% "compile"
 )
 
@@ -43,8 +43,6 @@ scriptstartVmArguments	:= Seq("-Xmx192m")
 
 seq(WebStartPlugin.allSettings:_*)
 
-webstartMainClass		:= "commonist.Commonist"
-
 webstartGenConf	:= GenConf(
 	dname		= "CN=Snake Oil, OU=Hacking Unit, O=FNORD! Inc., L=Bielefeld, ST=33641, C=DE",
 	validity	= 365
@@ -57,7 +55,8 @@ webstartKeyConf	:= KeyConf(
 	keyPass		= "0xDEADBEEF"
 )
 
-webstartJnlpConf	:= JnlpConf(
+webstartJnlpConf	:= Seq(JnlpConf(
+	mainClass		= "commonist.Commonist",
 	fileName		= "commonist.jnlp",
 	codeBase		= "http://djini.de/software/commonist/ws/",
 	title			= "The Commonist",
@@ -69,4 +68,4 @@ webstartJnlpConf	:= JnlpConf(
 	allPermissions	= true,
 	j2seVersion		= "1.6+",
 	maxHeapSize		= 192
-)
+))

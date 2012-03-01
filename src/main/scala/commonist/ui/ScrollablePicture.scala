@@ -1,12 +1,8 @@
 package commonist.ui
 
-import java.awt.Dimension
-import java.awt.Rectangle
-
-import javax.swing.JLabel
-import javax.swing.Scrollable
-import javax.swing.SwingConstants
-import javax.swing.event.MouseInputListener
+import java.awt.{ List => AwtList, _ }
+import javax.swing._
+import javax.swing.event._
 
 import commonist.Constants
 

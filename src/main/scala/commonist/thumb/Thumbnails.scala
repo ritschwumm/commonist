@@ -1,20 +1,11 @@
 package commonist.thumb
 
-import java.awt.Dimension
-import java.awt.Graphics
-import java.awt.Image
-import java.awt.geom.AffineTransform
-import java.awt.image.AffineTransformOp
-import java.awt.image.BufferedImage
-import java.io.File
-import java.io.IOException
-
-import javax.imageio.ImageIO
-import javax.imageio.ImageReadParam
-import javax.imageio.ImageReader
-import javax.imageio.stream.ImageInputStream
-import javax.swing.Icon
-import javax.swing.ImageIcon
+import java.io._
+import java.awt.{ List => AwtList, _ }
+import java.awt.geom._
+import java.awt.image._
+import javax.swing._
+import javax.imageio._
 
 import commonist.Constants
 import commonist.util.Settings

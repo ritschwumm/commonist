@@ -1,15 +1,14 @@
 package commonist.util
 
-import java.io.IOException
-import java.io.InputStream
+import java.io._
 import java.net.URL
 import java.text.MessageFormat
 import java.util.Properties
 
 import scala.collection.JavaConversions._
 
+import scutil.Implicits._
 import scutil.Resource._
-import scutil.ext.OptionImplicits._
 import scutil.log.Logging
 
 // TODO ugly

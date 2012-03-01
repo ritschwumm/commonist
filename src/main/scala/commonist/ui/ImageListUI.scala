@@ -1,34 +1,16 @@
 package commonist.ui
 
-import java.awt.Component
-import java.awt.Dimension
-import java.awt.GridBagLayout
-import java.awt.GridBagConstraints
-import java.awt.Image
-import java.awt.Rectangle
-import java.awt.event.ActionListener
-import java.awt.event.ActionEvent
 import java.io.File
-
-import javax.swing.BorderFactory
-import javax.swing.BoxLayout
-import javax.swing.Icon
-import javax.swing.JButton
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JScrollPane
-import javax.swing.Scrollable
-import javax.swing.SwingConstants
-import javax.swing.ScrollPaneConstants
-
-import commonist.Constants
-import commonist.data.ImageData
-import commonist.data.ImageListData
-import commonist.util.Messages
-import commonist.util.TextUtil2
+import java.awt.{ List => AwtList, _ }
+import java.awt.event._
+import javax.swing._
 
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
+
+import commonist.Constants
+import commonist.data._
+import commonist.util._
 
 /** displays a scrollable List of ImageUIs */
 final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel { outer =>

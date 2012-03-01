@@ -1,20 +1,16 @@
 package commonist
 
-import java.io.BufferedReader
-import java.io.IOException
-import java.net.URL
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import java.io._
+import java.net._
+import java.util.regex._
 
+import scutil.Implicits._
 import scutil.Resource._
 import scutil.log.Logging
-import scutil.ext.StringImplicits._
-import scutil.ext.BooleanImplicits._
 
 import scmw._
 
-import commonist.data.WikiData
-import commonist.data.LicenseData
+import commonist.data._
 
 object Parser extends Logging {
 	def parseCategories(s:String):String = {
@@ -37,7 +33,7 @@ object Parser extends Logging {
 	
 	def parseCoordinates(s:String):Option[Pair[String,String]] =
 			s splitAround ',' map { parseCoordinate _ } match {
-				case List(Some(latitude), Some(longitude))	=>
+				case Seq(Some(latitude), Some(longitude))	=>
 					Some(Pair(latitude, longitude))
 				case _	=> 
 					WARN("could not parse coordinates", s)

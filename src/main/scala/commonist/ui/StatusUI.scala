@@ -1,9 +1,8 @@
 package commonist.ui
 
-import javax.swing.JProgressBar
-import javax.swing.SwingConstants
+import javax.swing._
 
-import commonist.util.Messages
+import commonist.util._
 
 /** a JProgressBar displaying Messages */
 final class StatusUI extends JProgressBar(SwingConstants.HORIZONTAL) {

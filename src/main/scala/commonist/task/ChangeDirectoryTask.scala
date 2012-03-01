@@ -3,15 +3,12 @@ package commonist.task
 import java.io.File
 import javax.swing.Icon
 
+import scutil.Implicits._
 import scutil.log.Logging
-import scutil.ext.FileImplicits._
 
-import commonist.Constants
-import commonist.Task
-import commonist.thumb.Thumbnails
-import commonist.ui.ImageListUI
-import commonist.ui.MainWindow
-import commonist.ui.StatusUI
+import commonist._
+import commonist.thumb._
+import commonist.ui._
 import commonist.ui.later._
 
 /** change the directory displayed in the ImageListUI */
@@ -32,7 +29,7 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 				.getOrElse		{ WARN("directory does not exist: " + directory); return }
 		
 		// TODO duplicate code
-		val sorted	= listed.toList sortWith { (a,b) => a.getPath < b.getPath }
+		val sorted	= listed.toList sortBy { _.getPath }
 		
 		val	(readable,unreadable)	= sorted partition { _.canRead }
 		unreadable foreach { it => WARN("cannot read: " + it) }

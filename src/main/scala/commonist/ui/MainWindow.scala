@@ -1,16 +1,8 @@
 package commonist.ui
 
-import java.awt.BorderLayout
-import java.awt.Dimension
-import java.awt.Image
-import java.awt.Rectangle
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
-
-import javax.swing.JFrame
-import javax.swing.JPanel
-import javax.swing.JSplitPane
-import javax.swing.WindowConstants
+import java.awt.{ List => AwtList, _ }
+import java.awt.event._
+import javax.swing._
 
 import scutil.gui.CasterInstances._
 

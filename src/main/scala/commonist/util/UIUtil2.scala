@@ -1,23 +1,8 @@
 package commonist.util
 
-import java.awt.Dimension
-import java.awt.GraphicsConfiguration
-import java.awt.Insets
-import java.awt.Point
-import java.awt.Rectangle
-import java.awt.Toolkit
-import java.awt.Window
-import java.awt.Component
-import java.awt.KeyboardFocusManager
-import java.awt.event.InputEvent
-import java.awt.event.KeyEvent
-import java.awt.event.FocusEvent
-import java.awt.event.FocusAdapter
-
-import javax.swing.JScrollPane
-import javax.swing.JViewport
-import javax.swing.JComponent
-import javax.swing.KeyStroke
+import java.awt.{ List => AwtList, _ }
+import java.awt.event._
+import javax.swing._
 
 import scutil.gui.CasterInstances._
 

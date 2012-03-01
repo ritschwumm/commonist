@@ -1,50 +1,31 @@
 package commonist
 
-import java.awt.Image
-import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.Reader
-import java.net.MalformedURLException
-import java.net.URL
+import java.awt.{ List => AwtList, _ }
+import java.io._
+import java.net._
 
 import bsh.Interpreter
 import bsh.EvalError
 
-import scutil.Concurrent
+import scutil.Implicits._
+import scutil.ThreadUtil
 import scutil.Files._
 import scutil.Resource._
 import scutil.AppleQuit
 import scutil.log.Logging
 import scutil.gui.SwingUtil._
-import scutil.ext.AnyRefImplicits._
-import scutil.ext.OptionImplicits._
-import scutil.ext.FileImplicits._
 
-import commonist.data.LicenseData
-import commonist.data.WikiData
-import commonist.task.ChangeDirectoryTask
-import commonist.task.UploadFilesTask
-import commonist.thumb.FileCache
-import commonist.thumb.Thumbnails
-import commonist.ui.CommonUI
-import commonist.ui.DirectoryUI
-import commonist.ui.DirectoryUICallback
-import commonist.ui.ImageListUI
-import commonist.ui.MainWindow
-import commonist.ui.MainWindowCallback
-import commonist.ui.StatusUI
-import commonist.ui.UploadUI
-import commonist.ui.UploadUICallback
-import commonist.util.Loader
-import commonist.util.Settings
-import commonist.util.Messages
+import commonist.data._
+import commonist.task._
+import commonist.thumb._
+import commonist.ui._
+import commonist.util._
 
 /** the main application class */
 object Commonist extends App with Logging {
 	/** main entry point */
 	override def main(args:Array[String]) {
-		Concurrent installDefaultUncaughtExceptionHandler  { (t,e) =>
+		ThreadUtil installDefaultUncaughtExceptionHandler  { (t,e) =>
 			ERROR("Exception caught in thread: " + t.getName, e)  
 		}
 		edt {

@@ -1,32 +1,16 @@
 package commonist.ui
 
-import java.awt.Dimension
-import java.awt.GridBagLayout
-import java.awt.GridBagConstraints
-import java.awt.event.ActionListener
-import java.awt.event.ActionEvent
-import javax.swing.JComboBox
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JPasswordField
-import javax.swing.JScrollPane
-import javax.swing.JTextArea
-import javax.swing.JTextField
-import javax.swing.SwingConstants
-import javax.swing.ScrollPaneConstants
+import java.awt.{ List => AwtList, _ }
+import java.awt.event._
+import javax.swing._
 
-import scutil.ext.AnyRefImplicits._
-import scutil.ext.BooleanImplicits._
+import scutil.Implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 
 import commonist.Constants
-import commonist.data.WikiData
-import commonist.data.LicenseData
-import commonist.data.CommonData
-import commonist.util.UIUtil2
-import commonist.util.Messages
-import commonist.util.Settings
+import commonist.data._
+import commonist.util._
 
 /** an editor for Data common to all images */
 final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) extends JPanel {
@@ -53,15 +37,15 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 	
 	// editors
 	private val wikiEditor			= new JComboBox(wikiList.toArray[Object])
-	private val userEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH)
+	private val userEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val passwordEditor		= new JPasswordField(Constants.INPUT_FIELD_WIDTH)
-	private val descriptionEditor	= new JTextArea(Constants.INPUT_FIELD_HEIGHT, Constants.INPUT_FIELD_WIDTH)
+	private val descriptionEditor	= new JTextArea(Constants.INPUT_FIELD_HEIGHT, Constants.INPUT_FIELD_WIDTH)		with TextComponentUndo
 	private val descriptionScroll	= new JScrollPane(descriptionEditor, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
-	private val sourceEditor		= new JTextField(Constants.INPUT_FIELD_WIDTH)
-	private val dateEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH)
-	private val authorEditor		= new JTextField(Constants.INPUT_FIELD_WIDTH)
-	private val permissionEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH)
-	private val categoriesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH)
+	private val sourceEditor		= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
+	private val dateEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
+	private val authorEditor		= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
+	private val permissionEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
+	private val categoriesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val licenseEditor		= new JComboBox(licenseList.toArray[Object]) {
 		override def getPreferredSize():Dimension = new Dimension(
 				10,
@@ -185,7 +169,7 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 		val licenseData	= licenseList find { it => Some(it.template) == licenseSel } orElse licenseSel getOrElse ""
 		licenseEditor setSelectedItem licenseData
 		
-		userEditor.getText.isEmpty fold (userEditor, passwordEditor) requestFocusInWindow ()
+		userEditor.getText.isEmpty cata (userEditor, passwordEditor) requestFocusInWindow ()
 	}
 	
 	/** stores this UI's state in the properties */

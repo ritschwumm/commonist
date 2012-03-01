@@ -1,3 +1,8 @@
+0.4.30	01mar12
+	change		builds with xsbt-0.11.2 now
+	change		uses scala-2.9.1
+	change		code cleanups
+
 0.4.29	12sep11
 	change		scmw uses apache httpclient 4 now
 

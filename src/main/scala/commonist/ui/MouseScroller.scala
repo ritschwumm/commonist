@@ -1,15 +1,11 @@
 package commonist.ui
 
-import java.awt.Container
-import java.awt.Dimension
-import java.awt.Point
-import java.awt.event.MouseEvent
+import java.awt.{ List => AwtList, _ }
+import java.awt.event._
+import javax.swing._
+import javax.swing.event._
 
-import javax.swing.JComponent
-import javax.swing.JViewport
-import javax.swing.event.MouseInputAdapter
-
-import commonist.util.UIUtil2
+import commonist.util._
 
 /** 
  * moves a JComponent withing a JViewport with the mouse 

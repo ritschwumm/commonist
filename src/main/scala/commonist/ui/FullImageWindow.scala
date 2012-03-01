@@ -1,26 +1,16 @@
 package commonist.ui
 
-import java.awt.Image
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
-import java.awt.event.KeyEvent
-import java.awt.image.BufferedImage
-import java.io.File
-import java.io.IOException
-
-import javax.imageio.ImageIO
-import javax.swing.ImageIcon
-import javax.swing.JComponent
-import javax.swing.JFrame
-import javax.swing.JScrollPane
-import javax.swing.KeyStroke
-import javax.swing.SwingConstants
-import javax.swing.WindowConstants
-
-import commonist.util.UIUtil2
+import java.io._
+import java.awt.{ List => AwtList, _ }
+import java.awt.event._
+import java.awt.image._
+import javax.swing._
+import javax.imageio._
 
 import scutil.log.Logging
 import scutil.gui.SwingUtil._
+
+import commonist.util._
 
 object FullImageWindow extends Logging {
 	def display(file:File, programHeading:String, programIcon:Image) {
