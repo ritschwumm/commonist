@@ -13,7 +13,7 @@ import scutil.Files._
 import scutil.Resource._
 import scutil.AppleQuit
 import scutil.log.Logging
-import scutil.gui.SwingUtil._
+import scutil.gui.SwingApp
 
 import commonist.data._
 import commonist.task._
@@ -22,25 +22,7 @@ import commonist.ui._
 import commonist.util._
 
 /** the main application class */
-object Commonist extends App with Logging {
-	/** main entry point */
-	override def main(args:Array[String]) {
-		ThreadUtil installDefaultUncaughtExceptionHandler  { (t,e) =>
-			ERROR("Exception caught in thread: " + t.getName, e)  
-		}
-		edt {
-			try {
-				super.main(args)
-				init() 
-			}
-			catch { 
-				case e:Exception	=> ERROR("cannot start program", e) 
-			}
-		}
-	}
-	
-	//------------------------------------------------------------------------------
-	
+object Commonist extends SwingApp {
 	private val settingsProp	= (System getProperty "commonist.settings").guardNotNull
 	private val settingsDir		= settingsProp map { new File(_) } getOrElse (HOME / ".commonist")
 	private val etcDir			= PWD / "etc"
