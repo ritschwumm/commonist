@@ -142,7 +142,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	
 	imageView setToolTipText (Messages message ("image.tooltip", file.getName, TextUtil2.human(file.length)))
 	imageView setIcon		icon.orNull
-	imageView setText		(icon cata (_ => "", Messages text "image.nothumb"))
+	imageView setText		(icon cataSwapped (_ => "", Messages text "image.nothumb"))
 	
 	// TODO move unparsers and parsers together
 	

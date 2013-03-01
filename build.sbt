@@ -2,20 +2,31 @@ name			:= "commonist"
 
 organization	:= "de.djini"
 
-version			:= "0.4.32"
+version			:= "0.5.0"
 
-scalaVersion	:= "2.9.2"
+scalaVersion	:= "2.10.0"
 
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil"		% "0.14.0"			% "compile",
-	"de.djini"					%%	"scjson"		% "0.14.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.9.0"			% "compile",
-	"org.apache.httpcomponents"	%	"httpclient"	% "4.2.2"			% "compile",
-	"org.apache.httpcomponents"	%	"httpmime"		% "4.2.2"			% "compile",
+	"de.djini"					%%	"scutil"		% "0.16.0"			% "compile",
+	"de.djini"					%%	"scjson"		% "0.16.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.11.0"			% "compile",
+	"org.apache.httpcomponents"	%	"httpclient"	% "4.2.3"			% "compile",
+	"org.apache.httpcomponents"	%	"httpmime"		% "4.2.3"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile"
 )
 
-scalacOptions	++= Seq("-deprecation", "-unchecked")
+scalacOptions	++= Seq(
+	"-deprecation",
+	"-unchecked",
+	// "-language:implicitConversions",
+	// "-language:existentials",
+	// "-language:higherKinds",
+	// "-language:reflectiveCalls",
+	// "-language:dynamics",
+	"-language:postfixOps",
+	// "-language:experimental.macros"
+	"-feature"
+)
 
 //--------------------------------------------------------------------------------
 
@@ -31,7 +42,7 @@ buildInfoPackage	:= "commonist"
 
 scriptstartSettings
 
-scriptstartScriptConf	:= Seq(ScriptConf(
+scriptstartConfigs	:= Seq(ScriptConfig(
 	scriptName	= "commonist",
 	vmArguments	= Seq("-Xmx192m"),
 	mainClass	= "commonist.Commonist"
@@ -45,34 +56,32 @@ osxappBundleName	:= "commonist"
 
 osxappBundleIcons	:= file("src/main/osxapp/commonist.icns")
 
-osxappJvmVersion	:= "1.6+"
+osxappVm			:= OracleJava7()
 
 osxappMainClass		:= Some("commonist.Commonist")
 
-osxappVmOptions		:= Seq(
-	"-Xmx192m"
-)
+osxappVmOptions		:= Seq("-Xmx192m")
 
 //--------------------------------------------------------------------------------
 
 webstartSettings
 
-webstartGenConf	:= GenConf(
+webstartGenConfig	:= GenConfig(
 	dname		= "CN=Snake Oil, OU=Hacking Unit, O=FNORD! Inc., L=Bielefeld, ST=33641, C=DE",
 	validity	= 365
 )
 
-webstartKeyConf	:= KeyConf(
+webstartKeyConfig	:= KeyConfig(
 	keyStore	= file("etc/keyStore"),
 	storePass	= "0xDEADBEEF",
 	alias		= "signFiles",
 	keyPass		= "0xDEADBEEF"
 )
 
-webstartJnlpConf	:= Seq(JnlpConf(
+webstartJnlpConfigs	:= Seq(JnlpConfig(
 	fileName	= "commonist.jnlp",
 	descriptor	= (fileName:String, assets:Seq[JnlpAsset]) => {
-		<jnlp spec="1.5+" codebase="http://djini.de/software/commonist/ws/" href={fileName}>
+		<jnlp spec="1.6+" codebase="http://djini.de/software/commonist/ws/" href={fileName}>
 			<information>
 				<title>The Commonist</title>
 				<vendor>FNORD! Inc.</vendor>
@@ -92,3 +101,13 @@ webstartJnlpConf	:= Seq(JnlpConf(
 		</jnlp>
 	}
 ))
+
+webstartExtras	<<= sourceDirectory in Compile map { source =>
+	Path selectSubpaths (source / "webstart" , -DirectoryFilter) toSeq
+}
+
+//------------------------------------------------------------------------------
+
+zipperSettings
+
+zipperFiles		<<= scriptstartBuild map { dir => selectSubpaths(dir, -DirectoryFilter).toSeq }

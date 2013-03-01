@@ -1,3 +1,9 @@
+0.5.0	01mar13
+	change		issued a new snakeoil certificate
+	change		library updates
+	change		build with sbt-0.12.2 now
+	change		uses scala-2.10.0
+--------------------------------------------------------------------------------
 0.4.32	05jan13
 	bugfix		0.4.31 did not open the main window
 	change		build with sbt-0.12.1 now

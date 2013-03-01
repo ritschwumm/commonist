@@ -44,7 +44,7 @@ object EXIF extends Logging {
 				}
 			}
 			catch {
-				case e	=>	// ImageReadException, IOException
+				case e:Exception	=>	// ImageReadException, IOException
 					DEBUG("cannot read file", file, e.getMessage)
 					NONE
 			}

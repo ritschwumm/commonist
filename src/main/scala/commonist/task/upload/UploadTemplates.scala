@@ -17,7 +17,7 @@ import commonist.util._
 final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 	/** edit summary for writing a gallery */
 	def gallerySummary(version:String, failureCount:Int):String =
-			"commonist " + version + ((failureCount != 0) cata (", " + failureCount + " errors", ""))
+			"commonist " + version + ((failureCount != 0) cataSwapped (", " + failureCount + " errors", ""))
 	
 	/** compiles into wikitext */
 	def galleryDescription(common:Common, batch:Batch):String =
@@ -33,7 +33,7 @@ final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 				"upload"	-> upload
 			))
 	
-	private def template(typ:String, data:Map[String,_]):String = {
+	private def template(typ:String, data:Map[String,AnyRef]):String = {
 		val specific	= typ + "_" + wiki.family + (wiki.site map { "_" + _ } getOrElse "") + ".bpp"
 		val generic		= typ + "_default.bpp"
 		val url			=	(loader resourceURL specific)	orElse 
@@ -52,7 +52,7 @@ final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 	
 	private val TEMPLATE_ENCODING	= "UTF-8"
 	
-	private def compile(url:URL, data:Map[String,_] ):String = {
+	private def compile(url:URL, data:Map[String,AnyRef] ):String = {
 		val code = new InputStreamReader(url.openConnection.getInputStream, TEMPLATE_ENCODING) use { tin =>
 			new Compiler() compile tin
 		}

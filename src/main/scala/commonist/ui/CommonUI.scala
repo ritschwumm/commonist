@@ -169,7 +169,7 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 		val licenseData	= licenseList find { it => Some(it.template) == licenseSel } orElse licenseSel getOrElse ""
 		licenseEditor setSelectedItem licenseData
 		
-		userEditor.getText.isEmpty cata (userEditor, passwordEditor) requestFocusInWindow ()
+		userEditor.getText.isEmpty cataSwapped (userEditor, passwordEditor) requestFocusInWindow ()
 	}
 	
 	/** stores this UI's state in the properties */
