@@ -80,8 +80,11 @@ final class Thumbnails(cache:FileCache) extends Logging {
 		//		if (imageType == BufferedImage.TYPE_CUSTOM  
 		//		|| imageType == BufferedImage.TYPE_BYTE_GRAY
 		//		|| imageType == BufferedImage.TYPE_INT_RGB) {
-					val normalized	= new BufferedImage(image.getWidth, image.getHeight, BufferedImage.TYPE_3BYTE_BGR)
-					val g			= normalized.getGraphics
+					val normalized	= new BufferedImage(
+							image.getWidth, 
+							image.getHeight, 
+							BufferedImage.TYPE_3BYTE_BGR)
+					val g	= normalized.getGraphics
 					g drawImage (image, 0, 0, null)
 					g.dispose()
 					normalized
@@ -90,12 +93,16 @@ final class Thumbnails(cache:FileCache) extends Logging {
 					image
 				}
 		
-		val size	= new Dimension((image2.getWidth * scale).toInt, (image2.getHeight * scale).toInt)
-		val	thumb	= new BufferedImage(size.width, size.height, image2.getType)
+		val size	= new Dimension(
+				(image2.getWidth * scale).toInt, 
+				(image2.getHeight * scale).toInt)
+		val	thumb	= new BufferedImage(
+				size.width,
+				size.height,
+				image2.getType)
 		val op		= new AffineTransformOp(
-			new AffineTransform(scale, 0, 0, scale, 0, 0),	// AffineTransform.getScaleInstance(sx, sy)
-			AffineTransformOp.TYPE_BILINEAR					// TYPE_NEAREST_NEIGHBOR, TYPE_BILINEAR, TYPE_BICUBIC
-		)
+				new AffineTransform(scale, 0, 0, scale, 0, 0),	// AffineTransform.getScaleInstance(sx, sy)
+				AffineTransformOp.TYPE_BILINEAR)				// TYPE_NEAREST_NEIGHBOR, TYPE_BILINEAR, TYPE_BICUBIC
 		
 		op filter (image2, thumb)
 		thumb
@@ -139,7 +146,7 @@ final class Thumbnails(cache:FileCache) extends Logging {
 		Some(image)
 	}
 
-	/** returns the biggers power of 2 smaller than or equal to x */
+	/** returns the biggest power of 2 smaller than or equal to x */
 	private def smallerPowerOf2(x:Int):Int = {
 		var exp	= 1
 		var xxx	= x

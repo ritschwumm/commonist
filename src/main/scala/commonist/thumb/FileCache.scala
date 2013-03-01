@@ -19,7 +19,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 		val cached	= entryMap get original
 		if (cached == null)	return None
 		
-		if (!cached.exists || original.lastModified > cached.lastModified) {
+		if (original newerThan cached) {
 			remove(original)
 			return None
 		}

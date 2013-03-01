@@ -88,47 +88,47 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 	setLayout(new GridBagLayout)
 	
 	// header label 
-	add(commonLabel,		GBC pos (1,0) size (1,1) weight (0,0) anchor WEST		fill NONE		insets (0,0,4,0))
+	add(commonLabel,		GBC pos (1,0) size (1,1) weight (0,0) anchor WEST		fill NONE		insetsTLBR (0,0,4,0))
 
 	// part 1
 	
-	add(userLabel,			GBC pos (0,1) size (1,1) weight (0,0) anchor EAST		fill NONE 		insets (0,4,0,4))
-	add(userEditor,			GBC pos (1,1) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insets (0,0,0,0))
+	add(userLabel,			GBC pos (0,1) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
+	add(userEditor,			GBC pos (1,1) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 	
-	add(passwordLabel,		GBC pos (0,2) size (1,1) weight (0,0) anchor EAST		fill NONE		insets (0,4,0,4))
-	add(passwordEditor,		GBC pos (1,2) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insets (0,0,0,0))
+	add(passwordLabel,		GBC pos (0,2) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(passwordEditor,		GBC pos (1,2) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
-	add(wikiLabel,			GBC pos (0,3) size (1,1) weight (0,0) anchor EAST		fill NONE		insets (0,4,0,4))
-	add(wikiEditor,			GBC pos (1,3) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insets (0,0,0,0))
+	add(wikiLabel,			GBC pos (0,3) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(wikiEditor,			GBC pos (1,3) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
 	// separator 1
-	add(separator1,			GBC pos (0,4) size (2,1) weight (1,0) anchor CENTER		fill HORIZONTAL	insets (2,0,2,0))
+	add(separator1,			GBC pos (0,4) size (2,1) weight (1,0) anchor CENTER		fill HORIZONTAL	insetsTLBR (2,0,2,0))
 	
 	// part 2
 	
-	add(descriptionLabel,	GBC pos (0,5) size (1,1) weight (0,1) anchor NORTHEAST	fill NONE		insets (0,4,0,4))
-	add(descriptionScroll,	GBC pos (1,5) size (1,1) weight (0,1) anchor WEST		fill BOTH		insets (0,0,0,0))
+	add(descriptionLabel,	GBC pos (0,5) size (1,1) weight (0,1) anchor NORTHEAST	fill NONE		insetsTLBR (0,4,0,4))
+	add(descriptionScroll,	GBC pos (1,5) size (1,1) weight (0,1) anchor WEST		fill BOTH		insetsTLBR (0,0,0,0))
 
-	add(sourceLabel,		GBC pos (0,6) size (1,1) weight (0,0) anchor EAST		fill NONE		insets (0,4,0,4))
-	add(sourceEditor,		GBC pos (1,6) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insets (0,0,0,0))
+	add(sourceLabel,		GBC pos (0,6) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(sourceEditor,		GBC pos (1,6) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
-	add(dateLabel,			GBC pos (0,7) size (1,1) weight (0,0) anchor EAST		fill NONE		insets (0,4,0,4))
-	add(dateEditor,			GBC pos (1,7) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insets (0,0,0,0))
+	add(dateLabel,			GBC pos (0,7) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(dateEditor,			GBC pos (1,7) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
-	add(authorLabel,		GBC pos (0,8) size (1,1) weight (0,0) anchor EAST		fill NONE		insets (0,4,0,4))
-	add(authorEditor,		GBC pos (1,8) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insets (0,0,0,0))
+	add(authorLabel,		GBC pos (0,8) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(authorEditor,		GBC pos (1,8) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
-	add(permissionLabel, 	GBC pos (0,9) size (1,1) weight (0,0) anchor EAST		fill NONE		insets (0,4,0,4))
-	add(permissionEditor,	GBC pos (1,9) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insets (0,0,0,0))
+	add(permissionLabel, 	GBC pos (0,9) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(permissionEditor,	GBC pos (1,9) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 	
-	add(categoriesLabel,	GBC pos (0,10) size (1,1) weight (0,0) anchor NORTHEAST	fill NONE		insets (0,4,0,4))
-	add(categoriesEditor,	GBC pos (1,10) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insets (0,0,0,0))
+	add(categoriesLabel,	GBC pos (0,10) size (1,1) weight (0,0) anchor NORTHEAST	fill NONE		insetsTLBR (0,4,0,4))
+	add(categoriesEditor,	GBC pos (1,10) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
-	add(licenseLabel,		GBC pos (0,11) size (1,1) weight (0,0) anchor EAST		fill NONE		insets (0,4,0,4))
-	add(licenseEditor,		GBC pos (1,11) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insets (0,0,0,0))
+	add(licenseLabel,		GBC pos (0,11) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(licenseEditor,		GBC pos (1,11) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
 	// separator 2
-	add(separator2,			GBC pos (0,12) size (2,1) weight (1,0) anchor CENTER fill HORIZONTAL	insets (0,0,0,0))
+	add(separator2,			GBC pos (0,12) size (2,1) weight (1,0) anchor CENTER fill HORIZONTAL	insetsTLBR (0,0,0,0))
 	
 	/** gets all data edit in this UI */
 	def getData:CommonData = new CommonData(

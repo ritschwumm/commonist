@@ -39,12 +39,12 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	setBorder(Constants.PANEL_BORDER)
 
 	setLayout(new GridBagLayout)
-	add(selectLabel,		GBC pos(0,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL insets (0,0,0,2))
-	add(selectNoneButton,	GBC pos(1,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL	insets (0,0,0,2))
-	add(selectAllButton,	GBC pos(2,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL	insets (0,2,0,2))
-	add(selectFailedButton,	GBC pos(3,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL	insets (0,2,0,0))
-	add(selectStatus,		GBC pos(4,0) size(1,1) weight(1,0)		anchor CENTER	fill HORIZONTAL	insets (0,8,0,4))
-	add(scroll,				GBC pos(0,1) size(5,1) weight(1,1)		anchor CENTER	fill BOTH		insets (4,0,0,0))
+	add(selectLabel,		GBC pos(0,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL insetsTLBR (0,0,0,2))
+	add(selectNoneButton,	GBC pos(1,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL	insetsTLBR (0,0,0,2))
+	add(selectAllButton,	GBC pos(2,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL	insetsTLBR (0,2,0,2))
+	add(selectFailedButton,	GBC pos(3,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL	insetsTLBR (0,2,0,0))
+	add(selectStatus,		GBC pos(4,0) size(1,1) weight(1,0)		anchor CENTER	fill HORIZONTAL	insetsTLBR (0,8,0,4))
+	add(scroll,				GBC pos(0,1) size(5,1) weight(1,1)		anchor CENTER	fill BOTH		insetsTLBR (4,0,0,0))
 
 	//------------------------------------------------------------------------------
 	//## wiring

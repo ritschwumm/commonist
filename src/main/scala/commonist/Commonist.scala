@@ -9,6 +9,7 @@ import bsh.EvalError
 
 import scutil.Implicits._
 import scutil.ThreadUtil
+import scutil.ExceptionUtil
 import scutil.Files._
 import scutil.Resource._
 import scutil.AppleQuit
@@ -23,6 +24,9 @@ import commonist.util._
 
 /** the main application class */
 object Commonist extends SwingApp {
+	ExceptionUtil.logAllExceptions()
+	ExceptionUtil.logAWTExceptions()
+	
 	private val settingsProp	= (System getProperty "commonist.settings").guardNotNull
 	private val settingsDir		= settingsProp map { new File(_) } getOrElse (HOME / ".commonist")
 	private val etcDir			= PWD / "etc"
@@ -159,7 +163,7 @@ object Commonist extends SwingApp {
 	private def loadMessages(language:String) {
 		val defaultURL	= loader resourceURL "messages_default.properties" getOrError "cannot load messages_default.properties"
 		val userLangURL	= loader resourceURL ("messages_" + language + ".properties")
-		Messages.init(defaultURL, userLangURL)
+		Messages init (defaultURL, userLangURL)
 	}
 	
 	/** load licenses */
@@ -188,4 +192,9 @@ object Commonist extends SwingApp {
 		}
 	}
 	*/
+	
+	//------------------------------------------------------------------------------
+	//## startup
+	
+	init()
 }

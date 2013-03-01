@@ -1,3 +1,8 @@
+0.4.32	05jan13
+	bugfix		0.4.31 did not open the main window
+	change		build with sbt-0.12.1 now
+	change		library updates
+	
 0.4.31	08may12
 	change		uses scala-2.9.2
 

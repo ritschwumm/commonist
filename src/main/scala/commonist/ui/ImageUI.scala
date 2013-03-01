@@ -98,28 +98,28 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	
 	// labels and editors
 	
-	add(uploadLabel,		GBC pos (0,0) size (1,1) weight (0,0) anchor EAST		fill NONE insets (0,4,0,4))
-	add(uploadEditor,		GBC pos (1,0) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insets (0,0,0,0))
+	add(uploadLabel,		GBC pos (0,0) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(uploadEditor,		GBC pos (1,0) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
 
-	add(nameLabel,			GBC pos (0,1) size (1,1) weight (0,0) anchor EAST		fill NONE insets (0,4,0,4))
-	add(nameEditor,			GBC pos (1,1) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insets (0,0,0,0))
+	add(nameLabel,			GBC pos (0,1) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(nameEditor,			GBC pos (1,1) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 	
-	add(descriptionLabel, 	GBC pos (0,2) size (1,1) weight (0,0) anchor NORTHEAST	fill NONE insets (0,4,0,4))
-	add(descriptionScroll,	GBC pos (1,2) size (1,1) weight (1,1) anchor WEST		fill BOTH insets (0,0,0,0))
+	add(descriptionLabel, 	GBC pos (0,2) size (1,1) weight (0,0) anchor NORTHEAST	fill NONE 		insetsTLBR (0,4,0,4))
+	add(descriptionScroll,	GBC pos (1,2) size (1,1) weight (1,1) anchor WEST		fill BOTH 		insetsTLBR (0,0,0,0))
 	
-	add(dateLabel, 			GBC pos (0,3) size (1,1) weight (0,0) anchor EAST		fill NONE insets (0,4,0,4))
-	add(dateEditor,			GBC pos (1,3) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insets (0,0,0,0))
+	add(dateLabel, 			GBC pos (0,3) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
+	add(dateEditor,			GBC pos (1,3) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
 	
-	add(coordinatesLabel, 	GBC pos (0,4) size (1,1) weight (0,0) anchor EAST		fill NONE insets (0,4,0,4))
-	add(coordinatesEditor,	GBC pos (1,4) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insets (0,0,0,0))
+	add(coordinatesLabel, 	GBC pos (0,4) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
+	add(coordinatesEditor,	GBC pos (1,4) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
 	
-	add(categoriesLabel,	GBC pos (0,5) size (1,1) weight (0,0) anchor EAST		fill NONE insets (0,4,0,4))
-	add(categoriesEditor,	GBC pos (1,5) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insets (0,0,0,0))
+	add(categoriesLabel,	GBC pos (0,5) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
+	add(categoriesEditor,	GBC pos (1,5) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
 	
 	// state and image
 	
-	add(stateView,			GBC pos (2,0) size (1,1) weight (0,0) anchor CENTER		fill NONE insets (0,4,0,4))
-	add(imageView,			GBC pos (2,1) size (1,5) weight (0,0) anchor SOUTHWEST	fill NONE insets (0,4,0,4))
+	add(stateView,			GBC pos (2,0) size (1,1) weight (0,0) anchor CENTER		fill NONE 		insetsTLBR (0,4,0,4))
+	add(imageView,			GBC pos (2,1) size (1,5) weight (0,0) anchor SOUTHWEST	fill NONE 		insetsTLBR (0,4,0,4))
 	
 	//------------------------------------------------------------------------------
 	//## wiring
