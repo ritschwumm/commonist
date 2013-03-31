@@ -7,8 +7,8 @@ import java.awt.image._
 import javax.swing._
 import javax.imageio._
 
-import scutil.log.Logging
 import scutil.gui.SwingUtil._
+import scutil.log._
 
 import commonist.util._
 
@@ -16,7 +16,7 @@ object FullImageWindow extends Logging {
 	def display(file:File, programHeading:String, programIcon:Image) {
 		worker {
 			try {
-				val image = ImageIO.read(file)
+				val image = ImageIO read file
 				if (image != null) {
 					edt {
 						new FullImageWindow(file, programHeading, programIcon, image)

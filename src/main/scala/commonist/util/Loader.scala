@@ -4,7 +4,7 @@ import java.io._
 import java.net._
 
 import scutil.Implicits._
-import scutil.log.Logging
+import scutil.log._
 
 /** loads resources from a set of URL-paths */
 final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePrefix:String) extends Logging {

@@ -1,5 +1,6 @@
 package commonist.util
 
+import java.util.{ Collections => JUCollections }
 import java.awt.{ List => AwtList, _ }
 import java.awt.event._
 import javax.swing._
@@ -19,8 +20,8 @@ object UIUtil2 {
 	private val TAB_PLAIN	= KeyStroke getKeyStroke (KeyEvent.VK_TAB, 0)
 	private val TAB_SHIFT	= KeyStroke getKeyStroke (KeyEvent.VK_TAB, InputEvent.SHIFT_MASK)
 	def tabMovesFocus(target:JComponent) {
-		target setFocusTraversalKeys (KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,  java.util.Collections.singleton(TAB_PLAIN))
-		target setFocusTraversalKeys (KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, java.util.Collections.singleton(TAB_SHIFT))
+		target setFocusTraversalKeys (KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,  JUCollections singleton TAB_PLAIN)
+		target setFocusTraversalKeys (KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, JUCollections singleton TAB_SHIFT)
 						
 		/*
 		// @see http://www.javalobby.org/java/forums/t20457.html
@@ -55,7 +56,7 @@ object UIUtil2 {
 				Toolkit.getDefaultToolkit,
 				window.getGraphicsConfiguration)
 		val limited	= boundsWithinScreen(bounds, screen)
-		window.setBounds(limited)
+		window setBounds limited
 	}
 	
 	/** limit a Rectangle to the screen boundaries */
@@ -73,7 +74,7 @@ object UIUtil2 {
 	/** gets the screen estate */
 	def screenRect(toolkit:Toolkit, gc:GraphicsConfiguration):Rectangle = {
 		val bounds	= gc.getBounds
-		val insets	= toolkit.getScreenInsets(gc)
+		val insets	= toolkit getScreenInsets gc
 		bounds.x		+= insets.left
 		bounds.y		+= insets.top
 		bounds.width	-= insets.left + insets.right
@@ -91,7 +92,7 @@ object UIUtil2 {
 		val pos		= vp.getViewPosition
 		if (left >= 0) pos.x	= left	
 		if (top  >= 0) pos.y	= top
-		vp.setViewPosition(pos)
+		vp setViewPosition pos
 	}
 	
 	/** limits a Point to the insides of a Rectangle */

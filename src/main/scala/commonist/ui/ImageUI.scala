@@ -28,25 +28,25 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	//------------------------------------------------------------------------------
 	
 	private val stateView	= new JLabel(null, null, SwingConstants.CENTER)
-	stateView.setHorizontalTextPosition(SwingConstants.CENTER)
+	stateView setHorizontalTextPosition SwingConstants.CENTER
 	updateStateView()
 	
 	private val imageView	= new JLabel(null, null, SwingConstants.CENTER)
-	imageView.setBackground(Color.decode("#eeeeee"))
+	imageView setBackground (Color decode "#eeeeee")
 //		imageView.setBorder(
 //			BorderFactory.createBevelBorder(BevelBorder.RAISED)
 //		)
-	imageView.setOpaque(true)
+	imageView setOpaque true
 	/*### fehlt
 	imageView.setToolTipText(
 		file.Name + " (" + TextUtil.human(file.length()) + " bytes)"
 	)
 	*/
-	imageView.setHorizontalTextPosition(SwingConstants.CENTER)
-	imageView.setVerticalTextPosition(SwingConstants.CENTER)
-	imageView.setPreferredSize(thumbDimension)
-	imageView.setMinimumSize(thumbDimension)
-	imageView.setMaximumSize(thumbDimension)
+	imageView setHorizontalTextPosition	SwingConstants.CENTER
+	imageView setVerticalTextPosition	SwingConstants.CENTER
+	imageView setPreferredSize	thumbDimension
+	imageView setMinimumSize	thumbDimension
+	imageView setMaximumSize	thumbDimension
 
 	private val uploadLabel			= new JLabel(Messages text "image.upload")
 	private val nameLabel			= new JLabel(Messages text "image.name")
@@ -76,7 +76,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	UIUtil2 scrollVisibleOnFocus (categoriesEditor,		this)
 	
 	private val descriptionScroll	= new JScrollPane(
-	descriptionEditor, 
+			descriptionEditor, 
 			ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
 			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
 
@@ -146,11 +146,11 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	
 	// TODO move unparsers and parsers together
 	
-	val	exif		= EXIF extract file
-	val exifDate	= exif.date	map { _ format "yyyy-MM-dd HH:mm:ss" } getOrElse ""
-	val exifGPS		= exif.gps	map { it => it.latitude.toString + "," + it.longitude.toString } getOrElse ""
-	val exifDesc	= exif.description getOrElse ""
-	val fixedName	= Filename fix file.getName
+	private val	exif		= EXIF extract file
+	private val exifDate	= exif.date	map { _ format "yyyy-MM-dd HH:mm:ss" } getOrElse ""
+	private val exifGPS		= exif.gps	map { it => it.latitude.toString + "," + it.longitude.toString } getOrElse ""
+	private val exifDesc	= exif.description getOrElse ""
+	private val fixedName	= Filename fix file.getName
 	
 	uploadEditor		setSelected	false
 	nameEditor			setText		fixedName

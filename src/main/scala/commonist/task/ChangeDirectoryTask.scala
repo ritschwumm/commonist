@@ -4,7 +4,7 @@ import java.io.File
 import javax.swing.Icon
 
 import scutil.Implicits._
-import scutil.log.Logging
+import scutil.log._
 
 import commonist._
 import commonist.thumb._
@@ -29,7 +29,7 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 				.getOrElse		{ WARN("directory does not exist: " + directory); return }
 		
 		// TODO duplicate code
-		val sorted	= listed.toList sortBy { _.getPath }
+		val sorted	= listed sortBy { _.getPath }
 		
 		val	(readable,unreadable)	= sorted partition { _.canRead }
 		unreadable foreach { it => WARN("cannot read: " + it) }
@@ -54,7 +54,7 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 	
 				// update when a given number of ImageUIs have been added
 				// or a given delay has elapsed or 
-				val now	= System.currentTimeMillis()
+				val now	= System.currentTimeMillis
 				if (now - last > Constants.IMAGELIST_UPDATE_DELAY
 				|| (cur % Constants.IMAGELIST_UPDATE_COUNT) == 0) {
 					imageListUILater.updateSelectStatus()

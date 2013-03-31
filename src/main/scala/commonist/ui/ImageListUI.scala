@@ -5,6 +5,8 @@ import java.awt.{ List => AwtList, _ }
 import java.awt.event._
 import javax.swing._
 
+import scala.collection.mutable
+
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 
@@ -14,7 +16,7 @@ import commonist.util._
 
 /** displays a scrollable List of ImageUIs */
 final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel { outer =>
-	private val imageUIs	= new scala.collection.mutable.ListBuffer[ImageUI]
+	private val imageUIs	= new mutable.ListBuffer[ImageUI]
 	
 	//------------------------------------------------------------------------------
 	//## components
@@ -77,7 +79,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 		})
 		
 		imageUIs += imageUI
-		listPanel.add(imageUI)
+		listPanel add imageUI
 	}
 	
 	/** get the select status and update the display */
@@ -87,8 +89,11 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 		val allBytes		= (allFiles			map { _.length }).foldLeft (0L)(_+_)
 		val selectedBytes	= (selectedFiles	map { _.length }).foldLeft (0L)(_+_)
 	
-		selectStatus.setText(Messages.message("imageList.selected",
-			int2Integer(selectedFiles.size), int2Integer(allFiles.size), TextUtil2.human(selectedBytes), TextUtil2.human(allBytes) 
+		selectStatus.setText(Messages message ("imageList.selected",
+			int2Integer(selectedFiles.size),
+			int2Integer(allFiles.size),
+			TextUtil2 human selectedBytes,
+			TextUtil2 human allBytes 
 		))
 	}
 	

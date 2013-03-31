@@ -1,3 +1,9 @@
+0.6.0
+	feature		added zipfile for an osx app to the build
+	bugfix		display the commonist icon the dock on osx again
+	bugfix		on startup the selected directory was not visible in the 
+				directory tree
+
 0.5.0	01mar13
 	change		issued a new snakeoil certificate
 	change		library updates

@@ -1,34 +1,22 @@
 package commonist.ui
 
 import java.io.File
+import java.util.{ Enumeration => JUEnumeration }
 import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.TreePath
 
-import scala.collection.mutable
+import scala.collection.JavaConverters._
 
 import scutil.Implicits._
 
 /** a TreeNode for a File in the DirectoryTree */
-final class FileNode(file:File) extends DefaultMutableTreeNode {
-	// getUserObject setUserObject
-	
-	// state
-	
+final class FileNode(val file:File) extends DefaultMutableTreeNode {
 	private var allowsChildrenValue	= false
 	
-	// API
+	def childNodes:Seq[FileNode]	= children().asInstanceOf[JUEnumeration[FileNode]].asScala.toVector
 	
-	def childNodes:List[FileNode] = {
-		val	out	= new mutable.ListBuffer[FileNode]
-		val it	= children()
-		while (it.hasMoreElements) {
-			val element = it.nextElement.asInstanceOf[FileNode]
-			out	+= element
-		}
-		out.toList
-	}
-	
-	/** get the File this Node stands for */
-	def getFile():File = file
+	// NOTE without asInstanceOf scala chooses the Object constructor over the Object[] constructor
+	def treePathClone:TreePath	= new TreePath(getPath.asInstanceOf[Array[Object]])
 	
 	/** ensures the node has a single child every directory below it */
 	def update() {
@@ -37,16 +25,13 @@ final class FileNode(file:File) extends DefaultMutableTreeNode {
 		val listed	= file childrenWhere { file:File => file.isDirectory && !file.isHidden }
 		allowsChildrenValue	= listed.isDefined
 		listed foreach { files =>
-			// TODO duplicate
 			files sortBy { _.getPath } map { new FileNode(_) } foreach add
 		}
 	}
 	
-	// Node
+	//------------------------------------------------------------------------------
 	
-	override def getAllowsChildren():Boolean = allowsChildrenValue
-
-	override def isLeaf():Boolean = false
-	
-	override def toString():String = if (file.getName.length != 0) file.getName else file.getPath
+	override def getAllowsChildren():Boolean	= allowsChildrenValue
+	override def isLeaf():Boolean				= false
+	override def toString():String				= file.getName.guardNonEmpty getOrElse file.getPath
 }

@@ -7,9 +7,10 @@ import scala.collection.immutable.Queue
 
 import scutil.Implicits._
 import scutil.Resource._
-import scutil.log.Logging
+import scutil.Charsets._
+import scutil.log._
 
-/** caches drived Files indexed by their original Files */
+/** caches derived Files indexed by their original Files */
 final class FileCache(list:File, directory:File, cachedFiles:Int) extends Logging {
 	directory.mkdirs()
 	
@@ -64,25 +65,17 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 		if (!list.exists)	return
 		
 		DEBUG("reading metadata", list)
-		new BufferedReader(new InputStreamReader(new FileInputStream(list), "UTF-8")) use { in =>
-			try {
-				var	running	= true
-				while (running) {
-					val separator	= in.readLine
-					if (separator != null) {
-						val original	= new File(in.readLine)
-						val cached		= new File(in.readLine)
-						entryQueue	= entryQueue enqueue original
-						entryMap	= entryMap + (original -> cached)
-					}
-					else {
-						running = false
-					}
-				}
+		try {
+			list readLines utf_8 grouped 3 foreach { case Seq(s,o,c) =>
+				require(s.isEmpty, "invalid separator")
+				val original	= new File(o)
+				val cached		= new File(c)
+				entryQueue	= entryQueue enqueue original
+				entryMap	= entryMap + (original -> cached)
 			}
-			catch {
-				case e:Exception	=> WARN("cannot load metadata cache", list, e)
-			}
+		}
+		catch { case e:Exception	=> 
+			WARN("cannot load metadata cache", list, e)
 		}
 	}
 	
@@ -92,16 +85,8 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 		cleanup()
 
 		DEBUG("writing metadata", list)
-		new OutputStreamWriter(new FileOutputStream(list), "UTF-8") use { out =>
-			entryQueue foreach { original =>
-				val cached		= entryMap apply original
-				out write "\n"
-				out write original.getPath
-				out write "\n"
-				out write cached.getPath
-				out write "\n"
-			}
-		}
+		val strs	= entryQueue map { original => s"\n${original.getPath}\n${entryMap(original).getPath}\n" }
+		list writeString (utf_8, strs.mkString)
 	}
 	
 	/** clear cache metadata */
@@ -112,59 +97,48 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 	
 	/** remove the oldest cache entry and delete its file */
 	private def flush() {
-		if (entryQueue.isEmpty || entryQueue.size <= cachedFiles)	return
-		
-		for {
-			(oldOriginal,newQueue)	<- entryQueue.dequeueOption
-			(oldCached,newMap)		<- extractOption(entryMap, oldOriginal)
-		} {
-			entryQueue	= newQueue
-			entryMap	= newMap
-			DEBUG("flushing original: " + oldOriginal)
-			if (oldCached.exists) {
-				INFO("deleting cached: " +  oldCached)
-				oldCached.delete()
+		if (entryQueue.nonEmpty && entryQueue.size > cachedFiles) {
+			for {
+				(oldOriginal,newQueue)	<- entryQueue.dequeueOption
+				(oldCached,newMap)		<- entryMap extractAtOption oldOriginal
+			} {
+				entryQueue	= newQueue
+				entryMap	= newMap
+				DEBUG("flushing original: " + oldOriginal)
+				if (oldCached.exists) {
+					INFO("deleting cached: " +  oldCached)
+					oldCached.delete()
+				}
 			}
 		}
 	}
-	
-	// TODO use scutil extension when available
-	private def extractOption[S,T](map:Map[S,T], key:S):Option[(T,Map[S,T])]	=
-			map get key map { value => (value, map - key) }
 	
 	/** 
 	  * delete stale entries from the entryList and entryMap
 	  * and all cachefiles not in the entryMap and  
 	  */
 	private def cleanup() {
-		// stale entries from the entryList and entryMap
-		entryQueue foreach { original =>
-			if (!original.exists) {
-				WARN("original disappeared: " + original)
-				entryQueue	= entryQueue filterNot { _ ==== original }
-				entryMap	= entryMap - original
-			}
+		// remove stale entries from the entryList and entryMap
+		entryQueue filterNot { _.exists } foreach { original =>
+			WARN("original disappeared: " + original)
+			entryQueue	= entryQueue filterNot { _ ==== original }
+			entryMap	= entryMap - original
 		}
 
 		// delete all cachefiles not in the entryMap
 		val entries	= entryMap.values.toSet
 		val listed	= directory.listFiles	// TODO handle null
-		for (cached <- listed) {
-			if (!(entries contains cached)) {
-				INFO("deleting cached: " + cached)
-				cached.delete()
-			}
+		listed filterNot entries.contains foreach { cached =>
+			INFO("deleting cached: " + cached)
+			cached.delete()
 		}
 	}
 	
 	/** create a new cachefile */ 
 	private def cacheFile():File = {
-		while (true) {
-			val name	= randomString("0123456789abcdefghijklmnopqrstuvwxyz", 14)
-			val cached	= directory / name
-			if (!cached.exists)	return cached
-		}
-		sys error "silence! i kill you!"
+		val cached	= directory / randomString("0123456789abcdefghijklmnopqrstuvwxyz", 14)
+		if (cached.exists)	cacheFile()
+		else				cached
 	}
 
 	/** create a random String from given characters */

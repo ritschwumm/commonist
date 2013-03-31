@@ -1,6 +1,6 @@
 package commonist
 
-import scutil.log.Logging
+import scutil.log._
 
 final class TaskVar[T <: Task] {
 	private var	current:Option[T]	= None
@@ -32,7 +32,8 @@ abstract class Task extends Logging { outer =>
 		}
 	)
 	// see http://java.sun.com/developer/JDCTechTips/2005/tt0727.html#1
-	thread.setPriority(Thread.NORM_PRIORITY)
+	thread setPriority Thread.NORM_PRIORITY
+	
 	private var waitFor:Thread	= null
 	
 	/** start the task in its own thread */

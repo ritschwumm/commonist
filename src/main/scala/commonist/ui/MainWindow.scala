@@ -16,10 +16,10 @@ trait MainWindowCallback {
 	
 /** the application window */
 final class MainWindow(
-			commonUI:CommonUI, directoryUI:DirectoryUI, 
-			imageListUI:ImageListUI, statusUI:StatusUI, uploadUI:UploadUI, 
-			programHeading:String, programIcon:Image, callback:MainWindowCallback) {
-	
+	commonUI:CommonUI, directoryUI:DirectoryUI, 
+	imageListUI:ImageListUI, statusUI:StatusUI, uploadUI:UploadUI, 
+	programHeading:String, programIcon:Image, callback:MainWindowCallback
+) {
 	//------------------------------------------------------------------------------
 	//## panels
 	
@@ -51,7 +51,7 @@ final class MainWindow(
 	window setSize new Dimension(800, 600)
 	window setDefaultCloseOperation WindowConstants.DO_NOTHING_ON_CLOSE	// EXIT_ON_CLOSE or DISPOSE_ON_CLOSE
 	
-	window.setLocationRelativeTo(null)
+	window setLocationRelativeTo null
 	
 	// quit on window close 
 	window onWindowClosing { _ =>
@@ -75,10 +75,10 @@ final class MainWindow(
 	/** loads this UI's state from the properties */
 	def loadSettings(settings:Settings) {
 		val bounds	= window.getBounds
-		bounds.x		= settings getInt ("mainUI.x", bounds.x)
-		bounds.y		= settings getInt ("mainUI.y", bounds.y)
-		bounds.width	= settings getInt ("mainUI.w", bounds.width)
-		bounds.height	= settings getInt ("mainUI.h", bounds.height)
+		bounds.x		= settings getIntOrElse ("mainUI.x", bounds.x)
+		bounds.y		= settings getIntOrElse ("mainUI.y", bounds.y)
+		bounds.width	= settings getIntOrElse ("mainUI.w", bounds.width)
+		bounds.height	= settings getIntOrElse ("mainUI.h", bounds.height)
         UIUtil2 limitAndChangeBounds (window, bounds)
 	}
 	

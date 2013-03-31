@@ -9,7 +9,7 @@ import scala.collection.JavaConversions._
 
 import scutil.Implicits._
 import scutil.Resource._
-import scutil.log.Logging
+import scutil.log._
 
 // TODO ugly
 object Messages {

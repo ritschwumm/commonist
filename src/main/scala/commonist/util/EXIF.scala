@@ -23,7 +23,7 @@ import scala.util.control.Exception._
 
 import scutil.Implicits._
 import scutil.BigRational
-import scutil.log.Logging
+import scutil.log._
 
 object EXIF extends Logging {
 	val NONE	= EXIF(None, None, None, None)

@@ -1,13 +1,16 @@
 package commonist.ui
 
 import java.io.File
+import java.util.{ Stack => JUStack }
 import javax.swing._
 import javax.swing.event._
 import javax.swing.tree._
 
+import scutil.Implicits._
 import scutil.Files._
-import scutil.log.Logging
+import scutil.SystemProperties
 import scutil.gui.CasterInstances._
+import scutil.log._
 
 import commonist.Constants
 import commonist.util._
@@ -20,27 +23,19 @@ trait DirectoryUICallback {
 /** a JTree used to select a directory in the filesystem */
 final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with Logging {
 	// state
-	var currentDirectory	= new File(System.getProperty("user.home"))
+	var currentDirectory	= HOME
 
 	// make a root tree node
-	private val baseNode	= {
-		val rootDirs	= File.listRoots
-		val multiRoot	= rootDirs.length > 1
-		if (multiRoot) {
-			val baseNode1	= new FileNode(new File("/"))	//### FAKE..
-			for (rootDir <- rootDirs) {
-				baseNode1 add new FileNode(rootDir)
-				//### A:\ removed, the tree expand will update later
-				// rootNode.update()
+	private val (baseNode,fakeRoot)	=
+			File.listRoots.guardNotNull.flattenMany.toVector match {
+				case Vector(single)	=>
+					val baseNode	= new FileNode(single) doto { _.update() }
+					(baseNode, false)
+				case many	=>
+					val baseNode	= new FileNode(UNIX_ROOT)	// fake
+					many map (new FileNode(_)) foreach baseNode.add
+					(baseNode, true)
 			}
-			baseNode1
-		}
-		else {
-			val baseNode1	= new FileNode(rootDirs(0))
-			baseNode1.update()
-			baseNode1
-		}
-	}
 		
 	//------------------------------------------------------------------------------
 	//## components
@@ -58,71 +53,56 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 	//##  wiring
 	
 	directoryTree onTreeExpanded { ev =>
-		val node	= ev.getPath.getLastPathComponent.asInstanceOf[FileNode]
+		val node	= lastNode(ev.getPath)
 		node.update()
 		directoryModel nodeStructureChanged node
 	}
 	directoryTree onValueChanged { ev =>
-		val node	= ev.getPath.getLastPathComponent.asInstanceOf[FileNode]
-		currentDirectory	= node.getFile
+		val node			= lastNode(ev.getPath)
+		currentDirectory	= node.file
 		callback.changeDirectory(currentDirectory)
 	}
+	
+	private def lastNode(treePath:TreePath):FileNode	=
+			treePath.getLastPathComponent.asInstanceOf[FileNode]
 	
 	//------------------------------------------------------------------------------
 	//## BrowseDirectory action
 
-	/** browses all directories from the root to a given directory */
-	def browseDirectory(directory1:File) {
-		var directory:File	= directory1
-		
-		// build stack
-		val stack	= new java.util.Stack[File]	// TODO use scala collection
-		while (directory != null) {
-			stack push directory
-			directory	= directory.getParentFile
+	/** open all directories from the root to a given node and select it */
+	def browseDirectory(directory:File) {
+		def loop(search:Seq[FileNode], chain:List[File]) {
+			search find { _.file == chain.head } match {
+				case Some(node)	=>
+					val treePath	= node.treePathClone
+					directoryTree expandPath treePath
+					if (chain.tail.isEmpty) {
+						directoryTree	setSelectionPath	treePath
+						directoryTree	makeVisible			treePath
+						directoryTree	scrollPathToVisible	treePath
+						// done
+					}
+					else {
+						loop(node.childNodes, chain.tail)
+					}
+				case None	=>
+					WARN("node not found", chain.head)
+			}
 		}
 		
-		// find root node
-		var node:FileNode	= null	// TODO make immutable
-		directory	= stack.pop()
-		node	=
-				if (baseNode.getFile == directory)	baseNode
-				else 								baseNode.childNodes find { _.getFile == directory } orNull;
-		// TODO use Option	
-		if (node == null)	{ WARN("first node not found!"); return }
-	
-		val path1	= cloneTreePath(node)
-		directoryTree expandPath path1
-		
-		//------------------------------------------------------------------------------
-		
-		while (!stack.empty()) {
-			directory	= stack.pop()
-			// TODO use Option
-			node	= node.childNodes find { _.getFile == directory } orNull;
-			if (node == null)	{ WARN("child node not found!"); return; }
-			
-			val path2	= cloneTreePath(node)
-			directoryTree expandPath path2
-		}
-	
-		// does not get visible.. why?
-		val path3	= cloneTreePath(node)
-		directoryTree expandPath		path3
-		directoryTree makeVisible		path3
-		directoryTree setSelectionPath	path3
+		val fromRoot	= (directory :: directory.parentChain).reverse
+		if (fakeRoot)	loop(baseNode.childNodes,	fromRoot)
+		else 			loop(Seq(baseNode),			fromRoot)
 	}
-	
-	// NOTE without asInstanceOf scala chooses the Object constructor over the Object[] constructor
-	private def cloneTreePath(node:DefaultMutableTreeNode):TreePath = 
-			new TreePath(node.getPath.asInstanceOf[Array[Object]])
 	
 	//------------------------------------------------------------------------------
 	//## Settings
 
 	/** loads this UI's state from the properties */
 	def loadSettings(settings:Settings) {
-		currentDirectory	= new File(settings get ("directoryTree.currentDirectory", 	System.getProperty("user.home")))
+		currentDirectory	= new File(settings getOrElse (
+				"directoryTree.currentDirectory", 	
+				SystemProperties.user.home))
 		browseDirectory(currentDirectory)
 	}
 	

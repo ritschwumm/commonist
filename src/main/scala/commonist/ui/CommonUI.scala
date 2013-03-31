@@ -13,7 +13,7 @@ import commonist.data._
 import commonist.util._
 
 /** an editor for Data common to all images */
-final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) extends JPanel {
+final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) extends JPanel {
 	override def getMinimumSize():Dimension = new Dimension(
 			300, 
 			super.getMinimumSize.height)
@@ -74,7 +74,7 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 			case x:String		=> x
 			case x				=> sys error ("unexpected license type: " + x)
 		}
-		licenseEditor.setToolTipText(text)
+		licenseEditor setToolTipText text
 	}
 	licenseEditor onActionPerformed { _ =>
 		updateLicenseTooltip() 
@@ -152,14 +152,14 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 	
 	/** loads this UI's state from the properties */
 	def loadSettings(settings:Settings) {
-		userEditor			setText (settings get ("userEditor.Text",			""))
-		passwordEditor		setText (settings get ("passwordEditor.Text",		""))
-		descriptionEditor	setText (settings get ("descriptionEditor.Text",	""))
-		sourceEditor		setText (settings get ("sourceEditor.Text",			""))
-		dateEditor			setText (settings get ("dateEditor.Text",			""))
-		permissionEditor	setText (settings get ("permissionEditor.Text",		""))
-		authorEditor		setText (settings get ("authorEditor.Text",			""))
-		categoriesEditor	setText (settings get ("categoriesEditor.Text",		""))
+		userEditor			setText (settings getOrElse ("userEditor.Text",			""))
+		passwordEditor		setText (settings getOrElse ("passwordEditor.Text",		""))
+		descriptionEditor	setText (settings getOrElse ("descriptionEditor.Text",	""))
+		sourceEditor		setText (settings getOrElse ("sourceEditor.Text",		""))
+		dateEditor			setText (settings getOrElse ("dateEditor.Text",			""))
+		permissionEditor	setText (settings getOrElse ("permissionEditor.Text",	""))
+		authorEditor		setText (settings getOrElse ("authorEditor.Text",		""))
+		categoriesEditor	setText (settings getOrElse ("categoriesEditor.Text",	""))
 		
 		val wikiSel		= settings get "wikiEditor.SelectedItem"
 		val wikiData	= wikiList find { it => Some(it.api) == wikiSel } getOrElse wikiList(0)
@@ -186,7 +186,6 @@ final class CommonUI(wikiList:List[WikiData], licenseList:List[LicenseData]) ext
 		val wikiData	= wikiEditor.getSelectedItem.asInstanceOf[WikiData]
 		settings set ("wikiEditor.SelectedItem",	wikiData.api)
 		
-		//val licenseData	= licenseEditor.getSelectedItem.asInstanceOf[LicenseData]
 		val	licenseSel	= licenseEditor.getSelectedItem match {
 			case x:LicenseData	=> x.template
 			case x:String		=> x

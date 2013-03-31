@@ -6,7 +6,7 @@ import java.util.regex._
 
 import scutil.Implicits._
 import scutil.Resource._
-import scutil.log.Logging
+import scutil.log._
 
 import scmw._
 
@@ -31,10 +31,10 @@ object Parser extends Logging {
 		.mkString("\n")
 	}
 	
-	def parseCoordinates(s:String):Option[Pair[String,String]] =
+	def parseCoordinates(s:String):Option[(String,String)] =
 			s splitAround ',' map { parseCoordinate _ } match {
 				case Seq(Some(latitude), Some(longitude))	=>
-					Some(Pair(latitude, longitude))
+					Some((latitude, longitude))
 				case _	=> 
 					WARN("could not parse coordinates", s)
 					None
@@ -48,7 +48,7 @@ object Parser extends Logging {
 	//------------------------------------------------------------------------------
 
 	val WikiDataPattern	= """\s*(\S+)\s+(\S+)\s+(\S+)\s*""".r
-	def parseWikis(url:URL):List[WikiData] = parseURL(url) {
+	def parseWikis(url:URL):Seq[WikiData] = parseURL(url) {
 		_ match {
 			case WikiDataPattern(family, site, api)	=> 
 				Some(WikiData(family, parseSite(site), api))
@@ -60,7 +60,7 @@ object Parser extends Logging {
 	def parseSite(s:String):Option[String] = (s != "_") guard s
 	
 	val	LicenseDataPattern	= """(\{\{[^\}]+\}\})\s*(.*)""".r
-	def parseLicenses(url:URL):List[LicenseData] = parseURL(url) { 
+	def parseLicenses(url:URL):Seq[LicenseData] = parseURL(url) { 
 		_ match {
 			case LicenseDataPattern(template, description) => 
 				Some(LicenseData(template, description))
@@ -70,29 +70,13 @@ object Parser extends Logging {
 		}
 	}
 	
-	private def parseURL[T](url:URL)(parseLine:String=>Iterable[T]):List[T] = 
+	private def parseURL[T](url:URL)(parseLine:String=>Iterable[T]):Seq[T] = 
 			slurpLines(url)
 			.map { _.trim } 
 			.filter { _.nonEmpty }
 			.filter { !_.startsWith("#") } 
 			.flatMap { parseLine }
 	
-	private def slurpLines(url:URL):List[String] = {
-		import java.io._
-		import scala.collection.mutable.ListBuffer
-		import scala.annotation.tailrec
-		
-		new BufferedReader(new InputStreamReader(url.openStream, "UTF-8")) use { in =>
-			val out	= new ListBuffer[String]
-			@tailrec def readLine() {
-				val	line	= in.readLine
-				if (line != null) {
-					out	+= line
-					readLine()
-				}
-			}
-			readLine()
-			out.toList
-		}
-	}
+	private def slurpLines(url:URL):Seq[String] =
+			new BufferedReader(new InputStreamReader(url.openStream, "UTF-8")) use { _.readLines() }
 }

@@ -2,12 +2,15 @@ package commonist.task
 
 import java.io.File
 import java.nio.charset.Charset
+import java.util.{ List => JUList }
 import javax.swing.JOptionPane
+
+import scala.collection.JavaConverters._
 
 import scutil.Implicits._
 import scutil.Charsets
-import scutil.log.Logging
 import scutil.gui.SwingUtil._
+import scutil.log._
 
 import scmw._
 
@@ -84,7 +87,7 @@ final class UploadFilesTask(
 		statusUILater indeterminate ("status.login.started", wikiName)
 		check()
 			
-		val loginResult	= api.login(commonData.user.trim, commonData.password)
+		val loginResult	= api login (commonData.user.trim, commonData.password)
 		loginResult match {
 			case LoginSuccess(userName)	=>
 				INFO("login successful: " + userName)
@@ -106,7 +109,7 @@ final class UploadFilesTask(
 	statusUILater halt ("status.upload.aborted")
 	statusUILater halt ("status.upload.error", path, e.getMessage)
 	*/
-	private def upload(common:Common):List[Upload] = {
+	private def upload(common:Common):Seq[Upload] = {
 		INFO("uploading files")
 		
 		// TODO normalizeTitle(FileName.fix( is stupid
@@ -114,9 +117,9 @@ final class UploadFilesTask(
 		def titleAt(index:Int):String	=
 					 if (index < 0)					null
 				else if (index >= selected.size)	null
-				else Namespace.file(Filename.normalizeTitle(Filename.fix(selected(index).name)))
+				else selected(index).name |> Filename.fix |> Filename.normalizeTitle |> Namespace.file
 				
-		selected.zipWithIndex map { case Pair(imageData, index) => 
+		selected.zipWithIndex map { case (imageData, index) => 
 			check()
 			
 			val	file		= imageData.file
@@ -149,10 +152,10 @@ final class UploadFilesTask(
 			
 			statusUILater halt ("status.upload.started", fileName)
 			val callback	= new MyUploadCallback(mainWindow, statusUILater, fileLength, fileName, name)
-			val text		= uploadTemplates.imageDescription(common, upload)
+			val text		= uploadTemplates imageDescription (common, upload)
 			val	watch		= true
 			
-			val uploaded	= api.upload(name, "", text, watch, file, callback)
+			val uploaded	= api upload (name, "", text, watch, file, callback)
 			uploaded match {
 				case UploadSuccess(fileName, pageTitle)	=> 
 					INFO("upload successful: " + fileName + " to " + pageTitle)
@@ -201,7 +204,7 @@ final class UploadFilesTask(
 	statusUILater halt ("status.gallery.error", e.getMessage)
 	statusUILater halt ("status.gallery.editConflict",	"[[" + title + "]]")
 	*/
-	def gallery(common:Common, uploads:List[Upload]) = {
+	def gallery(common:Common, uploads:Seq[Upload]) = {
 		INFO("changing gallery")
 		check()
 		
@@ -209,9 +212,9 @@ final class UploadFilesTask(
 		val (sucesses, failures)	= uploads partition { _.error == null }
 		
 		val	batch	= Batch(
-			mkJavaList(uploads),
-			mkJavaList(sucesses),
-			mkJavaList(failures)
+			uploads.asJava,
+			sucesses.asJava,
+			failures.asJava
 		)
 		val summary	= uploadTemplates gallerySummary		(Constants.VERSION, failures.size)
 		val text	= uploadTemplates galleryDescription	(common, batch)
@@ -275,7 +278,7 @@ final class UploadFilesTask(
 						case UploadWarningDuplicate(conflicts)			=> (2, "query.upload.ignoreDuplicate.message",			conflicts mkString ", ")
 						case UploadWarningDuplicateArchive(conflict)	=> (3, "query.upload.ignoreDuplicateArchive.message",	conflict)
 					}
-					.toList
+					.toVector
 					.sortBy	{ case (prio, _, _)			=> prio	}
 					.map	{ case (_, key, conflict)	=> Messages message (key, name, conflict)	}
 					.mkString ("\n")
@@ -294,13 +297,5 @@ final class UploadFilesTask(
 					throw e
 			}
 		}
-	}
-	
-	// import scala.collection.JavaConversions._
-	// (scala.collection.mutable.Buffer[T](values:_*)):java.util.List[T]
-	def mkJavaList[T](values:List[T]):java.util.List[T] = {
-		val	out	= new java.util.ArrayList[T]
-		values foreach { out add _ }
-		out
 	}
 }

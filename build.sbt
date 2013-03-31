@@ -2,17 +2,18 @@ name			:= "commonist"
 
 organization	:= "de.djini"
 
-version			:= "0.5.0"
+version			:= "0.6.0"
 
-scalaVersion	:= "2.10.0"
+scalaVersion	:= "2.10.1"
 
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil"		% "0.16.0"			% "compile",
-	"de.djini"					%%	"scjson"		% "0.16.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.11.0"			% "compile",
+	"de.djini"					%%	"scutil"		% "0.18.0"			% "compile",
+	"de.djini"					%%	"scjson"		% "0.20.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.15.0"			% "compile",
 	"org.apache.httpcomponents"	%	"httpclient"	% "4.2.3"			% "compile",
 	"org.apache.httpcomponents"	%	"httpmime"		% "4.2.3"			% "compile",
-	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile"
+	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
+	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )
 
 scalacOptions	++= Seq(
@@ -48,6 +49,11 @@ scriptstartConfigs	:= Seq(ScriptConfig(
 	mainClass	= "commonist.Commonist"
 ))
 
+// scriptstart::zipper
+inTask(scriptstartBuild)(zipperSettings ++ Seq(
+	zipperFiles	<<= scriptstartBuild map { dir => selectSubpaths(dir, -DirectoryFilter).toSeq }
+))
+
 //--------------------------------------------------------------------------------
 
 osxappSettings
@@ -61,6 +67,12 @@ osxappVm			:= OracleJava7()
 osxappMainClass		:= Some("commonist.Commonist")
 
 osxappVmOptions		:= Seq("-Xmx192m")
+
+// osxapp::zipper
+inTask(osxappBuild)(zipperSettings ++ Seq(
+	zipperFiles		<<= osxappBuild map { dir => selectSubpaths(dir, -DirectoryFilter).toSeq },
+	zipperBundle	<<= zipperBundle { _ + ".app" } 
+))
 
 //--------------------------------------------------------------------------------
 
@@ -105,9 +117,3 @@ webstartJnlpConfigs	:= Seq(JnlpConfig(
 webstartExtras	<<= sourceDirectory in Compile map { source =>
 	Path selectSubpaths (source / "webstart" , -DirectoryFilter) toSeq
 }
-
-//------------------------------------------------------------------------------
-
-zipperSettings
-
-zipperFiles		<<= scriptstartBuild map { dir => selectSubpaths(dir, -DirectoryFilter).toSeq }

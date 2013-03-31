@@ -1,5 +1,6 @@
 package commonist.thumb
 
+import java.lang.{ Integer => JInteger }
 import java.io._
 import java.awt.{ List => AwtList, _ }
 import java.awt.geom._
@@ -7,17 +8,17 @@ import java.awt.image._
 import javax.swing._
 import javax.imageio._
 
+import scutil.log._
+
 import commonist.Constants
 import commonist.util.Settings
-
-import scutil.log.Logging
 
 /** manages thumbnail images */
 final class Thumbnails(cache:FileCache) extends Logging {
 	var	maxSize	= Constants.THUMBNAIL_DEFAULT_SIZE
 
 	def loadSettings(settings:Settings) {
-		maxSize	= settings getInt ("thumbnails.maxSize", maxSize)
+		maxSize	= settings getIntOrElse ("thumbnails.maxSize", maxSize)
 	}
 	
 	def saveSettings(settings:Settings) {
@@ -41,13 +42,13 @@ final class Thumbnails(cache:FileCache) extends Logging {
 			// TODO give the cache a loader instead of talking to it here
 			
 			// try to get cached thumb
-			(cache get file) map { ImageIO read _  } orElse {
+			(cache get file) map { ImageIO read _ } orElse {
 				// read original and make thumb
 				val thumb	= readSubsampled(file) map makeThumbnail
 				
 				thumb foreach { thumb =>
 					// cache thumb
-					val thumbFile2	= cache.put(file)
+					val thumbFile2	= cache put file
 					val	success		= ImageIO write (thumb, "jpg", thumbFile2)
 					if (!success) {
 						WARN("could not create thumbnail: " + thumbFile2)
@@ -132,7 +133,7 @@ final class Thumbnails(cache:FileCache) extends Logging {
 		val sizeY		= reader getHeight	imageIndex
 		val size		= sizeX min sizeY
 		val scale		= size / maxSize
-		val sampling	= smallerPowerOf2(scale * 100 / Constants.THUMBNAIL_SCALE_HEADROOM)
+		val sampling	= JInteger highestOneBit (scale * 100 / Constants.THUMBNAIL_SCALE_HEADROOM)
 //		System.err.println("#### scale=" + scale + "\t=> sampling=" + sampling)
 		
 		// TODO could scale at load time!
@@ -144,16 +145,5 @@ final class Thumbnails(cache:FileCache) extends Logging {
 		stream.close()
 		
 		Some(image)
-	}
-
-	/** returns the biggest power of 2 smaller than or equal to x */
-	private def smallerPowerOf2(x:Int):Int = {
-		var exp	= 1
-		var xxx	= x
-		while (xxx > 0) {
-			exp	= exp << 1
-			xxx	= xxx >> 1
-		}
-		exp >> 1
 	}
 }

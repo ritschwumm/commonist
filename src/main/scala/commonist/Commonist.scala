@@ -3,18 +3,21 @@ package commonist
 import java.awt.{ List => AwtList, _ }
 import java.io._
 import java.net._
+import javax.imageio.ImageIO
 
 import bsh.Interpreter
 import bsh.EvalError
 
+import org.simplericity.macify.eawt._
+
 import scutil.Implicits._
 import scutil.ThreadUtil
 import scutil.ExceptionUtil
+import scutil.SystemProperties
 import scutil.Files._
 import scutil.Resource._
-import scutil.AppleQuit
-import scutil.log.Logging
 import scutil.gui.SwingApp
+import scutil.log._
 
 import commonist.data._
 import commonist.task._
@@ -23,9 +26,16 @@ import commonist.ui._
 import commonist.util._
 
 /** the main application class */
-object Commonist extends SwingApp {
-	ExceptionUtil.logAllExceptions()
-	ExceptionUtil.logAWTExceptions()
+object Commonist extends SwingApp with Logging {
+	def onStartupError(e:Exception) {
+		e.printStackTrace()
+	}
+	ExceptionUtil logAllExceptions { (thread,throwable) =>
+		throwable.printStackTrace()
+	}
+	ExceptionUtil logAWTExceptions { (thread,throwable) =>
+		throwable.printStackTrace()
+	}
 	
 	private val settingsProp	= (System getProperty "commonist.settings").guardNotNull
 	private val settingsDir		= settingsProp map { new File(_) } getOrElse (HOME / ".commonist")
@@ -42,7 +52,7 @@ object Commonist extends SwingApp {
 	val programIcon		= null
 	val programHeading	= "The Commonist " + Constants.VERSION
 	
-	private val userLanguage	= System.getProperty("user.language")
+	private val userLanguage	= SystemProperties.user.language
 	INFO("using user language: " + userLanguage)
 	loadMessages(userLanguage)
 		
@@ -80,7 +90,16 @@ object Commonist extends SwingApp {
 		def quit() { doQuit() }
 	})
 		
-	AppleQuit install doQuit
+	private val macifyApplication	= new DefaultApplication
+	macifyApplication addApplicationListener new ApplicationAdapter {
+		override def handleQuit(ev:ApplicationEvent) {
+			doQuit()
+		}
+	}
+	"/commonist-128.png" |> getClass.getResource |> ImageIO.read |> 
+	macifyApplication.setApplicationIconImage
+	macifyApplication.removeAboutMenuItem()
+	macifyApplication.removePreferencesMenuItem()
 	
 	//-------------------------------------------------------------------------
 	//## life cycle
@@ -167,11 +186,11 @@ object Commonist extends SwingApp {
 	}
 	
 	/** load licenses */
-	private def loadLicenses():List[LicenseData] = 
+	private def loadLicenses():Seq[LicenseData] = 
 			Parser parseLicenses (loader resourceURL "licenses.txt" getOrError "cannot load licenses.txt")
 
 	/** load wikis */
-	private def loadWikis():List[WikiData] = 
+	private def loadWikis():Seq[WikiData] = 
 			Parser parseWikis (loader resourceURL "wikis.txt" getOrError "cannot load wikis.txt")
 	
 	/*

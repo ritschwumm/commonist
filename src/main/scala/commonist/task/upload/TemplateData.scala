@@ -1,8 +1,10 @@
 package commonist.task.upload
 
-import commonist.data._
+import java.util.{ List => JUList }
 
 import scala.reflect.BeanProperty
+
+import commonist.data._
 
 case class Common(
 	@BeanProperty description:String,
@@ -16,9 +18,9 @@ case class Common(
 )
 
 case class Batch(
-	@BeanProperty uploads:java.util.List[Upload],
-	@BeanProperty successes:java.util.List[Upload],
-	@BeanProperty failures:java.util.List[Upload]
+	@BeanProperty uploads:JUList[Upload],
+	@BeanProperty successes:JUList[Upload],
+	@BeanProperty failures:JUList[Upload]
 ) 
 
 case class Upload(

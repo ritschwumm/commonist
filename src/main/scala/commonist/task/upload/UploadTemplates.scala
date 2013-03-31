@@ -8,7 +8,7 @@ import bsh.Interpreter
 
 import scutil.Implicits._
 import scutil.Resource._
-import scutil.log.Logging
+import scutil.log._
 
 import commonist.data._
 import commonist.util._
@@ -40,12 +40,10 @@ final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 							(loader resourceURL generic)	getOrError 
 							("neither specific template: " + specific + " nor generic template: " + generic + " could be found")
 		try {
-			val compiled	= compile(url, data)
-			TextUtil2 trimLF (TextUtil2 restrictEmptyLines compiled)
+			compile(url, data) |> TextUtil2.restrictEmptyLines |> TextUtil2.trimLF
 		}
-		catch {
-			case e:Exception => 
-				ERROR("exception occurred while using template", url, e)
+		catch { case e:Exception => 
+			ERROR("exception occurred while using template", url, e)
 			throw e
 		}
 	}
@@ -57,12 +55,12 @@ final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 			new Compiler() compile tin
 		}
 
-		val sout	= new StringWriter()
+		val sout	= new StringWriter
 		val xout	= new PrintWriter(sout)
 		
 		val interpreter	= new Interpreter()
 		interpreter set ("out",	xout)
-		data.foreach { case Pair(key,value) => interpreter set (key, value) }
+		data.foreach { case (key,value) => interpreter set (key, value) }
 
 		val cin	= new StringReader(code)
 		interpreter eval (cin, interpreter.getNameSpace, url.toExternalForm)
