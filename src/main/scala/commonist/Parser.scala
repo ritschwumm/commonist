@@ -5,7 +5,6 @@ import java.net._
 import java.util.regex._
 
 import scutil.Implicits._
-import scutil.Resource._
 import scutil.log._
 
 import scmw._
@@ -24,7 +23,7 @@ object Parser extends Logging {
 		
 		// else compile wikitext
 		s
-		.splitAround(SEPARATOR)
+		.splitAroundChar(SEPARATOR)
 		.map { _.trim }
 		.filter { _.nonEmpty }
 		.map { name => LINK_START + Namespace.category(name) + LINK_END }
@@ -32,7 +31,7 @@ object Parser extends Logging {
 	}
 	
 	def parseCoordinates(s:String):Option[(String,String)] =
-			s splitAround ',' map { parseCoordinate _ } match {
+			s splitAroundChar ',' map parseCoordinate match {
 				case Seq(Some(latitude), Some(longitude))	=>
 					Some((latitude, longitude))
 				case _	=> 

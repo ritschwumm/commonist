@@ -7,8 +7,8 @@ import javax.swing.event._
 import javax.swing.tree._
 
 import scutil.Implicits._
-import scutil.Files._
-import scutil.SystemProperties
+import scutil.io.Files._
+import scutil.platform.SystemProperties
 import scutil.gui.CasterInstances._
 import scutil.log._
 

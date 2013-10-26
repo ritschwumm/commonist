@@ -5,7 +5,9 @@ import java.awt.{ List => AwtList, _ }
 import java.awt.event._
 import javax.swing._
 
+import scutil.lang._
 import scutil.Implicits._
+import scutil.color._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 
@@ -32,7 +34,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	updateStateView()
 	
 	private val imageView	= new JLabel(null, null, SwingConstants.CENTER)
-	imageView setBackground (Color decode "#eeeeee")
+	imageView setBackground rgb"eeeeee".toColor
 //		imageView.setBorder(
 //			BorderFactory.createBevelBorder(BevelBorder.RAISED)
 //		)
@@ -142,7 +144,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	
 	imageView setToolTipText (Messages message ("image.tooltip", file.getName, TextUtil2.human(file.length)))
 	imageView setIcon		icon.orNull
-	imageView setText		(icon cataSwapped (_ => "", Messages text "image.nothumb"))
+	imageView setText		(icon cata (Messages text "image.nothumb", constant("")))
 	
 	// TODO move unparsers and parsers together
 	

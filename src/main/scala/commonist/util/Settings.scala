@@ -1,18 +1,17 @@
 package commonist.util
 
 import java.io._
-import java.util.Properties
 
 import scala.collection.mutable
 import scala.collection.JavaConverters._
 
 import scutil.Implicits._
 import scutil.log._
+import scutil.io._
 
 /** encapsulates a properties file */
 class Settings(file:File) extends Logging {
-	private val propertiesRaw:Properties					= new Properties
-	private val propertiesMap:mutable.Map[String,String]	= propertiesRaw.asScala
+	private var propertiesMap:Map[String,String]	= Map.empty
 	
 	/** get a property */
 	def get(name:String):Option[String] = propertiesMap get name
@@ -22,7 +21,7 @@ class Settings(file:File) extends Logging {
 	
 	/** set a property */
 	def set(name:String, value:String) {
-		propertiesMap update (name, value)
+		propertiesMap	= propertiesMap updated (name, value)
 	}
 	
 	def getInt(name:String):Option[Int]	=
@@ -38,9 +37,7 @@ class Settings(file:File) extends Logging {
 	/** loads our properties file */
 	def load() {
 		if (file.exists) {
-			file withInputStream { in =>
-				propertiesRaw load in
-			}
+			propertiesMap = PropertiesUtil loadFile file
 		}
 		else {
 			INFO("setting file does not exist: " + file.getPath)
@@ -49,8 +46,6 @@ class Settings(file:File) extends Logging {
 
 	/** saves our properties file */
 	def save() {
-		file withOutputStream { out =>
-			propertiesRaw store (out, "the commonist")
-		}
+		PropertiesUtil saveFile (file, propertiesMap)
 	}
 }

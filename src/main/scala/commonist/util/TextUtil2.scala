@@ -1,11 +1,11 @@
 package commonist.util
 
-import scutil.Human
+import scutil.text.Human
 
 /** text utility functions */
 object TextUtil2 {
 	/** encode a number of bytes into a human readable form */
-	def human(bytes:Long):String = Human rounded (Human.binaryTable, 1, bytes)
+	def human(bytes:Long):String = Human roundedBinary (1, bytes)
 	
 	/** returns a single-line throwable description */
 	def shortError(t:Throwable):String		= t.getClass.getName.replaceAll("^.*\\.", "") + " " + feedToSpace(t.getMessage)

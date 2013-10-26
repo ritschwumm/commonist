@@ -2,16 +2,16 @@ name			:= "commonist"
 
 organization	:= "de.djini"
 
-version			:= "0.6.0"
+version			:= "0.7.0"
 
-scalaVersion	:= "2.10.1"
+scalaVersion	:= "2.10.3"
 
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil"		% "0.18.0"			% "compile",
-	"de.djini"					%%	"scjson"		% "0.20.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.15.0"			% "compile",
-	"org.apache.httpcomponents"	%	"httpclient"	% "4.2.3"			% "compile",
-	"org.apache.httpcomponents"	%	"httpmime"		% "4.2.3"			% "compile",
+	"de.djini"					%%	"scutil"		% "0.31.0"			% "compile",
+	"de.djini"					%%	"scjson"		% "0.34.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.29.0"			% "compile",
+	"org.apache.httpcomponents"	%	"httpclient"	% "4.2.6"			% "compile",
+	"org.apache.httpcomponents"	%	"httpmime"		% "4.2.6"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )
@@ -35,7 +35,7 @@ buildInfoSettings
 
 sourceGenerators in Compile	<+= buildInfo
 
-buildInfoKeys		:= Seq[Scoped](version)	// name, version, scalaVersion, sbtVersion
+buildInfoKeys		:= Seq[BuildInfoKey](version)	// name, version, scalaVersion, sbtVersion
 
 buildInfoPackage	:= "commonist"
 
@@ -51,7 +51,7 @@ scriptstartConfigs	:= Seq(ScriptConfig(
 
 // scriptstart::zipper
 inTask(scriptstartBuild)(zipperSettings ++ Seq(
-	zipperFiles	<<= scriptstartBuild map { dir => selectSubpaths(dir, -DirectoryFilter).toSeq }
+	zipperFiles	:= selectSubpaths(scriptstartBuild.value, -DirectoryFilter).toSeq
 ))
 
 //--------------------------------------------------------------------------------
@@ -70,25 +70,27 @@ osxappVmOptions		:= Seq("-Xmx192m")
 
 // osxapp::zipper
 inTask(osxappBuild)(zipperSettings ++ Seq(
-	zipperFiles		<<= osxappBuild map { dir => selectSubpaths(dir, -DirectoryFilter).toSeq },
-	zipperBundle	<<= zipperBundle { _ + ".app" } 
+	zipperFiles		:= selectSubpaths(osxappBuild.value, -DirectoryFilter).toSeq,
+	zipperBundle	:= zipperBundle.value + ".app" 
 ))
 
 //--------------------------------------------------------------------------------
 
 webstartSettings
 
-webstartGenConfig	:= GenConfig(
+webstartGenConfig	:= Some(GenConfig(
 	dname		= "CN=Snake Oil, OU=Hacking Unit, O=FNORD! Inc., L=Bielefeld, ST=33641, C=DE",
 	validity	= 365
-)
+))
 
-webstartKeyConfig	:= KeyConfig(
+webstartKeyConfig	:= Some(KeyConfig(
 	keyStore	= file("etc/keyStore"),
 	storePass	= "0xDEADBEEF",
 	alias		= "signFiles",
 	keyPass		= "0xDEADBEEF"
-)
+))
+
+webstartManifest	:= Some(file("etc/manifest.mf"))
 
 webstartJnlpConfigs	:= Seq(JnlpConfig(
 	fileName	= "commonist.jnlp",
@@ -114,6 +116,4 @@ webstartJnlpConfigs	:= Seq(JnlpConfig(
 	}
 ))
 
-webstartExtras	<<= sourceDirectory in Compile map { source =>
-	Path selectSubpaths (source / "webstart" , -DirectoryFilter) toSeq
-}
+webstartExtras	:= Path selectSubpaths ((sourceDirectory in Compile).value / "webstart" , -DirectoryFilter) toSeq

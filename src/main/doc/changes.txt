@@ -1,4 +1,10 @@
-0.6.0
+0.7.0	26oct13
+	change		issued a new snakeoil certificate
+	change		added permissions attribute to jar manifests
+	change		build with sbt 0.13.0
+	change		uses scala 2.10.3
+
+0.6.0	01apr13
 	feature		added zipfile for an osx app to the build
 	bugfix		display the commonist icon the dock on osx again
 	bugfix		on startup the selected directory was not visible in the 

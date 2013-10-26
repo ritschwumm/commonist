@@ -22,7 +22,7 @@ import org.apache.sanselan.formats.tiff.constants.GPSTagConstants._
 import scala.util.control.Exception._
 
 import scutil.Implicits._
-import scutil.BigRational
+import scutil.math.BigRational
 import scutil.log._
 
 object EXIF extends Logging {
@@ -43,10 +43,9 @@ object EXIF extends Logging {
 						NONE
 				}
 			}
-			catch {
-				case e:Exception	=>	// ImageReadException, IOException
-					DEBUG("cannot read file", file, e.getMessage)
-					NONE
+			catch { case e:Exception	=>	// ImageReadException, IOException
+				DEBUG("cannot read file", file, e.getMessage)
+				NONE
 			}
 	
 	//------------------------------------------------------------------------------

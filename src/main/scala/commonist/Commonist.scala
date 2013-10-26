@@ -11,11 +11,8 @@ import bsh.EvalError
 import org.simplericity.macify.eawt._
 
 import scutil.Implicits._
-import scutil.ThreadUtil
-import scutil.ExceptionUtil
-import scutil.SystemProperties
-import scutil.Files._
-import scutil.Resource._
+import scutil.platform._
+import scutil.io.Files._
 import scutil.gui.SwingApp
 import scutil.log._
 

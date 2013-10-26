@@ -7,7 +7,6 @@ import net.psammead.minibpp.Compiler
 import bsh.Interpreter
 
 import scutil.Implicits._
-import scutil.Resource._
 import scutil.log._
 
 import commonist.data._
@@ -17,7 +16,7 @@ import commonist.util._
 final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 	/** edit summary for writing a gallery */
 	def gallerySummary(version:String, failureCount:Int):String =
-			"commonist " + version + ((failureCount != 0) cataSwapped (", " + failureCount + " errors", ""))
+			"commonist " + version + ((failureCount != 0) cata ("", ", " + failureCount + " errors"))
 	
 	/** compiles into wikitext */
 	def galleryDescription(common:Common, batch:Batch):String =

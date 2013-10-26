@@ -8,8 +8,8 @@ import java.util.Properties
 import scala.collection.JavaConversions._
 
 import scutil.Implicits._
-import scutil.Resource._
 import scutil.log._
+import scutil.io._
 
 // TODO ugly
 object Messages {
@@ -25,8 +25,8 @@ object Messages {
 	
 /** encapsulates user messages loaded from a properties document */
 class Messages(defaultURL:URL, userLangURL:Option[URL]) extends Logging {
-	val defaultProps	= load(defaultURL)
-	val userLangProps	= userLangURL map load _ getOrElse Map.empty
+	val defaultProps	= PropertiesUtil loadURL defaultURL
+	val userLangProps	= userLangURL cata (Map.empty[String,String], PropertiesUtil.loadURL)
 
 	def getText(key:String):String = get(key)
 	
@@ -34,21 +34,13 @@ class Messages(defaultURL:URL, userLangURL:Option[URL]) extends Logging {
 			try {
 				MessageFormat format (get(key), args.map(_.asInstanceOf[AnyRef]) : _*)
 			}
-			catch {
-				case e:Exception	=>
-					ERROR("message cannot be used: " + key)
-					throw e
+			catch { case e:Exception	=>
+				ERROR("message cannot be used: " + key)
+				throw e
 			}
 	
 	private def get(key:String):String =
 			(userLangProps get key)	orElse
 			(defaultProps get key)	getOrError
 			("message not available: " + key)
-	
-	private def load(url:URL):Map[String,String] =
-			url.openStream() use { in =>
-				val props	= new Properties()
-				props load in
-				Map() ++ props
-			}
 }

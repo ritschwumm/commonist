@@ -6,8 +6,7 @@ import java.lang.{ Math => JMath }
 import scala.collection.immutable.Queue
 
 import scutil.Implicits._
-import scutil.Resource._
-import scutil.Charsets._
+import scutil.io.Charsets._
 import scutil.log._
 
 /** caches derived Files indexed by their original Files */
@@ -99,8 +98,8 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 	private def flush() {
 		if (entryQueue.nonEmpty && entryQueue.size > cachedFiles) {
 			for {
-				(oldOriginal,newQueue)	<- entryQueue.dequeueOption
-				(oldCached,newMap)		<- entryMap extractAtOption oldOriginal
+				(oldOriginal,	newQueue)	<- entryQueue.extractHead
+				(oldCached,		newMap)		<- entryMap extractAt oldOriginal
 			} {
 				entryQueue	= newQueue
 				entryMap	= newMap

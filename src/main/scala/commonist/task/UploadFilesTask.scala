@@ -8,7 +8,7 @@ import javax.swing.JOptionPane
 import scala.collection.JavaConverters._
 
 import scutil.Implicits._
-import scutil.Charsets
+import scutil.io.Charsets
 import scutil.gui.SwingUtil._
 import scutil.log._
 
