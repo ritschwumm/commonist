@@ -100,9 +100,13 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 
 	/** loads this UI's state from the properties */
 	def loadSettings(settings:Settings) {
-		currentDirectory	= new File(settings getOrElse (
-				"directoryTree.currentDirectory", 	
-				SystemProperties.user.home))
+		currentDirectory	=
+				new File(
+					settings getOrElse (
+						"directoryTree.currentDirectory", 	
+						SystemProperties.user.home
+					)
+				)
 		browseDirectory(currentDirectory)
 	}
 	

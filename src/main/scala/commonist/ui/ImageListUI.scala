@@ -74,9 +74,10 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	
 	/** adds a File UI */
 	def add(file:File, icon:Option[Icon], thumbnailMaxSize:Int) {
-		val	imageUI	= new ImageUI(file, icon, thumbnailMaxSize, programHeading, programIcon, new ImageUICallback {
-			def updateSelectStatus() {  outer.updateSelectStatus() }
-		})
+		val	imageUI	= 
+				new ImageUI(file, icon, thumbnailMaxSize, programHeading, programIcon, new ImageUICallback {
+					def updateSelectStatus() {  outer.updateSelectStatus() }
+				})
 		
 		imageUIs += imageUI
 		listPanel add imageUI
@@ -134,33 +135,37 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 			orientation	SwingConstants.VERTICAL or SwingConstants.HORIZONTAL.
 			direction	Less than zero to scroll up/left, greater than zero for down/right.
 		*/
-		def getScrollableUnitIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int = {
-			if (orientation == SwingConstants.HORIZONTAL)	return 1
-			
-			if (direction < 0) {
-				val component	= getComponentAt(visibleRect.x, visibleRect.y - 2)
-				val	visible		= visibleRect.y
-				val	target		= if (component != null) component.getY else 0
-				visible - target
-			}
-			else {
-				val component	= getComponentAt(visibleRect.x, visibleRect.y + visibleRect.height)
-				val	visible		= visibleRect.y + visibleRect.height
-				val	target		= if (component != null) (component.getY + component.getHeight) else this.getHeight
-				target - visible
-			}
-		}
+		def getScrollableUnitIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int =
+				if (orientation == SwingConstants.HORIZONTAL) {
+					1
+				}
+				else if (direction < 0) {
+					val component	= getComponentAt(visibleRect.x, visibleRect.y - 2)
+					val	visible		= visibleRect.y
+					val	target		= if (component != null) component.getY else 0
+					visible - target
+				}
+				else {
+					val component	= getComponentAt(visibleRect.x, visibleRect.y + visibleRect.height)
+					val	visible		= visibleRect.y + visibleRect.height
+					val	target		= if (component != null) (component.getY + component.getHeight) else this.getHeight
+					target - visible
+				}
 		
 		/**	visibleRect	The view area visible within the viewport
 			orientation	SwingConstants.VERTICAL or SwingConstants.HORIZONTAL.
 			direction	Less than zero to scroll up/left, greater than zero for down/right.
 		*/
-		def getScrollableBlockIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int = {
-			if (orientation == SwingConstants.HORIZONTAL)	return 1
-			
-			if (direction < 0)	visibleRect.height min (visibleRect.y - 0)
-			else				visibleRect.height min (this.getHeight  - (visibleRect.y + visibleRect.height))
-		}  
+		def getScrollableBlockIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int =
+				if (orientation == SwingConstants.HORIZONTAL) {
+					1
+				}
+				else if (direction < 0)	{
+					visibleRect.height min (visibleRect.y - 0)
+				}
+				else {
+					visibleRect.height min (this.getHeight  - (visibleRect.y + visibleRect.height))
+				}
 		
 		def getPreferredScrollableViewportSize():Dimension	= this.getPreferredSize
 		def getScrollableTracksViewportWidth():Boolean		= true

@@ -77,10 +77,12 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	UIUtil2 scrollVisibleOnFocus (coordinatesEditor,	this)
 	UIUtil2 scrollVisibleOnFocus (categoriesEditor,		this)
 	
-	private val descriptionScroll	= new JScrollPane(
-			descriptionEditor, 
-			ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
-			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED)
+	private val descriptionScroll	=
+			new JScrollPane(
+				descriptionEditor, 
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED
+			)
 
 //		setBorder(
 //			BorderFactory.createCompoundBorder(
@@ -161,10 +163,12 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	coordinatesEditor	setText		exifGPS
 	categoriesEditor	setText		""
 	
-	// TODO could be a trait
-	override def getMaximumSize():Dimension = new Dimension(
-			super.getMaximumSize.width,
-			super.getPreferredSize.height)
+	// BETTER could be a trait
+	override def getMaximumSize():Dimension =
+			new Dimension(
+				super.getMaximumSize.width,
+				super.getPreferredSize.height
+			)
 
 	/** returns true when this file should be uploaded */
 	def isUploadSelected():Boolean = uploadEditor.isSelected
@@ -180,23 +184,28 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	}
 	
 	private def updateStateView() {
-		val	label	= uploadSuccessful match {
-			case Some(true)		=> Messages.text("image.status.success")
-			case Some(false)	=> Messages.text("image.status.failure")
-			case None			=> Messages.text("image.status.none")
-		}
+		val	label	=
+				Messages text (
+					uploadSuccessful match {
+						case Some(true)		=> "image.status.success"
+						case Some(false)	=> "image.status.failure"
+						case None			=> "image.status.none"
+					}
+				)
 		stateView setText label
 	}
 	
 	/** gets all data edit in this UI */
-	def getData:ImageData = new ImageData(
-			file,
-			uploadEditor.isSelected,
-			nameEditor.getText,
-			descriptionEditor.getText,
-			dateEditor.getText,
-			coordinatesEditor.getText,
-			categoriesEditor.getText)       
+	def getData:ImageData =
+			ImageData(
+				file,
+				uploadEditor.isSelected,
+				nameEditor.getText,
+				descriptionEditor.getText,
+				dateEditor.getText,
+				coordinatesEditor.getText,
+				categoriesEditor.getText
+			)       
 			
 	/*
 	def setData(imageData:ImageData) {

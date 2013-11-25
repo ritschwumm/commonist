@@ -21,5 +21,5 @@ object TextUtil2 {
 
 	/** concatenates two Strings and inserts a separator if both are non-empty */
 	def joinNonEmpty(string1:String, string2:String, separator:String):String = 
-			List(string1, string2) filter { _.length != 0 } mkString separator
+			Vector(string1, string2) filter { _.length != 0 } mkString separator
 }

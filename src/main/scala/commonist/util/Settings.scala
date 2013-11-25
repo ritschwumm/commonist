@@ -10,7 +10,7 @@ import scutil.log._
 import scutil.io._
 
 /** encapsulates a properties file */
-class Settings(file:File) extends Logging {
+final class Settings(file:File) extends Logging {
 	private var propertiesMap:Map[String,String]	= Map.empty
 	
 	/** get a property */

@@ -2,16 +2,14 @@ name			:= "commonist"
 
 organization	:= "de.djini"
 
-version			:= "0.7.0"
+version			:= "0.8.0"
 
 scalaVersion	:= "2.10.3"
 
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil"		% "0.31.0"			% "compile",
-	"de.djini"					%%	"scjson"		% "0.34.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.29.0"			% "compile",
-	"org.apache.httpcomponents"	%	"httpclient"	% "4.2.6"			% "compile",
-	"org.apache.httpcomponents"	%	"httpmime"		% "4.2.6"			% "compile",
+	"de.djini"					%%	"scutil"		% "0.34.0"			% "compile",
+	"de.djini"					%%	"scjson"		% "0.37.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.33.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )

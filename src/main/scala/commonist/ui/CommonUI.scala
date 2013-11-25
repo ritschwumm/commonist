@@ -14,9 +14,11 @@ import commonist.util._
 
 /** an editor for Data common to all images */
 final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) extends JPanel {
-	override def getMinimumSize():Dimension = new Dimension(
-			300, 
-			super.getMinimumSize.height)
+	override def getMinimumSize():Dimension =
+			new Dimension(
+				300, 
+				super.getMinimumSize.height
+			)
 			
 	//## components
 	
@@ -69,11 +71,12 @@ final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) exten
 	
 	// license contains the full text as a tooltip
 	private def updateLicenseTooltip() {
-		val	text	= licenseEditor.getSelectedItem match {
-			case x:LicenseData	=> x.description
-			case x:String		=> x
-			case x				=> sys error ("unexpected license type: " + x)
-		}
+		val	text	=
+				licenseEditor.getSelectedItem match {
+					case x:LicenseData	=> x.description
+					case x:String		=> x
+					case x				=> sys error ("unexpected license type: " + x)
+				}
 		licenseEditor setToolTipText text
 	}
 	licenseEditor onActionPerformed { _ =>
@@ -131,21 +134,23 @@ final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) exten
 	add(separator2,			GBC pos (0,12) size (2,1) weight (1,0) anchor CENTER fill HORIZONTAL	insetsTLBR (0,0,0,0))
 	
 	/** gets all data edit in this UI */
-	def getData:CommonData = new CommonData(
-			wikiEditor.getSelectedItem.asInstanceOf[WikiData],
-			userEditor.getText.trim,
-			new String(passwordEditor.getPassword),
-			descriptionEditor.getText,
-			dateEditor.getText,
-			sourceEditor.getText,
-			authorEditor.getText,
-			permissionEditor.getText,
-			licenseEditor.getSelectedItem match {
-				case x:String		=> LicenseData(x, "")
-				case x:LicenseData	=> x
-				case x				=> sys error ("unexpected license type: " + x)
-			},
-			categoriesEditor.getText)
+	def getData:CommonData = 
+			CommonData(
+				wikiEditor.getSelectedItem.asInstanceOf[WikiData],
+				userEditor.getText.trim,
+				new String(passwordEditor.getPassword),
+				descriptionEditor.getText,
+				dateEditor.getText,
+				sourceEditor.getText,
+				authorEditor.getText,
+				permissionEditor.getText,
+				licenseEditor.getSelectedItem match {
+					case x:String		=> LicenseData(x, "")
+					case x:LicenseData	=> x
+					case x				=> sys error ("unexpected license type: " + x)
+				},
+				categoriesEditor.getText
+			)
 	
 	//------------------------------------------------------------------------------
 	//## Settings
@@ -186,11 +191,12 @@ final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) exten
 		val wikiData	= wikiEditor.getSelectedItem.asInstanceOf[WikiData]
 		settings set ("wikiEditor.SelectedItem",	wikiData.api)
 		
-		val	licenseSel	= licenseEditor.getSelectedItem match {
-			case x:LicenseData	=> x.template
-			case x:String		=> x
-			case x				=> sys error ("unexpected license type: " + x)
-		}
+		val	licenseSel	=
+				licenseEditor.getSelectedItem match {
+					case x:LicenseData	=> x.template
+					case x:String		=> x
+					case x				=> sys error ("unexpected license type: " + x)
+				}
 		settings set ("licenseEditor.SelectedItem",	licenseSel)
 	}
 }
