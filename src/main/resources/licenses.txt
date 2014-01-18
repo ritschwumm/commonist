@@ -49,6 +49,9 @@
 # Non-free licenses:
 {{Copyright by Wikimedia}}				Wikimedia logos
 
+# Other copyleft licenses:
+{{FAL}}									Copyleft: This work of art is free; you can redistribute it and/or modify it according to terms of the Free Art License.
+
 ## OLD
 #{{self2|GFDL|cc-by-sa-2.5,2.0,1.0}}	Own work, copyleft: Multi-license with GFDL and Creative Commons CC-BY-SA-2.5 and older versions (2.0 and 1.0)
 #{{self2|GFDL|cc-by-2.5}}			Own work, attribution required (Multi-license with GFDL and Creative Commons CC-BY 2.5)

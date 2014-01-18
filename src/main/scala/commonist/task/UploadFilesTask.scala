@@ -7,7 +7,7 @@ import javax.swing.JOptionPane
 
 import scala.collection.JavaConverters._
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.io.Charsets
 import scutil.gui.SwingUtil._
 import scutil.log._
@@ -90,16 +90,16 @@ final class UploadFilesTask(
 		val loginResult	= api login (commonData.user.trim, commonData.password)
 		loginResult match {
 			case LoginSuccess(userName)	=>
-				INFO("login successful: " + userName)
+				INFO("login successful", userName)
 				statusUILater halt ("status.login.successful", wikiName)
 				true
 			case LoginFailure(code)	=>
-				INFO("login failed: " + code)
+				INFO("login failed", code)
 				// TODO more detail
 				statusUILater halt ("status.login.wrongpw", wikiName)
 				false
 			case LoginError(code)	=>
-				INFO("login error: " + code)
+				INFO("login error", code)
 				statusUILater halt ("status.login.error", wikiName, code)
 				false
 		}
@@ -158,25 +158,25 @@ final class UploadFilesTask(
 			val uploaded	= api upload (name, "", text, watch, file, callback)
 			uploaded match {
 				case UploadSuccess(fileName, pageTitle)	=> 
-					INFO("upload successful: " + fileName + " to " + pageTitle)
+					INFO("upload successful", fileName, pageTitle)
 					statusUILater halt ("status.upload.successful", fileName, pageTitle)
 					imageListUILater uploadFinished (file, true)
 					upload copy (name=fileName, title=pageTitle)
 				case UploadAborted(warnings)	=>
-					ERROR("upload aborted: " + fileName)
+					ERROR("upload aborted", fileName)
 					statusUILater halt ("status.upload.error", fileName, "aborted")
 					imageListUILater uploadFinished (file, false)
 					// TODO just remove it from the list?
 					// TODO more detail
-					upload copy (error="aborted: " + renderWarnings(warnings))
+					upload copy (error=s"aborted: ${renderWarnings(warnings)}")
 				case UploadFailure(code)	=>
 					// TODO more detail
-					ERROR("upload failed: " + fileName + " because " + code)
+					ERROR("upload failed", fileName, code)
 					statusUILater halt ("status.upload.error", fileName, code)
 					imageListUILater uploadFinished (file, false)
 					upload copy (error=code)
 				case UploadError(code)	=>
-					ERROR("upload error: " + fileName + " because " + code)
+					ERROR("upload error", fileName, code)
 					statusUILater halt ("status.upload.error", fileName, code)
 					imageListUILater uploadFinished (file, false)
 					upload copy (error=code)
@@ -199,6 +199,9 @@ final class UploadFilesTask(
 	
 	private def renderFile(name:String):String	= 
 			"[[:" + (Namespace file name) + "]]"
+		
+	private def renderLink(s:String):String	=
+			"[[" + s + "]]"
 	
 	/*
 	statusUILater halt ("status.gallery.error", e.getMessage)
@@ -216,33 +219,33 @@ final class UploadFilesTask(
 			sucesses.asJava,
 			failures.asJava
 		)
-		val summary	= uploadTemplates gallerySummary		(Constants.VERSION, failures.size)
+		val summary	= uploadTemplates gallerySummary		(commonist.BuildInfo.version, failures.size)
 		val text	= uploadTemplates galleryDescription	(common, batch)
 		
 		// backup gallery text
 		val backup	= settingsDir / "gallery.txt"
-		INFO("writing gallery to: " + backup)
+		INFO("writing gallery", backup)
 		backup writeString (Charsets.utf_8, text)
 		
-		statusUILater indeterminate ("status.gallery.loading", "[[" + title + "]]")
+		statusUILater indeterminate ("status.gallery.loading", renderLink(title))
 		val editResult	= api edit (title, summary, None, { oldText =>
-			statusUILater indeterminate ("status.gallery.storing", "[[" + title + "]]")
+			statusUILater indeterminate ("status.gallery.storing", renderLink(title))
 			val newText	= text + "\n\n" + (TextUtil2 trimLF oldText)
 			Some(newText)
 		})
 		editResult match {
 			case EditSuccess(pageTitle)	=> 
-				statusUILater halt ("status.gallery.updated",	"[[" + title + "]]")
+				statusUILater halt ("status.gallery.updated",	renderLink(title))
 			case EditAborted		=>
 				// will not happen
 			case EditFailure(code)	=> 
 				// TODO more detail
-				statusUILater halt ("status.gallery.error",		code + " in [[" + title + "]]")
+				statusUILater halt ("status.gallery.error",		code + " in " + renderLink(title))
 			case EditError(code)	=> 
-				statusUILater halt ("status.gallery.error",		code + " in [[" + title + "]]")
+				statusUILater halt ("status.gallery.error",		code + " in " + renderLink(title))
 		}
 	}
-		
+	
 	/*
 	statusUILater halt ("status.logout.error", wikiName, e.getMessage)
 	if (!success) { statusUILater halt ("status.logout.failed", wikiName); return }

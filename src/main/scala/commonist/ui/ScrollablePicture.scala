@@ -26,10 +26,12 @@ final class ScrollablePicture extends JLabel with Scrollable {
     }
 
     def getScrollableBlockIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int = {
-		if (orientation == SwingConstants.HORIZONTAL)
+		if (orientation == SwingConstants.HORIZONTAL) {
 			visibleRect.width  - Constants.FULLSIZE_MAX_UNIT_INCREMENT
-		else
+		}
+		else {
 			visibleRect.height - Constants.FULLSIZE_MAX_UNIT_INCREMENT
+		}
     }
 
     def getPreferredScrollableViewportSize():Dimension = getPreferredSize

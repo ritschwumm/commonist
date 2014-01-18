@@ -1,3 +1,10 @@
+0.9.0	18jan14
+	change		added FAL license
+	change		mediawiki was a stupid default for the wiki,
+				using commons again.
+	change		updated libraries.
+	change		build with sbt 0.13.1
+
 0.8.0	24nov13
 	change		changed all wikis to use https
 	change		use scmw-0.33.0 to use new httpclient 4.3.1

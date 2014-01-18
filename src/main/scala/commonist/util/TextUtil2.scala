@@ -11,15 +11,15 @@ object TextUtil2 {
 	def shortError(t:Throwable):String		= t.getClass.getName.replaceAll("^.*\\.", "") + " " + feedToSpace(t.getMessage)
 	
 	/** replaces every linefeeds with a space */
-	def feedToSpace(s:String):String 		= s.replaceAll("\r\n|\r|\n", " ")
+	def feedToSpace(s:String):String 		= s replaceAll ("\r\n|\r|\n", " ")
 	
 	/** removes double empty lines */
-	def restrictEmptyLines(s:String):String	= s.replaceAll("\n\n\n+", "\n\n")
+	def restrictEmptyLines(s:String):String	= s replaceAll ("\n\n\n+", "\n\n")
 	
 	/** removes linefeeds from both ends of a string */
-	def trimLF(s:String):String				= s.replaceAll("^\\n+", "").replaceAll("\\n+$", "")
+	def trimLF(s:String):String				= s replaceAll ("^\\n+", "") replaceAll ("\\n+$", "")
 
 	/** concatenates two Strings and inserts a separator if both are non-empty */
 	def joinNonEmpty(string1:String, string2:String, separator:String):String = 
-			Vector(string1, string2) filter { _.length != 0 } mkString separator
+			Vector(string1, string2) filter { _.nonEmpty } mkString separator
 }

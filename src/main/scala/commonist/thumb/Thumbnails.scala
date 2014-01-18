@@ -8,6 +8,8 @@ import java.awt.image._
 import javax.swing._
 import javax.imageio._
 
+import scutil.lang._
+import scutil.implicits._
 import scutil.log._
 
 import commonist.Constants
@@ -33,30 +35,26 @@ final class Thumbnails(cache:FileCache) extends Logging {
 				cachedThumbnail(file) map { new ImageIcon(_) }
 			}
 			catch { case e:Exception =>
-				INFO("cannot create thumbnail from " + file, e)
+				INFO("cannot create thumbnail", file, e)
 				None
 			}
 	
 	/** make a thumbnail or return a cached version */
 	private def cachedThumbnail(file:File):Option[Image] =
-			// TODO give the cache a loader instead of talking to it here
-			
+			// BETTER give the cache a loader instead of talking to it here
 			// try to get cached thumb
-			(cache get file) map { ImageIO read _ } orElse {
-				// read original and make thumb
-				val thumb	= readSubsampled(file) map makeThumbnail
-				
-				thumb foreach { thumb =>
+			(cache get file) map { ImageIO read _ } orElse
+			// read original and make thumb
+			readSubsampled(file) map makeThumbnail doto {
+				_ foreach { thumb =>
 					// cache thumb
 					val thumbFile2	= cache put file
 					val	success		= ImageIO write (thumb, "jpg", thumbFile2)
 					if (!success) {
-						WARN("could not create thumbnail: " + thumbFile2)
+						WARN("could not create thumbnail", thumbFile2)
 						cache remove file
 					}
 				}
-				
-				thumb
 			}
 	
 	/** makes a thumbnail from an image */
@@ -65,7 +63,6 @@ final class Thumbnails(cache:FileCache) extends Logging {
 		if (scale >= 1.0)	return image
 		
 		// TODO check more image types
-		
 		// seen: TYPE_BYTE_GRAY and TYPE_BYTE_INDEXED,
 		// TYPE_CUSTOM			needs conversion or throws an ImagingOpException at transformation time
 		// TYPE_3BYTE_BGR		works without conversion
@@ -74,21 +71,18 @@ final class Thumbnails(cache:FileCache) extends Logging {
 		// TYPE_BYTE_INDEXED	works, but inverts color if converted to TYPE_3BYTE_BGR
 		
 		// normalize image type
-		val imageType	= image.getType
+		val normalizeTypes	= Set(BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_BYTE_INDEXED)
 		val image2 = 
-				if (imageType != BufferedImage.TYPE_3BYTE_BGR 
-				&& imageType != BufferedImage.TYPE_BYTE_INDEXED) {
-		//		if (imageType == BufferedImage.TYPE_CUSTOM  
-		//		|| imageType == BufferedImage.TYPE_BYTE_GRAY
-		//		|| imageType == BufferedImage.TYPE_INT_RGB) {
+				if (normalizeTypes contains image.getType) {
 					val normalized	= new BufferedImage(
 							image.getWidth, 
 							image.getHeight, 
 							BufferedImage.TYPE_3BYTE_BGR)
-					val g	= normalized.getGraphics
-					g drawImage (image, 0, 0, null)
-					g.dispose()
-					normalized
+					normalized doto { 
+						_.getGraphics use { g =>
+							g drawImage (image, 0, 0, null)
+						}
+					}
 				}
 				else {
 					image
@@ -111,39 +105,37 @@ final class Thumbnails(cache:FileCache) extends Logging {
 	
 	/** scales down when the image is too big */
 	private def readSubsampled(input:File):Option[BufferedImage] = {
-		// ImageIO.read(file)
-		
-		val stream = ImageIO.createImageInputStream(input)
-		if (stream == null)	throw new IOException("cannot create ImageInputStream for file: " + input)
-		
-		val it	= ImageIO getImageReaders stream
-		if (!it.hasNext) {
-			WARN("could not read original: " + input)
-			return None	// throw new IOException("cannot create ImageReader for file: " + input)
+		val stream = ImageIO createImageInputStream input
+		if (stream == null)	{
+			ERROR(s"cannot create ImageInputStream for file", input)
+			return None
 		}
+		stream use { stream =>
+			val it	= ImageIO getImageReaders stream
+			if (!it.hasNext) {
+				ERROR("cannot get ImageReader for file", input)
+				return None
+			}
+			
+			it.next use { reader =>
+				reader setInput (stream, true, true)
+				
+				val param		= reader.getDefaultReadParam
+				
+				val imageIndex	= 0
 		
-		val reader = it.next
-		reader setInput (stream, true, true)
-		
-		val param	= reader.getDefaultReadParam
-		
-		val imageIndex	= 0
-
-		val sizeX		= reader getWidth	imageIndex
-		val sizeY		= reader getHeight	imageIndex
-		val size		= sizeX min sizeY
-		val scale		= size / maxSize
-		val sampling	= JInteger highestOneBit (scale * 100 / Constants.THUMBNAIL_SCALE_HEADROOM)
-//		System.err.println("#### scale=" + scale + "\t=> sampling=" + sampling)
-		
-		// TODO could scale at load time!
-		if (sampling > 1)	param setSourceSubsampling (sampling, sampling, 0, 0)
-		val image	= reader read	(imageIndex, param)
-		
-		// TODO try/catch
-		reader.dispose()
-		stream.close()
-		
-		Some(image)
+				val sizeX		= reader getWidth	imageIndex
+				val sizeY		= reader getHeight	imageIndex
+				val size		= sizeX min sizeY
+				val scale		= size / maxSize
+				val sampling	= JInteger highestOneBit (scale * 100 / Constants.THUMBNAIL_SCALE_HEADROOM)
+				
+				// BETTER could scale at load time!
+				if (sampling > 1)	param setSourceSubsampling (sampling, sampling, 0, 0)
+				val image	= reader read	(imageIndex, param)
+				
+				Some(image)
+			}
+		}
 	}
 }

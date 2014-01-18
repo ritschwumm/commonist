@@ -7,7 +7,7 @@ import java.util.Properties
 
 import scala.collection.JavaConversions._
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.log._
 import scutil.io._
 
@@ -35,12 +35,12 @@ class Messages(defaultURL:URL, userLangURL:Option[URL]) extends Logging {
 				MessageFormat format (get(key), args.map(_.asInstanceOf[AnyRef]) : _*)
 			}
 			catch { case e:Exception	=>
-				ERROR("message cannot be used: " + key)
+				ERROR(s"message cannot be used: ${key}")
 				throw e
 			}
 	
 	private def get(key:String):String =
 			(userLangProps get key)	orElse
 			(defaultProps get key)	getOrError
-			("message not available: " + key)
+			(s"message not available: ${key}")
 }

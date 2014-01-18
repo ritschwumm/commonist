@@ -24,8 +24,13 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	private val listPanel	= new ListPanel()
 	listPanel setLayout new BoxLayout(listPanel, BoxLayout.Y_AXIS)
 	
-	private val scroll	= new JScrollPane(listPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER)
-	scroll setBorder (BorderFactory createEmptyBorder (0,0,0,0))	//### scrollBorder?
+	private val scroll	= 
+			new JScrollPane(
+				listPanel,
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+			)
+	scroll setBorder (BorderFactory createEmptyBorder (0,0,0,0))
 	
 	//var	bar	= scroll.getVerticalScrollBar
 
@@ -76,7 +81,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	def add(file:File, icon:Option[Icon], thumbnailMaxSize:Int) {
 		val	imageUI	= 
 				new ImageUI(file, icon, thumbnailMaxSize, programHeading, programIcon, new ImageUICallback {
-					def updateSelectStatus() {  outer.updateSelectStatus() }
+					def updateSelectStatus() { outer.updateSelectStatus() }
 				})
 		
 		imageUIs += imageUI
@@ -90,19 +95,25 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 		val allBytes		= (allFiles			map { _.length }).foldLeft (0L)(_+_)
 		val selectedBytes	= (selectedFiles	map { _.length }).foldLeft (0L)(_+_)
 	
-		selectStatus.setText(Messages message ("imageList.selected",
-			int2Integer(selectedFiles.size),
-			int2Integer(allFiles.size),
-			TextUtil2 human selectedBytes,
-			TextUtil2 human allBytes 
-		))
+		selectStatus setText (
+			Messages message (
+				"imageList.selected",
+				int2Integer(selectedFiles.size),
+				int2Integer(allFiles.size),
+				TextUtil2 human selectedBytes,
+				TextUtil2 human allBytes 
+			)
+		)
 	}
 	
-	def getData:ImageListData = new ImageListData(imageUIs.toList map { _.getData })
+	def getData:ImageListData = 
+			ImageListData(imageUIs.toList map { _.getData })
 	
 	/** set the upload state for the ImageUI representing the given file */
 	def uploadFinished(file:File, success:Boolean) {
-		imageUIs filter { _.getData.file == file } foreach { _ setUploadSuccessful Some(success) }
+		imageUIs 
+		.filter		{ _.getData.file == file } 
+		.foreach	{ _ setUploadSuccessful Some(success) }
 	}
 	
 	//------------------------------------------------------------------------------
@@ -122,7 +133,9 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	
 	/** checks for the upload checkbox in all failed images, unchecks it for the rest */
 	private def selectFailed() {
-		imageUIs foreach { it => it setUploadSelected (it.getUploadSuccessful == Some(false)) }
+		imageUIs foreach { it => 
+			it setUploadSelected (it.getUploadSuccessful == Some(false)) 
+		}
 		updateSelectStatus()
 	}
 	

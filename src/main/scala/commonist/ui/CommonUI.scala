@@ -4,7 +4,7 @@ import java.awt.{ List => AwtList, _ }
 import java.awt.event._
 import javax.swing._
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 
@@ -49,9 +49,11 @@ final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) exten
 	private val permissionEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val categoriesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val licenseEditor		= new JComboBox(licenseList.toArray[Object]) {
-		override def getPreferredSize():Dimension = new Dimension(
-				10,
-				super.getPreferredSize.height)
+		override def getPreferredSize():Dimension =
+				new Dimension(
+					10,
+					super.getPreferredSize.height
+				)
 	}
 	
 	// NOTE licenseEditor#SelectedItem is String|LicenseData 
@@ -75,7 +77,7 @@ final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) exten
 				licenseEditor.getSelectedItem match {
 					case x:LicenseData	=> x.description
 					case x:String		=> x
-					case x				=> sys error ("unexpected license type: " + x)
+					case x				=> sys error s"unexpected license type: ${x}"
 				}
 		licenseEditor setToolTipText text
 	}
@@ -147,7 +149,7 @@ final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) exten
 				licenseEditor.getSelectedItem match {
 					case x:String		=> LicenseData(x, "")
 					case x:LicenseData	=> x
-					case x				=> sys error ("unexpected license type: " + x)
+					case x				=> sys error s"unexpected license type: ${x}"
 				},
 				categoriesEditor.getText
 			)
@@ -195,7 +197,7 @@ final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) exten
 				licenseEditor.getSelectedItem match {
 					case x:LicenseData	=> x.template
 					case x:String		=> x
-					case x				=> sys error ("unexpected license type: " + x)
+					case x				=> sys error s"unexpected license type: ${x}"
 				}
 		settings set ("licenseEditor.SelectedItem",	licenseSel)
 	}

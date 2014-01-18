@@ -5,7 +5,7 @@ import java.io._
 import scala.collection.mutable
 import scala.collection.JavaConverters._
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.log._
 import scutil.io._
 
@@ -40,7 +40,7 @@ final class Settings(file:File) extends Logging {
 			propertiesMap = PropertiesUtil loadFile file
 		}
 		else {
-			INFO("setting file does not exist: " + file.getPath)
+			INFO("setting file does not exist", file.getPath)
 		}
 	}
 

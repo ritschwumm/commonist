@@ -3,7 +3,7 @@ package commonist.task
 import java.io.File
 import javax.swing.Icon
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.log._
 
 import commonist._
@@ -26,13 +26,13 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 		//  TODO handle null
 		val listed	= directory 
 				.childrenWhere	{ file:File => file.isFile && !file.isHidden }
-				.getOrElse		{ WARN("directory does not exist: " + directory); return }
+				.getOrElse		{ WARN("directory does not exist", directory); return }
 		
 		// TODO duplicate code
 		val sorted	= listed sortBy { _.getPath }
 		
 		val	(readable,unreadable)	= sorted partition { _.canRead }
-		unreadable foreach { it => WARN("cannot read: " + it) }
+		unreadable foreach { it => WARN("cannot read", it) }
 		
 		val max		= readable.length
 		var cur		= 0

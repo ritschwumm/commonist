@@ -19,9 +19,7 @@ import org.apache.sanselan.formats.tiff.constants.TiffTagConstants._
 import org.apache.sanselan.formats.tiff.constants.TiffDirectoryConstants._
 import org.apache.sanselan.formats.tiff.constants.GPSTagConstants._
 
-import scala.util.control.Exception._
-
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.math.BigRational
 import scutil.log._
 
@@ -110,7 +108,7 @@ object EXIF extends Logging {
 			val	sum	= bigRational(d)
 			Some(bigDecimal(sum))
 		case x =>
-			DEBUG("unexpected value: " + x)
+			DEBUG("unexpected value", x)
 			None			
 	}
 	private def bigRational(value:RationalNumber):BigRational	= BigRational(value.numerator, value.divisor)

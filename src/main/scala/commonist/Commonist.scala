@@ -10,7 +10,7 @@ import bsh.EvalError
 
 import org.simplericity.macify.eawt._
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.platform._
 import scutil.io.Files._
 import scutil.gui.SwingApp
@@ -39,18 +39,18 @@ object Commonist extends SwingApp with Logging {
 	private val etcDir			= PWD / "etc"
 	private val resourcesDir	= PWD / "src" / "main" / "resources"
 	private val resourcePrefix	= "/"
-	INFO("settings directory: "		+ settingsDir)
-	INFO("etc directory: "			+ etcDir)
-	INFO("resources directory: "	+ resourcesDir)
+	INFO("settings directory",	settingsDir)
+	INFO("etc directory",		etcDir)
+	INFO("resources directory",	resourcesDir)
 	settingsDir.mkdirs()
 	require(settingsDir.exists, "settings directory cannot be created")
 	private val loader		= new Loader(settingsDir, etcDir, resourcesDir, resourcePrefix)
 	
 	val programIcon		= null
-	val programHeading	= "The Commonist " + Constants.VERSION
+	val programHeading	= s"The Commonist ${commonist.BuildInfo.version}" 
 	
 	private val userLanguage	= SystemProperties.user.language
-	INFO("using user language: " + userLanguage)
+	INFO("using user language", userLanguage)
 	loadMessages(userLanguage)
 		
 	private val licenses	= loadLicenses()
@@ -93,8 +93,7 @@ object Commonist extends SwingApp with Logging {
 			doQuit()
 		}
 	}
-	"/commonist-128.png" |> getClass.getResource |> ImageIO.read |> 
-	macifyApplication.setApplicationIconImage
+	macifyApplication setApplicationIconImage ("/commonist-128.png" |> getClass.getResource |> ImageIO.read)
 	macifyApplication.removeAboutMenuItem()
 	macifyApplication.removePreferencesMenuItem()
 	
@@ -178,7 +177,7 @@ object Commonist extends SwingApp with Logging {
 	/** load language file for the language or en if not successful and returns the used language */
 	private def loadMessages(language:String) {
 		val defaultURL	= loader resourceURL "messages_default.properties" getOrError "cannot load messages_default.properties"
-		val userLangURL	= loader resourceURL ("messages_" + language + ".properties")
+		val userLangURL	= loader resourceURL (s"messages_${language}.properties")
 		Messages init (defaultURL, userLangURL)
 	}
 	

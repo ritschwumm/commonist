@@ -7,7 +7,7 @@ import javax.swing.tree.TreePath
 
 import scala.collection.JavaConverters._
 
-import scutil.Implicits._
+import scutil.implicits._
 
 /** a TreeNode for a File in the DirectoryTree */
 final class FileNode(val file:File) extends DefaultMutableTreeNode {

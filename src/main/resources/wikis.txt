@@ -1,11 +1,3 @@
-# other
-# kamelopedia		_			http://kamelopedia.mormo.org/api.php
-mediawiki		_			https://www.mediawiki.org/w/api.php
-
-# wikia
-wikia		foto			https://foto.wikia.com/api.php
-wikia		uncyclopedia	https://uncyclopedia.wikia.com/api.php
-
 # wikimedia
 wikimedia	commons			https://commons.wikimedia.org/w/api.php
 wikimedia	meta			https://meta.wikimedia.org/w/api.php
@@ -101,3 +93,11 @@ wiktionary	nl				https://nl.wiktionary.org/w/api.php
 wiktionary	pl				https://pl.wiktionary.org/w/api.php
 wiktionary	pt				https://pt.wiktionary.org/w/api.php
 wiktionary	sv				https://sv.wiktionary.org/w/api.php
+
+# other
+# kamelopedia		_			http://kamelopedia.mormo.org/api.php
+mediawiki		_			https://www.mediawiki.org/w/api.php
+
+# wikia
+wikia		foto			https://foto.wikia.com/api.php
+wikia		uncyclopedia	https://uncyclopedia.wikia.com/api.php

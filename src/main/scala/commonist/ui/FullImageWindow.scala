@@ -23,11 +23,11 @@ object FullImageWindow extends Logging {
 					}
 				}
 				else {
-					WARN("cannot load image: " + file)
+					WARN("cannot load image", file)
 				}
 			}
 			catch { case e:IOException =>
-				WARN("cannot load image: " + file, e)
+				WARN("cannot load image", file, e)
 			}
 		}
 	}

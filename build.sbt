@@ -2,14 +2,13 @@ name			:= "commonist"
 
 organization	:= "de.djini"
 
-version			:= "0.8.0"
+version			:= "0.9.0"
 
 scalaVersion	:= "2.10.3"
 
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil"		% "0.34.0"			% "compile",
-	"de.djini"					%%	"scjson"		% "0.37.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.33.0"			% "compile",
+	"de.djini"					%%	"scutil"		% "0.40.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.40.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )
@@ -17,7 +16,7 @@ libraryDependencies	++= Seq(
 scalacOptions	++= Seq(
 	"-deprecation",
 	"-unchecked",
-	// "-language:implicitConversions",
+	"-language:implicitConversions",
 	// "-language:existentials",
 	// "-language:higherKinds",
 	// "-language:reflectiveCalls",
@@ -58,7 +57,7 @@ osxappSettings
 
 osxappBundleName	:= "commonist"
 
-osxappBundleIcons	:= file("src/main/osxapp/commonist.icns")
+osxappBundleIcons	:= baseDirectory.value / "src/main/osxapp/commonist.icns"
 
 osxappVm			:= OracleJava7()
 
@@ -82,13 +81,13 @@ webstartGenConfig	:= Some(GenConfig(
 ))
 
 webstartKeyConfig	:= Some(KeyConfig(
-	keyStore	= file("etc/keyStore"),
+	keyStore	= baseDirectory.value / "etc/keyStore",
 	storePass	= "0xDEADBEEF",
 	alias		= "signFiles",
 	keyPass		= "0xDEADBEEF"
 ))
 
-webstartManifest	:= Some(file("etc/manifest.mf"))
+webstartManifest	:= Some(baseDirectory.value / "etc/manifest.mf")
 
 webstartJnlpConfigs	:= Seq(JnlpConfig(
 	fileName	= "commonist.jnlp",

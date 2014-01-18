@@ -6,7 +6,7 @@ import javax.swing._
 import javax.swing.event._
 import javax.swing.tree._
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.io.Files._
 import scutil.platform.SystemProperties
 import scutil.gui.CasterInstances._

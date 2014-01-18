@@ -4,7 +4,8 @@ import java.io._
 import java.net._
 import java.util.regex._
 
-import scutil.Implicits._
+import scutil.implicits._
+import scutil.io.Charsets.utf_8
 import scutil.log._
 
 import scmw._
@@ -71,11 +72,11 @@ object Parser extends Logging {
 	
 	private def parseURL[T](url:URL)(parseLine:String=>Iterable[T]):Seq[T] = 
 			slurpLines(url)
-			.map { _.trim } 
-			.filter { _.nonEmpty }
-			.filter { !_.startsWith("#") } 
-			.flatMap { parseLine }
+			.map		{ _.trim } 
+			.filter		{ _.nonEmpty }
+			.filter		{ !_.startsWith("#") } 
+			.flatMap	{ parseLine }
 	
 	private def slurpLines(url:URL):Seq[String] =
-			new BufferedReader(new InputStreamReader(url.openStream, "UTF-8")) use { _.readLines() }
+			(url withReader utf_8) { _.readLines() }
 }

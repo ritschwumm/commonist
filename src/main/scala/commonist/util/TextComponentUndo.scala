@@ -11,8 +11,8 @@ import scutil.log._
 
 /** adds undo to a {@link JTextComponent} */
 trait TextComponentUndo extends Logging { self:JTextComponent =>
-	private val REDO_KEY_STROKE	= KeyStroke.getKeyStroke("control Y")
-	private val UNDO_KEY_STROKE	= KeyStroke.getKeyStroke("control Z")
+	private val REDO_KEY_STROKE	= KeyStroke getKeyStroke "control Y"
+	private val UNDO_KEY_STROKE	= KeyStroke getKeyStroke "control Z"
 	private val REDO_ACTION		= "Redo"
 	private val UNDO_ACTION		= "Undo"
 	private val LIMIT			= 100
@@ -22,11 +22,12 @@ trait TextComponentUndo extends Logging { self:JTextComponent =>
 	
 	private val propertyListener	= new PropertyChangeListener {
 		def propertyChange(ev:PropertyChangeEvent) {
-			if (ev.getPropertyName != "document")	return
-			val oldDocument	= ev.getOldValue.asInstanceOf[Document]
-			val newDocument	= ev.getNewValue.asInstanceOf[Document]
-			oldDocument	removeUndoableEditListener	undoableEditListener
-			newDocument	addUndoableEditListener		undoableEditListener
+			if (ev.getPropertyName == "document") {
+				val oldDocument	= ev.getOldValue.asInstanceOf[Document]
+				val newDocument	= ev.getNewValue.asInstanceOf[Document]
+				oldDocument	removeUndoableEditListener	undoableEditListener
+				newDocument	addUndoableEditListener		undoableEditListener
+			}
 		}
 	}
 		

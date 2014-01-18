@@ -5,7 +5,7 @@ import java.lang.{ Math => JMath }
 
 import scala.collection.immutable.Queue
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.io.Charsets._
 import scutil.log._
 
@@ -38,8 +38,8 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 		
 		// insert a new entry
 		val	cached	= cacheFile()
-		INFO("caching original: " + original)
-		INFO("cached thumbnail: " + cached)
+		INFO("caching original", original)
+		INFO("cached thumbnail", cached)
 		entryQueue	= entryQueue enqueue original
 		entryMap	= entryMap + (original -> cached)
 		cached
@@ -48,11 +48,11 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 	/** remove an entry */
 	def remove(original:File) {
 		val cached	= entryMap get original
-		DEBUG("removing original: " + original)
+		DEBUG("removing original", original)
 		entryQueue	= entryQueue filterNot { _ ==== original }
 		entryMap	= entryMap - original
 		cached filter { _.exists } foreach { cached =>
-			INFO("deleting cached: " +  cached)
+			INFO("deleting cached", cached)
 			cached.delete()
 		}
 	}
@@ -103,9 +103,9 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 			} {
 				entryQueue	= newQueue
 				entryMap	= newMap
-				DEBUG("flushing original: " + oldOriginal)
+				DEBUG("flushing original", oldOriginal)
 				if (oldCached.exists) {
-					INFO("deleting cached: " +  oldCached)
+					INFO("deleting cached", oldCached)
 					oldCached.delete()
 				}
 			}
@@ -119,7 +119,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 	private def cleanup() {
 		// remove stale entries from the entryList and entryMap
 		entryQueue filterNot { _.exists } foreach { original =>
-			WARN("original disappeared: " + original)
+			WARN("original disappeared", original)
 			entryQueue	= entryQueue filterNot { _ ==== original }
 			entryMap	= entryMap - original
 		}
@@ -128,7 +128,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 		val entries	= entryMap.values.toSet
 		val listed	= directory.listFiles	// TODO handle null
 		listed filterNot entries.contains foreach { cached =>
-			INFO("deleting cached: " + cached)
+			INFO("deleting cached", cached)
 			cached.delete()
 		}
 	}

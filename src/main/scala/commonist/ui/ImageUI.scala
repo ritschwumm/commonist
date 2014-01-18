@@ -6,7 +6,7 @@ import java.awt.event._
 import javax.swing._
 
 import scutil.lang._
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.color._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
@@ -35,13 +35,12 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	
 	private val imageView	= new JLabel(null, null, SwingConstants.CENTER)
 	imageView setBackground rgb"eeeeee".toColor
-//		imageView.setBorder(
-//			BorderFactory.createBevelBorder(BevelBorder.RAISED)
-//		)
 	imageView setOpaque true
-	/*### fehlt
-	imageView.setToolTipText(
+	/*
+	BETTER add tooltip
+	imageView setToolTipText (
 		file.Name + " (" + TextUtil.human(file.length()) + " bytes)"
+	)
 	)
 	*/
 	imageView setHorizontalTextPosition	SwingConstants.CENTER
@@ -207,19 +206,6 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 				categoriesEditor.getText
 			)       
 			
-	/*
-	def setData(imageData:ImageData) {
-		//this.file	= imageData.file
-		uploadEditor		setSelected imageData.upload
-		nameEditor			setText		imageData.name
-		descriptionEditor	setText		imageData.description
-		dateEditor			setText		imageData.date
-		permissionEditor	setText		imageData.permission
-		coordinatesEditor	setText		imageData.cordinates
-		categoriesEditor	setText		imageData.categories
-	}
-	*/
-	
 	private def displayFullImage() {
 		FullImageWindow display (file, programHeading, programIcon)
 	}

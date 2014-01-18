@@ -6,7 +6,7 @@ import java.net._
 import net.psammead.minibpp.Compiler
 import bsh.Interpreter
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.log._
 
 import commonist.data._
@@ -16,7 +16,7 @@ import commonist.util._
 final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 	/** edit summary for writing a gallery */
 	def gallerySummary(version:String, failureCount:Int):String =
-			"commonist " + version + ((failureCount != 0) cata ("", ", " + failureCount + " errors"))
+			"commonist " + version + ((failureCount != 0) cata ("", s", ${failureCount} errors"))
 	
 	/** compiles into wikitext */
 	def galleryDescription(common:Common, batch:Batch):String =
@@ -33,11 +33,11 @@ final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 			))
 	
 	private def template(typ:String, data:Map[String,AnyRef]):String = {
-		val specific	= typ + "_" + wiki.family + (wiki.site map { "_" + _ } getOrElse "") + ".bpp"
+		val specific	= typ + "_" + wiki.family + (wiki.site cata ("", "_" + _)) + ".bpp"
 		val generic		= typ + "_default.bpp"
 		val url			=	(loader resourceURL specific)	orElse 
 							(loader resourceURL generic)	getOrError 
-							("neither specific template: " + specific + " nor generic template: " + generic + " could be found")
+							(s"neither specific template: ${specific} nor generic template: ${generic} could be found")
 		try {
 			compile(url, data) |> TextUtil2.restrictEmptyLines |> TextUtil2.trimLF
 		}

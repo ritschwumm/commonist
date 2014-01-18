@@ -3,7 +3,7 @@ package commonist.util
 import java.io._
 import java.net._
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.log._
 
 /** loads resources from a set of URL-paths */
@@ -15,7 +15,7 @@ final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePre
 			classloaderURL(resourcePrefix, path)	noneEffect
 			{ DEBUG(
 					"failed to access resource", path, "tried to find in",
-					settingsDir, etcDir, resourcesDir, "classpath:" + resourcePrefix)
+					settingsDir, etcDir, resourcesDir, s"classpath:${resourcePrefix}")
 			}
 	
 	def directoryURL(directory:File, path:String):Option[URL] =
