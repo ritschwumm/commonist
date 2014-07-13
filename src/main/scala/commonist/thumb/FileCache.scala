@@ -126,7 +126,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 
 		// delete all cachefiles not in the entryMap
 		val entries	= entryMap.values.toSet
-		val listed	= directory.listFiles	// TODO handle null
+		val listed	= directory.children.flattenMany
 		listed filterNot entries.contains foreach { cached =>
 			INFO("deleting cached", cached)
 			cached.delete()

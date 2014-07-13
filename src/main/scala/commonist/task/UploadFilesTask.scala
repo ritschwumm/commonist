@@ -294,10 +294,9 @@ final class UploadFilesTask(
 					(JOptionPane showConfirmDialog (mainWindow.window, body, title, JOptionPane.YES_NO_OPTION))
 				}
 			}
-			catch { 
-				case e:Exception =>
-					ERROR("callback error", e)
-					throw e
+			catch { case e:Exception =>
+				ERROR("callback error", e)
+				throw e
 			}
 		}
 	}

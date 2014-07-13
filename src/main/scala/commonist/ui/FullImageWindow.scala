@@ -49,7 +49,7 @@ final class FullImageWindow(file:File, programHeading:String, programIcon:Image,
 	window.getContentPane add scroll
 	window.pack()
 	
-//		// TODO: seems to break with small images
+//		// TODO seems to break with small images
 //		Rectangle	bounds	= UIUtil.boundsInScreen(window.getBounds)
 //		bounds.width	= Math.max(bounds.width,	Constants.FULLSIZE_MIN_FRAME_SIZE)
 //		bounds.height	= Math.max(bounds.height,	Constants.FULLSIZE_MIN_FRAME_SIZE)

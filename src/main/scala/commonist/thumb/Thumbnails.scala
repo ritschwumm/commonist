@@ -11,6 +11,7 @@ import javax.imageio._
 import scutil.lang._
 import scutil.implicits._
 import scutil.log._
+import scutil.gui.implicits._
 
 import commonist.Constants
 import commonist.util.Settings

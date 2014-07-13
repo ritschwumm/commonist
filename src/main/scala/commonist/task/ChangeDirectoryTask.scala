@@ -23,12 +23,10 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 		Thread.`yield`()	//Thread.sleep(50)
 		
 		DEBUG("listFiles")
-		//  TODO handle null
 		val listed	= directory 
 				.childrenWhere	{ file:File => file.isFile && !file.isHidden }
 				.getOrElse		{ WARN("directory does not exist", directory); return }
 		
-		// TODO duplicate code
 		val sorted	= listed sortBy { _.getPath }
 		
 		val	(readable,unreadable)	= sorted partition { _.canRead }

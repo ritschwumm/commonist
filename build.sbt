@@ -2,13 +2,14 @@ name			:= "commonist"
 
 organization	:= "de.djini"
 
-version			:= "0.9.1"
+version			:= "1.0.0"
 
-scalaVersion	:= "2.10.3"
+scalaVersion	:= "2.11.1"
 
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil"		% "0.40.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.40.1"			% "compile",
+	"de.djini"					%%	"scutil-core"	% "0.45.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.45.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.46.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )
@@ -47,8 +48,8 @@ scriptstartConfigs	:= Seq(ScriptConfig(
 ))
 
 // scriptstart::zipper
-inTask(scriptstartBuild)(zipperSettings ++ Seq(
-	zipperFiles	:= selectSubpaths(scriptstartBuild.value, -DirectoryFilter).toSeq
+inTask(scriptstart)(zipperSettings ++ Seq(
+	zipperFiles	:= selectSubpaths(scriptstart.value, -DirectoryFilter).toSeq
 ))
 
 //--------------------------------------------------------------------------------
@@ -66,8 +67,8 @@ osxappMainClass		:= Some("commonist.Commonist")
 osxappVmOptions		:= Seq("-Xmx192m")
 
 // osxapp::zipper
-inTask(osxappBuild)(zipperSettings ++ Seq(
-	zipperFiles		:= selectSubpaths(osxappBuild.value, -DirectoryFilter).toSeq,
+inTask(osxapp)(zipperSettings ++ Seq(
+	zipperFiles		:= selectSubpaths(osxapp.value, -DirectoryFilter).toSeq,
 	zipperBundle	:= zipperBundle.value + ".app" 
 ))
 
@@ -114,3 +115,11 @@ webstartJnlpConfigs	:= Seq(JnlpConfig(
 ))
 
 webstartExtras	:= Path selectSubpaths ((sourceDirectory in Compile).value / "webstart" , -DirectoryFilter) toSeq
+
+//------------------------------------------------------------------------------
+
+// build bundles in target/../zipper
+TaskKey[Seq[File]]("bundle")	:= Seq(
+	(zipper in scriptstart).value,
+	(zipper in osxapp).value
+)

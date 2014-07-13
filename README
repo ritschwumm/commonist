@@ -16,4 +16,4 @@ Get and install these library/libraries before building:
 Use these commands to build:
     git clone git@github.com:ritschwumm/commonist.git
     cd commonist
-    sbt publish-local
+    sbt bundle

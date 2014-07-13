@@ -2,7 +2,7 @@ package commonist.task.upload
 
 import java.util.{ List => JUList }
 
-import scala.reflect.BeanProperty
+import scala.beans.BeanProperty
 
 import commonist.data._
 

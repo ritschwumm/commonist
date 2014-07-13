@@ -8,6 +8,7 @@ import javax.swing._
 import scutil.lang._
 import scutil.implicits._
 import scutil.color._
+import scutil.gui.implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 
@@ -147,7 +148,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	imageView setIcon		icon.orNull
 	imageView setText		(icon cata (Messages text "image.nothumb", constant("")))
 	
-	// TODO move unparsers and parsers together
+	// BETTER move unparsers and parsers together
 	
 	private val	exif		= EXIF extract file
 	private val exifDate	= exif.date	map { _ format "yyyy-MM-dd HH:mm:ss" } getOrElse ""

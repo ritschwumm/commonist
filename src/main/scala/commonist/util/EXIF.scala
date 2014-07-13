@@ -143,6 +143,6 @@ object EXIF extends Logging {
 			Option(metaData findEXIFValue tagInfo) map { _.getValueDescription }
 }
 
-// TODO use name and description to fill the GUI
+// BETTER use name and description to fill the GUI
 case class EXIF(name:Option[String], description:Option[String], date:Option[Date], gps:Option[GPS])
 case class GPS(latitude:BigDecimal, longitude:BigDecimal)
