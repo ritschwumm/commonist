@@ -1,6 +1,5 @@
 # wikimedia
 wikimedia	commons			https://commons.wikimedia.org/w/api.php
-wikimedia	meta			https://meta.wikimedia.org/w/api.php
 
 # wikibooks
 wikibooks	de				https://de.wikibooks.org/w/api.php
