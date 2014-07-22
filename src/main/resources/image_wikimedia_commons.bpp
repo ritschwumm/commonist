@@ -23,7 +23,7 @@ $(upload.description)
 $(upload.coordinates)
 # }
 # if (!common.licenseTemplate.equals("")) {
-== {{int:license}} ==
+== {{int:license-header}} ==
 $(common.licenseTemplate)
 # }
 $(common.categories)
