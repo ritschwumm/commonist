@@ -2,7 +2,7 @@ name			:= "commonist"
 
 organization	:= "de.djini"
 
-version			:= "1.0.0"
+version			:= "1.1.0-SNAPSHOT
 
 scalaVersion	:= "2.11.1"
 
