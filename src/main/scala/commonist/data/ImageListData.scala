@@ -1,7 +1,9 @@
 package commonist.data
 
+import scutil.lang.ISeq
+
 /** Data edited in an ImageListUI */
-case class ImageListData(imageDatas:Seq[ImageData]) {
-	def hasSelected:Boolean		= imageDatas exists	{ _.upload }
-	def selected:Seq[ImageData]	= imageDatas filter	{ _.upload }
+case class ImageListData(imageDatas:ISeq[ImageData]) {
+	def hasSelected:Boolean			= imageDatas exists	{ _.upload }
+	def selected:ISeq[ImageData]	= imageDatas filter	{ _.upload }
 }

@@ -10,6 +10,7 @@ import bsh.EvalError
 
 import org.simplericity.macify.eawt._
 
+import scutil.lang.ISeq
 import scutil.implicits._
 import scutil.platform._
 import scutil.io.Files._
@@ -181,11 +182,11 @@ object CommonistMain extends Logging {
 	}
 	
 	/** load licenses */
-	private def loadLicenses():Seq[LicenseData] = 
+	private def loadLicenses():ISeq[LicenseData] = 
 			Parser parseLicenses (loader resourceURL "licenses.txt" getOrError "cannot load licenses.txt")
 
 	/** load wikis */
-	private def loadWikis():Seq[WikiData] = 
+	private def loadWikis():ISeq[WikiData] = 
 			Parser parseWikis (loader resourceURL "wikis.txt" getOrError "cannot load wikis.txt")
 	
 	/*

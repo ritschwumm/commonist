@@ -4,6 +4,7 @@ import java.awt.{ List => AwtList, _ }
 import java.awt.event._
 import javax.swing._
 
+import scutil.lang.ISeq
 import scutil.implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
@@ -13,7 +14,7 @@ import commonist.data._
 import commonist.util._
 
 /** an editor for Data common to all images */
-final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) extends JPanel {
+final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) extends JPanel {
 	override def getMinimumSize():Dimension =
 			new Dimension(
 				300, 

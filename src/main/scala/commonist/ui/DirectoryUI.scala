@@ -6,6 +6,7 @@ import javax.swing._
 import javax.swing.event._
 import javax.swing.tree._
 
+import scutil.lang.ISeq
 import scutil.implicits._
 import scutil.io.Files._
 import scutil.platform.SystemProperties
@@ -71,7 +72,7 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 
 	/** open all directories from the root to a given node and select it */
 	def browseDirectory(directory:File) {
-		def loop(search:Seq[FileNode], chain:List[File]) {
+		def loop(search:ISeq[FileNode], chain:List[File]) {
 			search find { _.file == chain.head } match {
 				case Some(node)	=>
 					val treePath	= node.treePathClone
@@ -92,7 +93,7 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 		
 		val fromRoot	= (directory :: directory.parentChain).reverse
 		if (fakeRoot)	loop(baseNode.childNodes,	fromRoot)
-		else 			loop(Seq(baseNode),			fromRoot)
+		else 			loop(ISeq(baseNode),		fromRoot)
 	}
 	
 	//------------------------------------------------------------------------------

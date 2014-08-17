@@ -1,6 +1,10 @@
+1.1.0
+	change		updated commons image template
+	change		dropped support for mediawiki.org
+	
 1.0.0	13jul14
 	update		scala 2.11.1, sbt 0.13.5, updated all libraries and sbt plugins
-
+--------------------------------------------------------------------------------
 0.9.1	22jan14
 	bugfix		updated scmw, previous version did not close http responses
 

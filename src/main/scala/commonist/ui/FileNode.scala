@@ -7,13 +7,14 @@ import javax.swing.tree.TreePath
 
 import scala.collection.JavaConverters._
 
+import scutil.lang.ISeq
 import scutil.implicits._
 
 /** a TreeNode for a File in the DirectoryTree */
 final class FileNode(val file:File) extends DefaultMutableTreeNode {
 	private var allowsChildrenValue	= false
 	
-	def childNodes:Seq[FileNode]	= children().asInstanceOf[JUEnumeration[FileNode]].asScala.toVector
+	def childNodes:ISeq[FileNode]	= children().asInstanceOf[JUEnumeration[FileNode]].asScala.toVector
 	
 	// NOTE without asInstanceOf scala chooses the Object constructor over the Object[] constructor
 	def treePathClone:TreePath	= new TreePath(getPath.asInstanceOf[Array[Object]])

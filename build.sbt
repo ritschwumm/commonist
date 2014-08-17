@@ -2,14 +2,14 @@ name			:= "commonist"
 
 organization	:= "de.djini"
 
-version			:= "1.1.0-SNAPSHOT"
+version			:= "1.1.0"
 
-scalaVersion	:= "2.11.1"
+scalaVersion	:= "2.11.2"
 
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil-core"	% "0.45.0"			% "compile",
-	"de.djini"					%%	"scutil-swing"	% "0.45.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.46.0"			% "compile",
+	"de.djini"					%%	"scutil-core"	% "0.48.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.48.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.49.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )

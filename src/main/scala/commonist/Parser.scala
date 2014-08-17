@@ -4,6 +4,7 @@ import java.io._
 import java.net._
 import java.util.regex._
 
+import scutil.lang.ISeq
 import scutil.implicits._
 import scutil.io.Charsets.utf_8
 import scutil.log._
@@ -33,7 +34,7 @@ object Parser extends Logging {
 	
 	def parseCoordinates(s:String):Option[(String,String)] =
 			s splitAroundChar ',' map parseCoordinate match {
-				case Seq(Some(latitude), Some(longitude))	=>
+				case ISeq(Some(latitude), Some(longitude))	=>
 					Some((latitude, longitude))
 				case _	=> 
 					WARN("could not parse coordinates", s)
@@ -48,7 +49,7 @@ object Parser extends Logging {
 	//------------------------------------------------------------------------------
 
 	val WikiDataPattern	= """\s*(\S+)\s+(\S+)\s+(\S+)\s*""".r
-	def parseWikis(url:URL):Seq[WikiData] = parseURL(url) {
+	def parseWikis(url:URL):ISeq[WikiData] = parseURL(url) {
 		_ match {
 			case WikiDataPattern(family, site, api)	=> 
 				Some(WikiData(family, parseSite(site), api))
@@ -60,7 +61,7 @@ object Parser extends Logging {
 	def parseSite(s:String):Option[String] = (s != "_") guard s
 	
 	val	LicenseDataPattern	= """(\{\{[^\}]+\}\})\s*(.*)""".r
-	def parseLicenses(url:URL):Seq[LicenseData] = parseURL(url) { 
+	def parseLicenses(url:URL):ISeq[LicenseData] = parseURL(url) { 
 		_ match {
 			case LicenseDataPattern(template, description) => 
 				Some(LicenseData(template, description))
@@ -70,13 +71,13 @@ object Parser extends Logging {
 		}
 	}
 	
-	private def parseURL[T](url:URL)(parseLine:String=>Iterable[T]):Seq[T] = 
+	private def parseURL[T](url:URL)(parseLine:String=>Iterable[T]):ISeq[T] = 
 			slurpLines(url)
 			.map		{ _.trim } 
 			.filter		{ _.nonEmpty }
 			.filter		{ !_.startsWith("#") } 
 			.flatMap	{ parseLine }
 	
-	private def slurpLines(url:URL):Seq[String] =
+	private def slurpLines(url:URL):ISeq[String] =
 			(url withReader utf_8) { _.readLines() }
 }

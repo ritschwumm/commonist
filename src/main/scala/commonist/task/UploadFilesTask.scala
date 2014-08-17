@@ -7,6 +7,7 @@ import javax.swing.JOptionPane
 
 import scala.collection.JavaConverters._
 
+import scutil.lang.ISeq
 import scutil.implicits._
 import scutil.io.Charsets
 import scutil.gui.SwingUtil._
@@ -109,7 +110,7 @@ final class UploadFilesTask(
 	statusUILater halt ("status.upload.aborted")
 	statusUILater halt ("status.upload.error", path, e.getMessage)
 	*/
-	private def upload(common:Common):Seq[Upload] = {
+	private def upload(common:Common):ISeq[Upload] = {
 		INFO("uploading files")
 		
 		// TODO normalizeTitle(FileName.fix( is stupid
@@ -207,7 +208,7 @@ final class UploadFilesTask(
 	statusUILater halt ("status.gallery.error", e.getMessage)
 	statusUILater halt ("status.gallery.editConflict",	"[[" + title + "]]")
 	*/
-	def gallery(common:Common, uploads:Seq[Upload]) = {
+	def gallery(common:Common, uploads:ISeq[Upload]) = {
 		INFO("changing gallery")
 		check()
 		
