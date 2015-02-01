@@ -2,7 +2,8 @@ target/
 project/boot/
 project/plugins/project/
 
-/doc
+/bin/
+/doc/
 /dist.sbt
-/etc
-/versatz
+/etc/
+/versatz/
