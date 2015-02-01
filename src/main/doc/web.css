@@ -1,0 +1,104 @@
+body {
+	font-family:		sans-serif;
+	color:				black; 
+	background:			white;
+	margin-right:		1em;
+}
+a { 
+	color:				red;
+	text-decoration:	none;
+}
+a:visited { 
+	color:				maroon;
+}
+
+h1 {
+	font-family:        Papyrus,fantasy;
+    margin:             0;
+    padding-top:        0.5ex;
+    padding-bottom:     0.5ex;
+    padding-left:       0.48em;
+    padding-right:      0.6em;
+    font-size:         	7ex;
+}
+
+h2 {
+	margin-top:			0;
+	margin-bottom:		0.1em;
+	font-size:			medium;
+	text-transform:		uppercase;
+}
+
+h3 {
+	margin-top:			0;
+	margin-left:		2em;
+	margin-bottom:		0.1em;
+	font-size:			small;
+	text-transform:		uppercase;
+}
+
+p {
+	margin-top:			0;	
+	margin-left:		2em;
+	margin-bottom:		2ex;
+	margin-right:		3em;
+}
+
+table {
+	border-spacing:		0;
+	padding:			0;
+	margin:				0;
+	margin-left:		2em;
+	margin-bottom:		2ex;
+}
+td {
+	padding-right:		1.5ex;
+	padding-top:		0;
+	padding-bottom:		0;
+	vertical-align:		top; 
+} 
+
+ul {
+	margin-top:			0;	
+	margin-left:		0;
+	margin-bottom:		2ex;
+}
+ol {
+	margin-top:			0;	
+	margin-left:		0.8em;
+	margin-bottom:		2ex;
+}
+
+h1.navigation {
+	display:			none;
+}
+ul#navigation {
+    width:              100%;
+    margin:             0;
+    padding-top:        0.5ex;
+    padding-bottom:     0.5ex;
+    padding-left:       0.3em;
+    padding-right:      0.6em;
+    border-top:         solid black 1px;
+    border-bottom:      solid black 1px;
+}
+ul#navigation li {
+	margin:				0;
+	padding-right:		0.5em;
+	list-style-type:	none;
+	display:			inline;
+}
+
+/*----------------------------------------------------------------------------*/
+
+#webstart {
+	font-size: 3em;
+	float: right;
+	margin: 0;
+	padding: 0.5em 1em;
+	background: #eeeeee;
+}
+
+.hint {
+	font-style: italic;
+}

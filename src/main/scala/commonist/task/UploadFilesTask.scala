@@ -5,8 +5,6 @@ import java.nio.charset.Charset
 import java.util.{ List => JUList }
 import javax.swing.JOptionPane
 
-import scala.collection.JavaConverters._
-
 import scutil.lang.ISeq
 import scutil.implicits._
 import scutil.io.Charsets
@@ -216,9 +214,9 @@ final class UploadFilesTask(
 		val (sucesses, failures)	= uploads partition { _.error == null }
 		
 		val	batch	= Batch(
-			uploads.asJava,
-			sucesses.asJava,
-			failures.asJava
+			uploads.toJList,
+			sucesses.toJList,
+			failures.toJList
 		)
 		val summary	= uploadTemplates gallerySummary		(commonist.BuildInfo.version, failures.size)
 		val text	= uploadTemplates galleryDescription	(common, batch)

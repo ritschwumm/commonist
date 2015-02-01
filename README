@@ -4,11 +4,12 @@ To build this code, get and install SBT from
     https://github.com/sbt/sbt
 
 Get and install these library/libraries before building:
+    https://github.com/ritschwumm/xsbt-util
     https://github.com/ritschwumm/xsbt-classpath
     https://github.com/ritschwumm/xsbt-webstart
     https://github.com/ritschwumm/xsbt-scriptstart
     https://github.com/ritschwumm/xsbt-osxapp
-    https://github.com/ritschwumm/xsbt-zipper
+    https://github.com/ritschwumm/xsbt-capsule
     https://github.com/ritschwumm/scutil
     https://github.com/ritschwumm/scjson
     https://github.com/ritschwumm/scmw

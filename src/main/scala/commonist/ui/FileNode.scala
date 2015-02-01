@@ -5,8 +5,6 @@ import java.util.{ Enumeration => JUEnumeration }
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreePath
 
-import scala.collection.JavaConverters._
-
 import scutil.lang.ISeq
 import scutil.implicits._
 
@@ -14,7 +12,15 @@ import scutil.implicits._
 final class FileNode(val file:File) extends DefaultMutableTreeNode {
 	private var allowsChildrenValue	= false
 	
-	def childNodes:ISeq[FileNode]	= children().asInstanceOf[JUEnumeration[FileNode]].asScala.toVector
+	def childNodes:ISeq[FileNode]	= {
+		// TODO scutil 0.58.0
+		val enum	= children().asInstanceOf[JUEnumeration[FileNode]]
+		val iter	= new Iterator[FileNode] {
+			def hasNext	= enum.hasMoreElements
+			def next	= enum.nextElement
+		}
+		iter.toVector
+	}
 	
 	// NOTE without asInstanceOf scala chooses the Object constructor over the Object[] constructor
 	def treePathClone:TreePath	= new TreePath(getPath.asInstanceOf[Array[Object]])

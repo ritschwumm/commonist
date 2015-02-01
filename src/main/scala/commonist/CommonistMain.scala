@@ -1,8 +1,6 @@
 package commonist
 
-import java.awt.{ List => AwtList, _ }
 import java.io._
-import java.net._
 import javax.imageio.ImageIO
 
 import bsh.Interpreter

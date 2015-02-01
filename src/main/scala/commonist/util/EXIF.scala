@@ -101,7 +101,7 @@ object EXIF extends Logging {
 		// 	val sum	= all(0) / BigRational(1) + all(1) / BigRational(60) + all(2) / BigRational(3600)
 		// 	Some(bigDecimal(sum))
 		case dms:Array[RationalNumber] if dms.length > 0 =>
-			val	factors	= Stream.iterate(1)(60 *) map { BigRational(_) }
+			val	factors	= Stream.iterate(1)(60 * _) map { BigRational(_) }
 			val sum		= dms.toList map bigRational zip factors map { case (v,f) => v / f } reduceLeft (_+_)
 			Some(bigDecimal(sum))
 		case d:RationalNumber =>

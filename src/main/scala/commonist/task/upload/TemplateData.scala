@@ -4,8 +4,6 @@ import java.util.{ List => JUList }
 
 import scala.beans.BeanProperty
 
-import commonist.data._
-
 case class Common(
 	@BeanProperty description:String,
 	@BeanProperty date:String,

@@ -1,19 +1,8 @@
 name			:= "commonist"
-
 organization	:= "de.djini"
+version			:= "1.2.0"
 
-version			:= "1.1.0"
-
-scalaVersion	:= "2.11.2"
-
-libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil-core"	% "0.48.0"			% "compile",
-	"de.djini"					%%	"scutil-swing"	% "0.48.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.49.0"			% "compile",
-	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
-	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
-)
-
+scalaVersion	:= "2.11.5"
 scalacOptions	++= Seq(
 	"-deprecation",
 	"-unchecked",
@@ -22,104 +11,77 @@ scalacOptions	++= Seq(
 	// "-language:higherKinds",
 	// "-language:reflectiveCalls",
 	// "-language:dynamics",
-	"-language:postfixOps",
+	// "-language:postfixOps",
 	// "-language:experimental.macros"
-	"-feature"
+	"-feature",
+	"-Ywarn-unused-import",
+	"-Xfatal-warnings"
 )
+
+conflictManager	:= ConflictManager.strict
+libraryDependencies	++= Seq(
+	"de.djini"					%%	"scutil-core"	% "0.63.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.63.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.64.0"			% "compile",
+	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
+	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
+)
+
+enablePlugins(WebStartPlugin, ScriptStartPlugin, OsxAppPlugin, CapsulePlugin)
 
 //--------------------------------------------------------------------------------
 
 buildInfoSettings
-
 sourceGenerators in Compile	<+= buildInfo
-
 buildInfoKeys		:= Seq[BuildInfoKey](version)	// name, version, scalaVersion, sbtVersion
-
 buildInfoPackage	:= "commonist"
 
 //--------------------------------------------------------------------------------
 
-scriptstartSettings
-
 scriptstartConfigs	:= Seq(ScriptConfig(
 	scriptName	= "commonist",
-	vmArguments	= Seq("-Xmx192m"),
+	vmOptions	= Seq("-Xmx192m"),
 	mainClass	= "commonist.Commonist"
 ))
 
-// scriptstart::zipper
-inTask(scriptstart)(zipperSettings ++ Seq(
-	zipperFiles	:= selectSubpaths(scriptstart.value, -DirectoryFilter).toSeq
-))
-
 //--------------------------------------------------------------------------------
-
-osxappSettings
 
 osxappBundleName	:= "commonist"
-
 osxappBundleIcons	:= baseDirectory.value / "src/main/osxapp/commonist.icns"
-
 osxappVm			:= OracleJava7()
-
 osxappMainClass		:= Some("commonist.Commonist")
-
 osxappVmOptions		:= Seq("-Xmx192m")
 
-// osxapp::zipper
-inTask(osxapp)(zipperSettings ++ Seq(
-	zipperFiles		:= selectSubpaths(osxapp.value, -DirectoryFilter).toSeq,
-	zipperBundle	:= zipperBundle.value + ".app" 
-))
+//------------------------------------------------------------------------------
+
+capsuleMainClass		:= Some("commonist.Commonist")
+capsuleVmOptions		:= Seq("-Xmx192m")
+capsuleMinJavaVersion	:= Some("1.7.0")
+capsuleMakeExecutable	:= true
 
 //--------------------------------------------------------------------------------
-
-webstartSettings
 
 webstartGenConfig	:= Some(GenConfig(
 	dname		= "CN=Snake Oil, OU=Hacking Unit, O=FNORD! Inc., L=Bielefeld, ST=33641, C=DE",
 	validity	= 365
 ))
-
 webstartKeyConfig	:= Some(KeyConfig(
 	keyStore	= baseDirectory.value / "etc/keyStore",
 	storePass	= "0xDEADBEEF",
 	alias		= "signFiles",
 	keyPass		= "0xDEADBEEF"
 ))
-
 webstartManifest	:= Some(baseDirectory.value / "etc/manifest.mf")
-
 webstartJnlpConfigs	:= Seq(JnlpConfig(
 	fileName	= "commonist.jnlp",
-	descriptor	= (fileName:String, assets:Seq[JnlpAsset]) => {
-		<jnlp spec="1.6+" codebase="http://djini.de/software/commonist/ws/" href={fileName}>
-			<information>
-				<title>The Commonist</title>
-				<vendor>FNORD! Inc.</vendor>
-				<description>a MediaWiki file upload tool</description>
-				<icon href="commonist-32.png"/>
-				<icon href="commonist-64.png" kind="splash"/>
-				<offline-allowed/>
-			</information>
-			<security>
-				<all-permissions/>
-			</security> 
-			<resources>
-				<j2se version="1.6+" max-heap-size="192m"/>
-				{ assets map { _.toElem } }
-			</resources>
-			<application-desc main-class="commonist.Commonist"/>
-		</jnlp>
-	}
+	descriptor	= Jnlp.descriptor
 ))
-
-webstartExtras	:= Path selectSubpaths ((sourceDirectory in Compile).value / "webstart" , -DirectoryFilter) toSeq
+webstartExtras	:= selectSubpaths((sourceDirectory in Compile).value / "webstart" , -DirectoryFilter) toSeq
 
 //------------------------------------------------------------------------------
 
-// build bundles in target/../zipper
 TaskKey[Seq[File]]("bundle")	:= Seq(
-	(zipper in scriptstart).value,
-	(zipper in osxapp).value
+	scriptstartZip.value,
+	osxappZip.value,
+	capsule.value
 )

@@ -1,8 +1,6 @@
 package commonist
 
-import java.io._
 import java.net._
-import java.util.regex._
 
 import scutil.lang.ISeq
 import scutil.implicits._

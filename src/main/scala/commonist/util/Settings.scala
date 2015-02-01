@@ -3,9 +3,7 @@ package commonist.util
 import java.io._
 
 import scala.collection.mutable
-import scala.collection.JavaConverters._
 
-import scutil.implicits._
 import scutil.log._
 import scutil.io._
 

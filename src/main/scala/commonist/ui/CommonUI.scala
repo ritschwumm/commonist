@@ -1,7 +1,6 @@
 package commonist.ui
 
 import java.awt.{ List => AwtList, _ }
-import java.awt.event._
 import javax.swing._
 
 import scutil.lang.ISeq

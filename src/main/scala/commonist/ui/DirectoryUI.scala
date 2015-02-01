@@ -3,7 +3,6 @@ package commonist.ui
 import java.io.File
 import java.util.{ Stack => JUStack }
 import javax.swing._
-import javax.swing.event._
 import javax.swing.tree._
 
 import scutil.lang.ISeq

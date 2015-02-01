@@ -2,7 +2,6 @@ package commonist.ui
 
 import java.awt.{ List => AwtList, _ }
 import javax.swing._
-import javax.swing.event._
 
 import commonist.Constants
 

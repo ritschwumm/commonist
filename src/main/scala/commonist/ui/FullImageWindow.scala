@@ -3,7 +3,6 @@ package commonist.ui
 import java.io._
 import java.awt.{ List => AwtList, _ }
 import java.awt.event._
-import java.awt.image._
 import javax.swing._
 import javax.imageio._
 

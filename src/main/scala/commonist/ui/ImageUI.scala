@@ -7,7 +7,6 @@ import javax.swing._
 
 import scutil.lang._
 import scutil.implicits._
-import scutil.color._
 import scutil.gui.implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._

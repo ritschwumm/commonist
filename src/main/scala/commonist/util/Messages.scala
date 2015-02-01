@@ -1,11 +1,8 @@
 package commonist.util
 
-import java.io._
 import java.net.URL
 import java.text.MessageFormat
 import java.util.Properties
-
-import scala.collection.JavaConversions._
 
 import scutil.implicits._
 import scutil.log._

@@ -1,4 +1,8 @@
-1.1.0
+1.2.0	01feb15
+	update		scala 2.11.5, updated all libraries and sbt plugins
+
+1.1.0	17aug14
+	update		scala 2.11.2, updated all libraries and sbt plugins
 	change		updated commons image template
 	change		dropped support for mediawiki.org
 	
