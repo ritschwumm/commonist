@@ -1,9 +1,9 @@
 target/
 project/boot/
-project/plugins/project/
+
+/doc/
+/versatz/
 
 /bin/
-/doc/
+/etc/keyStore
 /dist.sbt
-/etc/
-/versatz/
