@@ -1,30 +1,25 @@
 # ATTENTION: this file is UTF-8 encoded
-# see http://commons.wikimedia.org/wiki/Commons:Copyright_tags
+# see https://commons.wikimedia.org/wiki/Commons:Copyright_tags
 
 # unknown
 {{subst:nld}}							I don't know what the license is
 
 # Your own work (best practices)
-{{self|GFDL|cc-by-sa-3.0,2.5,2.0,1.0}}	Own work, copyleft: Multi-license with GFDL and Creative Commons CC-BY-SA-3.0 and older versions (2.5, 2.0 and 1.0)
-{{self|GFDL|cc-by-3.0}}					Own work, attribution required (Multi-license with GFDL and Creative Commons CC-BY 3.0)
-{{self|cc-by-sa-3.0}}					Own work, share alike, attribution required (Creative Commons CC-BY-SA-3.0)
-{{PD-self}}								Own work, all rights released (Public domain)
+{{self|cc-by-sa-4.0}}					Own work, share alike, attribution required (Creative Commons CC-BY-SA-4.0)
+{{self|cc-by-4.0}}				   	Own work, attribution required (Creative Commons CC-BY-SA-4.0)
+{{self|cc-zero}}              Own work, CC0 1.0 Universal Public Domain Dedication
+{{self|GFDL|cc-by-4.0}}				Own work, attribution required (Multi-license with GFDL and Creative Commons CC-BY 4.0)
+{{PD-self}}							    	Own work, all rights released (Public domain)
 
 # Free licenses:
 
-## GNU Licenses:
-{{GFDL}}								GNU Free Documentation License
-{{GFDL-1.2}} 							for works released under the GNU Free Documentation License version 1.2 specifically.
-{{GFDL-en}}								GFDL content from English Wikipedia
-{{GFDL-OpenGeoDB}}						GFDL images from http://opengeodb.de
-{{GPL}}									GNU General Public License
-{{LGPL}}								GNU Lesser General Public License
-
 ## Creative Commons licenses:
+{{cc-by-sa-4.0}}						Creative Commons Attribution ShareAlike 4.0
 {{cc-by-sa-3.0}}						Creative Commons Attribution ShareAlike 3.0
 {{cc-by-sa-2.5}}						Creative Commons Attribution ShareAlike 2.5
 {{cc-by-sa-2.0}}						Creative Commons Attribution ShareAlike 2.0
 {{cc-by-sa-1.0}}						Creative Commons Attribution ShareAlike 1.0
+{{cc-by-4.0}}							Creative Commons Attribution 4.0
 {{cc-by-3.0}}							Creative Commons Attribution 3.0
 {{cc-by-2.5}}							Creative Commons Attribution 2.5
 {{cc-by-2.0}}							Creative Commons Attribution 2.0
@@ -45,6 +40,14 @@
 {{PD-Soviet}}							Work published in the Soviet Union before May 27, 1973 - public domain
 {{PD}}									Public domain (generic - please give a reason in the description field!)
 {{patent}}								Patent material - public domain
+
+## GNU Licenses:
+{{GFDL}}								GNU Free Documentation License
+{{GFDL-1.2}} 							for works released under the GNU Free Documentation License version 1.2 specifically.
+{{GFDL-en}}								GFDL content from English Wikipedia
+{{GFDL-OpenGeoDB}}						GFDL images from http://opengeodb.de
+{{GPL}}									GNU General Public License
+{{LGPL}}								GNU Lesser General Public License
 
 # Non-free licenses:
 {{Copyright by Wikimedia}}				Wikimedia logos
