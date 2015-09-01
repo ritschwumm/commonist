@@ -18,7 +18,7 @@ final class ScrollablePicture extends JLabel with Scrollable {
         if (direction < 0) {
         	val newPosition = currentPosition - (currentPosition / Constants.FULLSIZE_MAX_UNIT_INCREMENT) * Constants.FULLSIZE_MAX_UNIT_INCREMENT
             if (newPosition == 0) Constants.FULLSIZE_MAX_UNIT_INCREMENT else newPosition
-        } 
+        }
 		else {
             ((currentPosition / Constants.FULLSIZE_MAX_UNIT_INCREMENT) + 1) * Constants.FULLSIZE_MAX_UNIT_INCREMENT - currentPosition
         }
@@ -36,7 +36,7 @@ final class ScrollablePicture extends JLabel with Scrollable {
     def getPreferredScrollableViewportSize():Dimension = getPreferredSize
     def getScrollableTracksViewportWidth():Boolean	= false
     def getScrollableTracksViewportHeight():Boolean	= false
-    
+
     /*
     private class MouseBorderScroll extends MouseInputAdapter {
     	def mouseDragged(MouseEvent ev) {

@@ -7,8 +7,8 @@ import javax.swing.event._
 
 import commonist.util._
 
-/** 
- * moves a JComponent withing a JViewport with the mouse 
+/**
+ * moves a JComponent withing a JViewport with the mouse
  * usage: add an instance as MouseListener and MouseMotionListener to the target componente
  */
 final class MouseScroller(picture:JComponent) extends MouseInputAdapter {

@@ -20,6 +20,6 @@ object TextUtil2 {
 	def trimLF(s:String):String				= s replaceAll ("^\\n+", "") replaceAll ("\\n+$", "")
 
 	/** concatenates two Strings and inserts a separator if both are non-empty */
-	def joinNonEmpty(string1:String, string2:String, separator:String):String = 
+	def joinNonEmpty(string1:String, string2:String, separator:String):String =
 			Vector(string1, string2) filter { _.nonEmpty } mkString separator
 }

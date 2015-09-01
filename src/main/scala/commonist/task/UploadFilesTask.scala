@@ -23,12 +23,12 @@ import commonist.util._
 /** upload files selected in the ImageListUI */
 final class UploadFilesTask(
 	settingsDir:File,
-	loader:Loader, 
-	commonData:CommonData, 
-	imageListData:ImageListData, 
+	loader:Loader,
+	commonData:CommonData,
+	imageListData:ImageListData,
 	mainWindow:MainWindow,
 	imageListUI:ImageListUI,
-	statusUI:StatusUI 
+	statusUI:StatusUI
 ) extends Task {
 	private val statusUILater		= new StatusUILater(statusUI)
 	private val imageListUILater	= new ImageListUILater(imageListUI)
@@ -63,7 +63,7 @@ final class UploadFilesTask(
 			}
 			INFO("upload finished")
 		}
-		catch { 
+		catch {
 			case e:AbortedException =>
 				ERROR("upload task aborted")
 				statusUILater halt ("status.upload.aborted")
@@ -118,7 +118,7 @@ final class UploadFilesTask(
 				else if (index >= selected.size)	null
 				else selected(index).name |> Filename.fix |> Filename.normalizeTitle |> Namespace.file
 				
-		selected.zipWithIndex map { case (imageData, index) => 
+		selected.zipWithIndex map { case (imageData, index) =>
 			check()
 			
 			val	file		= imageData.file
@@ -156,7 +156,7 @@ final class UploadFilesTask(
 			
 			val uploaded	= api upload (name, "", text, watch, file, callback)
 			uploaded match {
-				case UploadSuccess(fileName, pageTitle)	=> 
+				case UploadSuccess(fileName, pageTitle)	=>
 					INFO("upload successful", fileName, pageTitle)
 					statusUILater halt ("status.upload.successful", fileName, pageTitle)
 					imageListUILater uploadFinished (file, true)
@@ -183,7 +183,7 @@ final class UploadFilesTask(
 		}
 	}
 	
-	private def renderWarnings(warnings:Set[UploadWarning]):String	= 
+	private def renderWarnings(warnings:Set[UploadWarning]):String	=
 			warnings map renderWarning mkString ", "
 	
 	private def renderWarning(warning:UploadWarning):String	= warning match {
@@ -196,7 +196,7 @@ final class UploadFilesTask(
 	private def renderWarning(key:String, conflict:String):String	=
 			key + ": " + renderFile(conflict)
 	
-	private def renderFile(name:String):String	= 
+	private def renderFile(name:String):String	=
 			"[[:" + (Namespace file name) + "]]"
 		
 	private def renderLink(s:String):String	=
@@ -233,14 +233,14 @@ final class UploadFilesTask(
 			Some(newText)
 		})
 		editResult match {
-			case EditSuccess(pageTitle)	=> 
+			case EditSuccess(pageTitle)	=>
 				statusUILater halt ("status.gallery.updated",	renderLink(title))
 			case EditAborted		=>
 				// will not happen
-			case EditFailure(code)	=> 
+			case EditFailure(code)	=>
 				// TODO more detail
 				statusUILater halt ("status.gallery.error",		code + " in " + renderLink(title))
-			case EditError(code)	=> 
+			case EditError(code)	=>
 				statusUILater halt ("status.gallery.error",		code + " in " + renderLink(title))
 		}
 	}
@@ -273,7 +273,7 @@ final class UploadFilesTask(
 			
 			val title	= Messages message ("query.upload.title", name)
 			
-			val content	= problems 
+			val content	= problems
 					.map {
 						case UploadWarningExists(conflict)				=> (0, "query.upload.ignoreFileexists.message",			conflict)
 						case UploadWarningWasDeleted(conflict)			=> (1, "query.upload.ignoreFilewasdeleted.message",		conflict)
@@ -289,7 +289,7 @@ final class UploadFilesTask(
 			
 			try {
 				edtWait {
-					JOptionPane.YES_OPTION == 
+					JOptionPane.YES_OPTION ==
 					(JOptionPane showConfirmDialog (mainWindow.window, body, title, JOptionPane.YES_NO_OPTION))
 				}
 			}

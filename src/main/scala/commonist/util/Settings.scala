@@ -28,8 +28,8 @@ final class Settings(file:File) extends Logging {
 	def getIntOrElse(name:String, defaultValue:Int):Int	=
 			getInt(name) getOrElse defaultValue
 		
-	def setInt(name:String, value:Int) { 
-		set(name, value.toString) 
+	def setInt(name:String, value:Int) {
+		set(name, value.toString)
 	}
 	
 	/** loads our properties file */

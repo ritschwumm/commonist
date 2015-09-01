@@ -15,8 +15,8 @@ trait MainWindowCallback {
 	
 /** the application window */
 final class MainWindow(
-	commonUI:CommonUI, directoryUI:DirectoryUI, 
-	imageListUI:ImageListUI, statusUI:StatusUI, uploadUI:UploadUI, 
+	commonUI:CommonUI, directoryUI:DirectoryUI,
+	imageListUI:ImageListUI, statusUI:StatusUI, uploadUI:UploadUI,
 	programHeading:String, programIcon:Image, callback:MainWindowCallback
 ) {
 	//------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ final class MainWindow(
 	
 	window setLocationRelativeTo null
 	
-	// quit on window close 
+	// quit on window close
 	window onWindowClosing { _ =>
 		window.dispose()
 		callback.quit()

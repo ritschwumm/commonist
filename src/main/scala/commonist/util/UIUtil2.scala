@@ -34,8 +34,8 @@ object UIUtil2 {
 		import javax.swing.AbstractAction
 		import javax.swing.JComponent
 
-		val nextFocusAction:Action	= new AbstractAction("Move Focus Forwards") { 
-			def actionPerformed(ev:ActionEvent) { 
+		val nextFocusAction:Action	= new AbstractAction("Move Focus Forwards") {
+			def actionPerformed(ev:ActionEvent) {
 				ev.getSource.asInstanceOf[Component].transferFocus()
 			}
 		}
@@ -50,7 +50,7 @@ object UIUtil2 {
 		*/
 	}
 	
-	/** sets window bounds limited to the screen estate */ 
+	/** sets window bounds limited to the screen estate */
 	def limitAndChangeBounds(window:Window, bounds:Rectangle) {
 		val screen = screenRect(
 				Toolkit.getDefaultToolkit,

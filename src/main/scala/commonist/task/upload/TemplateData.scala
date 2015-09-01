@@ -19,7 +19,7 @@ case class Batch(
 	@BeanProperty uploads:JUList[Upload],
 	@BeanProperty successes:JUList[Upload],
 	@BeanProperty failures:JUList[Upload]
-) 
+)
 
 case class Upload(
 	@BeanProperty name:String,			// without the File namespace

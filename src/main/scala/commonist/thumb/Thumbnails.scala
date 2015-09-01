@@ -29,7 +29,7 @@ final class Thumbnails(cache:FileCache) extends Logging {
 	
 	def getMaxSize:Int	= maxSize
 	
-	/** creates a thumbnail Icon from an image File or returns null */ 
+	/** creates a thumbnail Icon from an image File or returns null */
 	def thumbnail(file:File):Option[Icon] =
 			try {
 				cachedThumbnail(file) map { new ImageIcon(_) }
@@ -72,13 +72,13 @@ final class Thumbnails(cache:FileCache) extends Logging {
 		
 		// normalize image type
 		val normalizeTypes	= Set(BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_BYTE_INDEXED)
-		val image2 = 
+		val image2 =
 				if (normalizeTypes contains image.getType) {
 					val normalized	= new BufferedImage(
-							image.getWidth, 
-							image.getHeight, 
+							image.getWidth,
+							image.getHeight,
 							BufferedImage.TYPE_3BYTE_BGR)
-					normalized doto { 
+					normalized doto {
 						_.getGraphics use { g =>
 							g drawImage (image, 0, 0, null)
 						}
@@ -89,7 +89,7 @@ final class Thumbnails(cache:FileCache) extends Logging {
 				}
 		
 		val size	= new Dimension(
-				(image2.getWidth * scale).toInt, 
+				(image2.getWidth * scale).toInt,
 				(image2.getHeight * scale).toInt)
 		val	thumb	= new BufferedImage(
 				size.width,

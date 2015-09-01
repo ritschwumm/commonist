@@ -27,7 +27,7 @@ class Messages(defaultURL:URL, userLangURL:Option[URL]) extends Logging {
 
 	def getText(key:String):String = get(key)
 	
-	def getMessage(key:String, args:Object*):String	= 
+	def getMessage(key:String, args:Object*):String	=
 			try {
 				MessageFormat format (get(key), args.map(_.asInstanceOf[AnyRef]) : _*)
 			}

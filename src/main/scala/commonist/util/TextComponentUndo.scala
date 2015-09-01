@@ -43,7 +43,7 @@ trait TextComponentUndo extends Logging { self:JTextComponent =>
 				if (undoManager.canUndo) {
 					undoManager.undo()
 				}
-			} 
+			}
 			catch { case e:CannotUndoException 	=>
 				ERROR("undo failed", e)
 			}

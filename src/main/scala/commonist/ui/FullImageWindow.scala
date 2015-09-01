@@ -64,7 +64,7 @@ final class FullImageWindow(file:File, programHeading:String, programIcon:Image,
 	window setVisible true
 	
 	window.getRootPane.registerKeyboardAction(
-		new ActionListener { 
+		new ActionListener {
 			def actionPerformed(ev:ActionEvent) {
 				window.dispose()
 			}

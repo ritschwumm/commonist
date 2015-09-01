@@ -78,8 +78,8 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	
 	private val descriptionScroll	=
 			new JScrollPane(
-				descriptionEditor, 
-				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+				descriptionEditor,
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED
 			)
 
@@ -128,8 +128,8 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	//## wiring
 	
 	// update select status on upload checkbox changes
-	uploadEditor onActionPerformed { _ => 
-		callback.updateSelectStatus() 
+	uploadEditor onActionPerformed { _ =>
+		callback.updateSelectStatus()
 	}
 	// open full size view on click
 	imageView onMouseClicked { ev =>
@@ -204,7 +204,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 				dateEditor.getText,
 				coordinatesEditor.getText,
 				categoriesEditor.getText
-			)       
+			)
 			
 	private def displayFullImage() {
 		FullImageWindow display (file, programHeading, programIcon)

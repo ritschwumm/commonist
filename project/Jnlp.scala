@@ -15,7 +15,7 @@ object Jnlp {
 				</information>
 				<security>
 					<all-permissions/>
-				</security> 
+				</security>
 				<resources>
 					<j2se version="1.6+" max-heap-size="192m"/>
 					{ assets map { _.toElem } }

@@ -26,14 +26,14 @@ import scutil.log._
 object EXIF extends Logging {
 	val NONE	= EXIF(None, None, None, None)
 	
-	def extract(file:File):EXIF = 
+	def extract(file:File):EXIF =
 			try {
 				(Sanselan getMetadata file) match {
 					case meta:JpegImageMetadata	=>
 						INFO("found EXIF data", file)
 						EXIF(
-								getDocumentName(meta), 
-								getImageDescription(meta), 
+								getDocumentName(meta),
+								getImageDescription(meta),
 								getDate(meta),
 								getGPS(meta))
 					case _ =>
@@ -114,7 +114,7 @@ object EXIF extends Logging {
 	private def bigRational(value:RationalNumber):BigRational	= BigRational(value.numerator, value.divisor)
 	private def bigDecimal(value:BigRational):BigDecimal		= new BigDecimal(value toBigDecimal gpsPrecision)
 	private val gpsPrecision:MathContext						= new MathContext(12, RoundingMode.HALF_EVEN)
-		 
+		
 	//------------------------------------------------------------------------------
 	
 	private def getImageDescription(metaData:JpegImageMetadata):Option[String] =
@@ -129,13 +129,13 @@ object EXIF extends Logging {
 			getDate(metaData, TIFF_TAG_DATE_TIME)					// DateTime
 			
 	private def getString(metaData:JpegImageMetadata, tagInfo:TagInfo):Option[String] =
-			getValueDescription(metaData, tagInfo) map { _ replaceAll ("^'|'$", "") } 
+			getValueDescription(metaData, tagInfo) map { _ replaceAll ("^'|'$", "") }
 			
 	private def getDate(metaData:JpegImageMetadata, tagInfo:TagInfo):Option[Date] =
-			getValueDescription(metaData, tagInfo) flatMap parseDate _ 
+			getValueDescription(metaData, tagInfo) flatMap parseDate _
 			
 	// @see http://www.awaresystems.be/imaging/tiff/tifftags/privateifd/exif/datetimeoriginal.html
-	private def parseDate(s:String):Option[Date] = 
+	private def parseDate(s:String):Option[Date] =
 			try { Some(new SimpleDateFormat("''yyyy:MM:dd HH:mm:ss''") parse s) }
 			catch { case e:ParseException => DEBUG("cannot parse date", s); None }
 			

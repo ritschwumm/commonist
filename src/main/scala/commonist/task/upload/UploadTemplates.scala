@@ -35,13 +35,13 @@ final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 	private def template(typ:String, data:Map[String,AnyRef]):String = {
 		val specific	= typ + "_" + wiki.family + (wiki.site cata ("", "_" + _)) + ".bpp"
 		val generic		= typ + "_default.bpp"
-		val url			=	(loader resourceURL specific)	orElse 
-							(loader resourceURL generic)	getOrError 
+		val url			=	(loader resourceURL specific)	orElse
+							(loader resourceURL generic)	getOrError
 							(s"neither specific template: ${specific} nor generic template: ${generic} could be found")
 		try {
 			compile(url, data) |> TextUtil2.restrictEmptyLines |> TextUtil2.trimLF
 		}
-		catch { case e:Exception => 
+		catch { case e:Exception =>
 			ERROR("exception occurred while using template", url, e)
 			throw e
 		}

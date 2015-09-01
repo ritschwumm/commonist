@@ -8,8 +8,8 @@ import scutil.log._
 
 /** loads resources from a set of URL-paths */
 final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePrefix:String) extends Logging {
-	def resourceURL(path:String):Option[URL] = 
-			directoryURL(settingsDir, path) 		orElse 
+	def resourceURL(path:String):Option[URL] =
+			directoryURL(settingsDir, path) 		orElse
 			directoryURL(etcDir, path)				orElse
 			directoryURL(resourcesDir, path)		orElse
 			classloaderURL(resourcePrefix, path)	noneEffect

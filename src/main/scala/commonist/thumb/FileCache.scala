@@ -22,7 +22,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 			if (original newerThan cached) {
 				remove(original)
 				None
-			} 
+			}
 			else {
 				// move to the end of the list (LRU)
 				entryQueue	= entryQueue filterNot { _ ==== original }
@@ -73,7 +73,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 				entryMap	= entryMap + (original -> cached)
 			}
 		}
-		catch { case e:Exception	=> 
+		catch { case e:Exception	=>
 			WARN("cannot load metadata cache", list, e)
 		}
 	}
@@ -112,9 +112,9 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 		}
 	}
 	
-	/** 
+	/**
 	  * delete stale entries from the entryList and entryMap
-	  * and all cachefiles not in the entryMap and  
+	  * and all cachefiles not in the entryMap and
 	  */
 	private def cleanup() {
 		// remove stale entries from the entryList and entryMap
@@ -133,7 +133,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 		}
 	}
 	
-	/** create a new cachefile */ 
+	/** create a new cachefile */
 	private def cacheFile():File = {
 		val cached	= directory / randomString("0123456789abcdefghijklmnopqrstuvwxyz", 14)
 		if (cached.exists)	cacheFile()

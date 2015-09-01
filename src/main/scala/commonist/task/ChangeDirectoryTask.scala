@@ -23,7 +23,7 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 		Thread.`yield`()	//Thread.sleep(50)
 		
 		DEBUG("listFiles")
-		val listed	= directory 
+		val listed	= directory
 				.childrenWhere	{ file:File => file.isFile && !file.isHidden }
 				.getOrElse		{ WARN("directory does not exist", directory); return }
 		
@@ -51,12 +51,12 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 				catch { case e:InterruptedException => WARN("interrupted", e) }
 	
 				// update when a given number of ImageUIs have been added
-				// or a given delay has elapsed or 
+				// or a given delay has elapsed or
 				val now	= System.currentTimeMillis
 				if (now - last > Constants.IMAGELIST_UPDATE_DELAY
 				|| (cur % Constants.IMAGELIST_UPDATE_COUNT) == 0) {
 					imageListUILater.updateSelectStatus()
-					// this doesn't have to run in the EDT, 
+					// this doesn't have to run in the EDT,
 					// but is needed to make our changes visible
 					mainWindow.revalidate()
 					last	= now

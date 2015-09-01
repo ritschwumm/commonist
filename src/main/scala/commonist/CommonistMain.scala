@@ -45,7 +45,7 @@ object CommonistMain extends Logging {
 	private val loader		= new Loader(settingsDir, etcDir, resourcesDir, resourcePrefix)
 	
 	val programIcon		= null
-	val programHeading	= s"The Commonist ${commonist.BuildInfo.version}" 
+	val programHeading	= s"The Commonist ${commonist.BuildInfo.version}"
 	
 	private val userLanguage	= SystemProperties.user.language
 	INFO("using user language", userLanguage)
@@ -146,7 +146,7 @@ object CommonistMain extends Logging {
 	private var changeDirectory	= new TaskVar[ChangeDirectoryTask]
 	private var uploadFiles		= new TaskVar[UploadFilesTask]
 	
-	/** 
+	/**
 	 * Action: change to a new directory
 	 * load and display imageUIs for all files in the new directory
 	 */
@@ -180,11 +180,11 @@ object CommonistMain extends Logging {
 	}
 	
 	/** load licenses */
-	private def loadLicenses():ISeq[LicenseData] = 
+	private def loadLicenses():ISeq[LicenseData] =
 			Parser parseLicenses (loader resourceURL "licenses.txt" getOrError "cannot load licenses.txt")
 
 	/** load wikis */
-	private def loadWikis():ISeq[WikiData] = 
+	private def loadWikis():ISeq[WikiData] =
 			Parser parseWikis (loader resourceURL "wikis.txt" getOrError "cannot load wikis.txt")
 	
 	/*

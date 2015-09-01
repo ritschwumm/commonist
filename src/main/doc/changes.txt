@@ -1,3 +1,7 @@
+1.3.0	30jul15
+	change		updated licenses
+	update		scala 2.11.7, updated all libraries and sbt plugins
+
 1.2.0	01feb15
 	update		scala 2.11.5, updated all libraries and sbt plugins
 

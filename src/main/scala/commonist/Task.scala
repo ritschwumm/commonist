@@ -85,7 +85,7 @@ abstract class Task extends Logging { outer =>
 			waitFor.join()
 			true
 		}
-		catch { case e:InterruptedException => 
+		catch { case e:InterruptedException =>
 			ERROR("task interrupted", e)
 			false
 		}

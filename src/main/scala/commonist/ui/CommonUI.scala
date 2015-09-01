@@ -16,7 +16,7 @@ import commonist.util._
 final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) extends JPanel {
 	override def getMinimumSize():Dimension =
 			new Dimension(
-				300, 
+				300,
 				super.getMinimumSize.height
 			)
 			
@@ -56,7 +56,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 				)
 	}
 	
-	// NOTE licenseEditor#SelectedItem is String|LicenseData 
+	// NOTE licenseEditor#SelectedItem is String|LicenseData
 	licenseEditor setEditable true
 	
 	// separators
@@ -82,7 +82,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 		licenseEditor setToolTipText text
 	}
 	licenseEditor onActionPerformed { _ =>
-		updateLicenseTooltip() 
+		updateLicenseTooltip()
 	}
 	updateLicenseTooltip()
 	
@@ -92,7 +92,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	setBorder(Constants.PANEL_BORDER)
 	setLayout(new GridBagLayout)
 	
-	// header label 
+	// header label
 	add(commonLabel,		GBC pos (1,0) size (1,1) weight (0,0) anchor WEST		fill NONE		insetsTLBR (0,0,4,0))
 
 	// part 1
@@ -136,7 +136,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	add(separator2,			GBC pos (0,12) size (2,1) weight (1,0) anchor CENTER fill HORIZONTAL	insetsTLBR (0,0,0,0))
 	
 	/** gets all data edit in this UI */
-	def getData:CommonData = 
+	def getData:CommonData =
 			CommonData(
 				wikiEditor.getSelectedItem.asInstanceOf[WikiData],
 				userEditor.getText.trim,

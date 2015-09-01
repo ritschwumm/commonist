@@ -1,6 +1,6 @@
 A file upload tool for mediawiki using its api.php interface
 
-To build this code, get and install SBT from 
+To build this code, get and install SBT from
     https://github.com/sbt/sbt
 
 Get and install these library/libraries before building:
