@@ -167,7 +167,7 @@ final class UploadFilesTask(
 					imageListUILater uploadFinished (file, false)
 					// TODO just remove it from the list?
 					// TODO more detail
-					upload copy (error=s"aborted: ${renderWarnings(warnings)}")
+					upload copy (error = so"aborted: ${renderWarnings(warnings)}")
 				case UploadFailure(code)	=>
 					// TODO more detail
 					ERROR("upload failed", fileName, code)

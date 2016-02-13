@@ -32,12 +32,12 @@ class Messages(defaultURL:URL, userLangURL:Option[URL]) extends Logging {
 				MessageFormat format (get(key), args.map(_.asInstanceOf[AnyRef]) : _*)
 			}
 			catch { case e:Exception	=>
-				ERROR(s"message cannot be used: ${key}")
+				ERROR(so"message cannot be used: ${key}")
 				throw e
 			}
 	
 	private def get(key:String):String =
 			(userLangProps get key)	orElse
 			(defaultProps get key)	getOrError
-			(s"message not available: ${key}")
+			(so"message not available: ${key}")
 }

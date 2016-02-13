@@ -1,6 +1,6 @@
 name			:= "commonist"
 organization	:= "de.djini"
-version			:= "1.3.0"
+version			:= "1.4.0"
 
 scalaVersion	:= "2.11.7"
 scalacOptions	++= Seq(
@@ -20,19 +20,17 @@ scalacOptions	++= Seq(
 
 conflictManager	:= ConflictManager.strict
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil-core"	% "0.71.0"			% "compile",
-	"de.djini"					%%	"scutil-swing"	% "0.71.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.72.0"			% "compile",
+	"de.djini"					%%	"scutil-core"	% "0.78.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.78.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.79.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )
 
-enablePlugins(WebStartPlugin, ScriptStartPlugin, OsxAppPlugin, CapsulePlugin)
+enablePlugins(WebStartPlugin, ScriptStartPlugin, OsxAppPlugin, CapsulePlugin, BuildInfoPlugin)
 
 //--------------------------------------------------------------------------------
 
-buildInfoSettings
-sourceGenerators in Compile	<+= buildInfo
 buildInfoKeys		:= Seq[BuildInfoKey](version)	// name, version, scalaVersion, sbtVersion
 buildInfoPackage	:= "commonist"
 

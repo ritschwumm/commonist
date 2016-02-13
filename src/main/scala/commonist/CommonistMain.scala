@@ -45,7 +45,7 @@ object CommonistMain extends Logging {
 	private val loader		= new Loader(settingsDir, etcDir, resourcesDir, resourcePrefix)
 	
 	val programIcon		= null
-	val programHeading	= s"The Commonist ${commonist.BuildInfo.version}"
+	val programHeading	= so"The Commonist ${commonist.BuildInfo.version}"
 	
 	private val userLanguage	= SystemProperties.user.language
 	INFO("using user language", userLanguage)
@@ -175,7 +175,7 @@ object CommonistMain extends Logging {
 	/** load language file for the language or en if not successful and returns the used language */
 	private def loadMessages(language:String) {
 		val defaultURL	= loader resourceURL "messages_default.properties" getOrError "cannot load messages_default.properties"
-		val userLangURL	= loader resourceURL (s"messages_${language}.properties")
+		val userLangURL	= loader resourceURL (so"messages_${language}.properties")
 		Messages init (defaultURL, userLangURL)
 	}
 	

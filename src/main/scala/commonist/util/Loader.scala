@@ -15,7 +15,7 @@ final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePre
 			classloaderURL(resourcePrefix, path)	noneEffect
 			{ DEBUG(
 					"failed to access resource", path, "tried to find in",
-					settingsDir, etcDir, resourcesDir, s"classpath:${resourcePrefix}")
+					settingsDir, etcDir, resourcesDir, so"classpath:${resourcePrefix}")
 			}
 	
 	def directoryURL(directory:File, path:String):Option[URL] =

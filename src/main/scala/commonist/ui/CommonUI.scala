@@ -77,7 +77,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 				licenseEditor.getSelectedItem match {
 					case x:LicenseData	=> x.description
 					case x:String		=> x
-					case x				=> sys error s"unexpected license type: ${x}"
+					case x				=> sys error so"unexpected license type: ${x.toString}"
 				}
 		licenseEditor setToolTipText text
 	}
@@ -149,7 +149,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 				licenseEditor.getSelectedItem match {
 					case x:String		=> LicenseData(x, "")
 					case x:LicenseData	=> x
-					case x				=> sys error s"unexpected license type: ${x}"
+					case x				=> sys error so"unexpected license type: ${x.toString}"
 				},
 				categoriesEditor.getText
 			)
@@ -197,7 +197,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 				licenseEditor.getSelectedItem match {
 					case x:LicenseData	=> x.template
 					case x:String		=> x
-					case x				=> sys error s"unexpected license type: ${x}"
+					case x				=> sys error so"unexpected license type: ${x.toString}"
 				}
 		settings set ("licenseEditor.SelectedItem",	licenseSel)
 	}

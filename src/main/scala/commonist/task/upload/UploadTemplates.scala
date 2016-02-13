@@ -16,7 +16,7 @@ import commonist.util._
 final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 	/** edit summary for writing a gallery */
 	def gallerySummary(version:String, failureCount:Int):String =
-			"commonist " + version + ((failureCount != 0) cata ("", s", ${failureCount} errors"))
+			"commonist " + version + ((failureCount != 0) cata ("", so", ${failureCount.toString} errors"))
 	
 	/** compiles into wikitext */
 	def galleryDescription(common:Common, batch:Batch):String =
@@ -37,7 +37,7 @@ final class UploadTemplates(loader:Loader, wiki:WikiData) extends Logging {
 		val generic		= typ + "_default.bpp"
 		val url			=	(loader resourceURL specific)	orElse
 							(loader resourceURL generic)	getOrError
-							(s"neither specific template: ${specific} nor generic template: ${generic} could be found")
+							(so"neither specific template: ${specific} nor generic template: ${generic} could be found")
 		try {
 			compile(url, data) |> TextUtil2.restrictEmptyLines |> TextUtil2.trimLF
 		}

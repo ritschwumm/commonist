@@ -84,7 +84,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 		cleanup()
 
 		DEBUG("writing metadata", list)
-		val strs	= entryQueue map { original => s"\n${original.getPath}\n${entryMap(original).getPath}\n" }
+		val strs	= entryQueue map { original => so"\n${original.getPath}\n${entryMap(original).getPath}\n" }
 		list writeString (utf_8, strs.mkString)
 	}
 	

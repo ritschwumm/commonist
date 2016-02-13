@@ -107,7 +107,7 @@ final class Thumbnails(cache:FileCache) extends Logging {
 	private def readSubsampled(input:File):Option[BufferedImage] = {
 		val stream = ImageIO createImageInputStream input
 		if (stream == null)	{
-			ERROR(s"cannot create ImageInputStream for file", input)
+			ERROR(so"cannot create ImageInputStream for file", input)
 			return None
 		}
 		stream use { stream =>
