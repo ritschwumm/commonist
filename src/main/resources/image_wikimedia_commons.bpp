@@ -22,6 +22,9 @@ $(upload.description)
 # else if (!upload.coordinates.equals("")) {
 $(upload.coordinates)
 # }
+# if (!common.others.equals("")) {
+$(common.others)
+# }
 # if (!common.licenseTemplate.equals("")) {
 == {{int:license-header}} ==
 $(common.licenseTemplate)

@@ -34,6 +34,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	private val dateLabel			= new JLabel(Messages text "common.date",			SwingConstants.RIGHT)
 	private val authorLabel			= new JLabel(Messages text "common.author",			SwingConstants.RIGHT)
 	private val permissionLabel		= new JLabel(Messages text "common.permission",		SwingConstants.RIGHT)
+	private val othersLabel		    = new JLabel(Messages text "common.others", 		SwingConstants.RIGHT)
 	private val categoriesLabel		= new JLabel(Messages text "common.categories",		SwingConstants.RIGHT)
 	private val licenseLabel		= new JLabel(Messages text "common.license",		SwingConstants.RIGHT)
 	
@@ -47,6 +48,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	private val dateEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val authorEditor		= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val permissionEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
+	private val othersEditor	    = new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val categoriesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val licenseEditor		= new JComboBox(licenseList.toArray[Object]) {
 		override def getPreferredSize():Dimension =
@@ -126,14 +128,17 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	add(permissionLabel, 	GBC pos (0,9) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
 	add(permissionEditor,	GBC pos (1,9) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 	
-	add(categoriesLabel,	GBC pos (0,10) size (1,1) weight (0,0) anchor NORTHEAST	fill NONE		insetsTLBR (0,4,0,4))
-	add(categoriesEditor,	GBC pos (1,10) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(othersLabel,	 	GBC pos (0,10) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(othersEditor,		GBC pos (1,10) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
-	add(licenseLabel,		GBC pos (0,11) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(licenseEditor,		GBC pos (1,11) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(categoriesLabel,	GBC pos (0,11) size (1,1) weight (0,0) anchor NORTHEAST	fill NONE		insetsTLBR (0,4,0,4))
+	add(categoriesEditor,	GBC pos (1,11) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+
+	add(licenseLabel,		GBC pos (0,12) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
+	add(licenseEditor,		GBC pos (1,12) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
 	// separator 2
-	add(separator2,			GBC pos (0,12) size (2,1) weight (1,0) anchor CENTER fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(separator2,			GBC pos (0,13) size (2,1) weight (1,0) anchor CENTER fill HORIZONTAL	insetsTLBR (0,0,0,0))
 	
 	/** gets all data edit in this UI */
 	def getData:CommonData =
@@ -146,6 +151,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 				sourceEditor.getText,
 				authorEditor.getText,
 				permissionEditor.getText,
+				othersEditor.getText,
 				licenseEditor.getSelectedItem match {
 					case x:String		=> LicenseData(x, "")
 					case x:LicenseData	=> x
@@ -165,6 +171,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 		sourceEditor		setText (settings getOrElse ("sourceEditor.Text",		""))
 		dateEditor			setText (settings getOrElse ("dateEditor.Text",			""))
 		permissionEditor	setText (settings getOrElse ("permissionEditor.Text",	""))
+		othersEditor		setText (settings getOrElse ("othersEditor.Text",		""))
 		authorEditor		setText (settings getOrElse ("authorEditor.Text",		""))
 		categoriesEditor	setText (settings getOrElse ("categoriesEditor.Text",	""))
 		
@@ -188,6 +195,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 		settings set ("dateEditor.Text",			dateEditor.getText)
 		settings set ("authorEditor.Text",			authorEditor.getText)
 		settings set ("permissionEditor.Text",		permissionEditor.getText)
+		settings set ("othersEditor.Text",			othersEditor.getText)
 		settings set ("categoriesEditor.Text",		categoriesEditor.getText)
 		
 		val wikiData	= wikiEditor.getSelectedItem.asInstanceOf[WikiData]

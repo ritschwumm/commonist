@@ -10,6 +10,7 @@ case class Common(
 	@BeanProperty source:String,
 	@BeanProperty author:String,
 	@BeanProperty permission:String,
+	@BeanProperty others:String,
 	@BeanProperty licenseTemplate:String,
 	@BeanProperty licenseDescription:String,
 	@BeanProperty categories:String
