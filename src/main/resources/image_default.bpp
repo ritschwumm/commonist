@@ -31,6 +31,9 @@ $(common.author)
 == permission ==
 $(common.permission)
 
+== others ==
+$(common.others)
+
 == license ==
 $(common.licenseDescription)
 $(common.licenseTemplate)

@@ -10,6 +10,7 @@ case class CommonData(
 	source:String,
 	author:String,
 	permission:String,
+	others:String,
 	license:LicenseData,
 	categories:String
 )

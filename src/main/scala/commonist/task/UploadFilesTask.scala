@@ -53,6 +53,7 @@ final class UploadFilesTask(
 				commonData.source.trim,
 				commonData.author.trim,
 				commonData.permission.trim,
+				commonData.others.trim,
 				commonData.license.template,
 				commonData.license.description,
 				Parser parseCategories commonData.categories
