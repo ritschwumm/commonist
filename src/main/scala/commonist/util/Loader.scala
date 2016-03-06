@@ -18,9 +18,9 @@ final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePre
 					settingsDir, etcDir, resourcesDir, so"classpath:${resourcePrefix}")
 			}
 	
-	def directoryURL(directory:File, path:String):Option[URL] =
+	private def directoryURL(directory:File, path:String):Option[URL] =
 			new File(directory, path).guardExists map { _.toURI.toURL }
 			
-	def classloaderURL(resourcePrefix:String, path:String):Option[URL] =
-			getClass resourceOption (resourcePrefix + path)
+	private def classloaderURL(resourcePrefix:String, path:String):Option[URL] =
+			getClass.resources findUrl (resourcePrefix + path)
 }

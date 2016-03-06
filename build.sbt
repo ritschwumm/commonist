@@ -1,6 +1,6 @@
 name			:= "commonist"
 organization	:= "de.djini"
-version			:= "1.4.0"
+version			:= "1.5.0"
 
 scalaVersion	:= "2.11.7"
 scalacOptions	++= Seq(
@@ -20,9 +20,9 @@ scalacOptions	++= Seq(
 
 conflictManager	:= ConflictManager.strict
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil-core"	% "0.78.0"			% "compile",
-	"de.djini"					%%	"scutil-swing"	% "0.78.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.79.0"			% "compile",
+	"de.djini"					%%	"scutil-core"	% "0.80.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.80.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.81.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )
@@ -46,7 +46,7 @@ scriptstartConfigs	:= Seq(ScriptConfig(
 
 osxappBundleName	:= "commonist"
 osxappBundleIcons	:= baseDirectory.value / "src/main/osxapp/commonist.icns"
-osxappVm			:= OracleJava7()
+osxappVm			:= OracleJava()
 osxappMainClass		:= Some("commonist.Commonist")
 osxappVmOptions		:= Seq("-Xmx192m")
 
@@ -72,7 +72,25 @@ webstartKeyConfig	:= Some(KeyConfig(
 webstartManifest	:= Some(baseDirectory.value / "etc/manifest.mf")
 webstartJnlpConfigs	:= Seq(JnlpConfig(
 	fileName	= "commonist.jnlp",
-	descriptor	= Jnlp.descriptor
+	descriptor	= (fileName:String, assets:Seq[JnlpAsset]) =>
+			<jnlp spec="6.0+" codebase="http://neonstau.de/commonist/ws/" href={fileName}>
+				<information>
+					<title>The Commonist</title>
+					<vendor>FNORD! Inc.</vendor>
+					<description>a MediaWiki file upload tool</description>
+					<icon href="commonist-32.png"/>
+					<icon href="commonist-64.png" kind="splash"/>
+					<offline-allowed/>
+				</information>
+				<security>
+					<all-permissions/>
+				</security>
+				<resources>
+					<j2se version="1.7+" max-heap-size="192m"/>
+					{ assets map { _.toElem } }
+				</resources>
+				<application-desc main-class="commonist.Commonist"/>
+			</jnlp>
 ))
 webstartExtras	:= selectSubpaths((sourceDirectory in Compile).value / "webstart" , -DirectoryFilter) toSeq
 

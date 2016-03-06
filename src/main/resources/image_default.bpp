@@ -41,7 +41,7 @@ $(common.licenseTemplate)
 # // see http://microformats.org/wiki/geo
 # if (upload.latitude != null && upload.longitude!= null) {
 <div class="geo">
-	<span class="latitude">$(upload.latitude)</span>, 
+	<span class="latitude">$(upload.latitude)</span>,
 	<span class="longitude">$(upload.longitude)</span>
 </div>
 # }
