@@ -1,7 +1,7 @@
 package commonist.ui
 
 import java.io.File
-import java.awt.{ List => AwtList, _ }
+import java.awt.{ List => _, _ }
 import java.awt.event._
 import javax.swing._
 
@@ -54,6 +54,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	private val descriptionLabel	= new JLabel(Messages text "image.description")
 	private val dateLabel			= new JLabel(Messages text "image.date")
 	private val coordinatesLabel	= new JLabel(Messages text "image.coordinates")
+	private val headingLabel		= new JLabel(Messages text "image.heading")
 	private val categoriesLabel		= new JLabel(Messages text "image.categories")
 	
 	private val uploadEditor		= new JCheckBox(null.asInstanceOf[Icon], false)
@@ -61,6 +62,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	private val descriptionEditor	= new JTextArea(Constants.INPUT_FIELD_HEIGHT, Constants.INPUT_FIELD_WIDTH)		with TextComponentUndo
 	private val dateEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH)	with TextComponentUndo
 	private val coordinatesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH)	with TextComponentUndo
+	private val headingEditor		= new JTextField(Constants.INPUT_FIELD_WIDTH)	with TextComponentUndo
 	private val categoriesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH)	with TextComponentUndo
 	
 	UIUtil2 tabMovesFocus descriptionEditor
@@ -74,6 +76,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	UIUtil2 scrollVisibleOnFocus (descriptionEditor,	this)
 	UIUtil2 scrollVisibleOnFocus (dateEditor,			this)
 	UIUtil2 scrollVisibleOnFocus (coordinatesEditor,	this)
+	UIUtil2 scrollVisibleOnFocus (headingEditor,		this)
 	UIUtil2 scrollVisibleOnFocus (categoriesEditor,		this)
 	
 	private val descriptionScroll	=
@@ -116,13 +119,16 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	add(coordinatesLabel, 	GBC pos (0,4) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
 	add(coordinatesEditor,	GBC pos (1,4) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
 	
-	add(categoriesLabel,	GBC pos (0,5) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
-	add(categoriesEditor,	GBC pos (1,5) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
+	add(headingLabel, 		GBC pos (0,5) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
+	add(headingEditor,		GBC pos (1,5) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
+	
+	add(categoriesLabel,	GBC pos (0,6) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
+	add(categoriesEditor,	GBC pos (1,6) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
 	
 	// state and image
 	
 	add(stateView,			GBC pos (2,0) size (1,1) weight (0,0) anchor CENTER		fill NONE 		insetsTLBR (0,4,0,4))
-	add(imageView,			GBC pos (2,1) size (1,5) weight (0,0) anchor SOUTHWEST	fill NONE 		insetsTLBR (0,4,0,4))
+	add(imageView,			GBC pos (2,1) size (1,6) weight (0,0) anchor SOUTHWEST	fill NONE 		insetsTLBR (0,4,0,4))
 	
 	//------------------------------------------------------------------------------
 	//## wiring
@@ -150,8 +156,9 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	// BETTER move unparsers and parsers together
 	
 	private val	exif		= EXIF extract file
-	private val exifDate	= exif.date	map { _ format "yyyy-MM-dd HH:mm:ss" } getOrElse ""
-	private val exifGPS		= exif.gps	map { it => it.latitude.toString + "," + it.longitude.toString } getOrElse ""
+	private val exifDate	= exif.date		cata ("", _ format "yyyy-MM-dd HH:mm:ss")
+	private val exifGPS		= exif.gps		cata ("", it => it.latitude.toString + "," + it.longitude.toString)
+	private val exifHeading	= exif.heading	cata ("", _.toString)
 	private val exifDesc	= exif.description getOrElse ""
 	private val fixedName	= Filename fix file.getName
 	
@@ -160,6 +167,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	descriptionEditor	setText		exifDesc
 	dateEditor			setText		exifDate
 	coordinatesEditor	setText		exifGPS
+	headingEditor		setText		exifHeading
 	categoriesEditor	setText		""
 	
 	// BETTER could be a trait
@@ -203,6 +211,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 				descriptionEditor.getText,
 				dateEditor.getText,
 				coordinatesEditor.getText,
+				headingEditor.getText,
 				categoriesEditor.getText
 			)
 			

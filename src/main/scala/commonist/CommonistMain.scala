@@ -3,9 +3,6 @@ package commonist
 import java.io._
 import javax.imageio.ImageIO
 
-import bsh.Interpreter
-import bsh.EvalError
-
 import org.simplericity.macify.eawt._
 
 import scutil.lang.ISeq

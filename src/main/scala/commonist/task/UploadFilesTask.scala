@@ -1,8 +1,6 @@
 package commonist.task
 
 import java.io.File
-import java.nio.charset.Charset
-import java.util.{ List => JUList }
 import javax.swing.JOptionPane
 
 import scutil.lang.ISeq
@@ -134,6 +132,7 @@ final class UploadFilesTask(
 			val coordParts	= Parser parseCoordinates imageData.coordinates
 			val latitude	= coordParts map { _._1 } orNull;
 			val longitude	= coordParts map { _._2 } orNull;
+			val heading		= imageData.heading
 			val categories	= Parser parseCategories imageData.categories
 			
 			val upload	= Upload(
@@ -147,7 +146,8 @@ final class UploadFilesTask(
 				categories,
 				coords.trim,
 				latitude,
-				longitude
+				longitude,
+				heading.trim
 			)
 			
 			statusUILater halt ("status.upload.started", fileName)

@@ -2,7 +2,7 @@ package commonist.thumb
 
 import java.lang.{ Integer => JInteger }
 import java.io._
-import java.awt.{ List => AwtList, _ }
+import java.awt.{ List => _, _ }
 import java.awt.geom._
 import java.awt.image._
 import javax.swing._

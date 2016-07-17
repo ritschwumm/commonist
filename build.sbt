@@ -1,8 +1,8 @@
 name			:= "commonist"
 organization	:= "de.djini"
-version			:= "1.5.0"
+version			:= "1.6.0"
 
-scalaVersion	:= "2.11.7"
+scalaVersion	:= "2.11.8"
 scalacOptions	++= Seq(
 	"-deprecation",
 	"-unchecked",
@@ -20,11 +20,22 @@ scalacOptions	++= Seq(
 
 conflictManager	:= ConflictManager.strict
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil-core"	% "0.80.0"			% "compile",
-	"de.djini"					%%	"scutil-swing"	% "0.80.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.81.0"			% "compile",
+	"de.djini"					%%	"scutil-core"	% "0.84.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.84.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.85.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
+)
+
+wartremoverErrors ++= Seq(
+	Wart.Any2StringAdd,
+	Wart.EitherProjectionPartial,
+	Wart.OptionPartial,
+	Wart.Enumeration,
+	Wart.FinalCaseClass,
+	Wart.JavaConversions,
+	Wart.Option2Iterable,
+	Wart.TryPartial
 )
 
 enablePlugins(WebStartPlugin, ScriptStartPlugin, OsxAppPlugin, CapsulePlugin, BuildInfoPlugin)

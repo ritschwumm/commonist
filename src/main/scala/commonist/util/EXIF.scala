@@ -6,13 +6,11 @@ import java.util.Date
 import java.math.MathContext
 import java.math.RoundingMode
 
-import org.apache.sanselan.ImageReadException
 import org.apache.sanselan.Sanselan
-import org.apache.sanselan.common.IImageMetadata
 import org.apache.sanselan.common.RationalNumber
 import org.apache.sanselan.formats.jpeg.JpegImageMetadata
+import org.apache.sanselan.formats.tiff.TiffDirectory
 import org.apache.sanselan.formats.tiff.TiffField
-import org.apache.sanselan.formats.tiff.TiffImageMetadata
 import org.apache.sanselan.formats.tiff.constants.TagInfo
 import org.apache.sanselan.formats.tiff.constants.ExifTagConstants._
 import org.apache.sanselan.formats.tiff.constants.TiffTagConstants._
@@ -24,18 +22,22 @@ import scutil.math.BigRational
 import scutil.log._
 
 object EXIF extends Logging {
-	val NONE	= EXIF(None, None, None, None)
+	val NONE	= EXIF(None, None, None, None, None)
 	
 	def extract(file:File):EXIF =
 			try {
 				(Sanselan getMetadata file) match {
 					case meta:JpegImageMetadata	=>
-						INFO("found EXIF data", file)
+						INFO("found EXIF data in", file)
 						EXIF(
-								getDocumentName(meta),
-								getImageDescription(meta),
-								getDate(meta),
-								getGPS(meta))
+							getDocumentName(meta),
+							getImageDescription(meta),
+							getDate(meta),
+							getGPS(meta),
+							getHeading(meta)
+						) doto { it =>
+							DEBUG("data found", it)
+						}
 					case _ =>
 						INFO("no EXIF data found", file)
 						NONE
@@ -47,7 +49,19 @@ object EXIF extends Logging {
 			}
 	
 	//------------------------------------------------------------------------------
-	
+
+	private def getHeading(metaData:JpegImageMetadata):Option[BigDecimal] =
+			for {
+				gpsDir			<- getGpsDirectory(metaData)
+				
+				directionVal	<- (gpsDir findField GPS_TAG_GPS_IMG_DIRECTION).guardNotNull
+				direction		<- decimal(directionVal.getValue)
+				//directionRef	<- (gpsDir findField GPS_TAG_GPS_IMG_DIRECTION_REF).guardNotNull
+				//GPS_TAG_GPS_IMG_DIRECTION_REF_VALUE_MAGNETIC_NORTH
+				//GPS_TAG_GPS_IMG_DIRECTION_REF_VALUE_TRUE_NORTH
+			}
+			yield direction
+			
 	/*
 	// NOTE this doesn't work in sanselan 0.97 because FieldTypeRational#getSimpleValue
 	// returns either a RationalNumber or an Array of RationalNumber whereas
@@ -62,29 +76,35 @@ object EXIF extends Logging {
 	
 	private def getGPS(metaData:JpegImageMetadata):Option[GPS] =
 			for {
-				exif			<- metaData.getExif.guardNotNull
-				gpsDir			<- (exif findDirectory DIRECTORY_TYPE_GPS).guardNotNull
+				gpsDir			<- getGpsDirectory(metaData)
 				
 				latitudeRef		<- (gpsDir findField GPS_TAG_GPS_LATITUDE_REF).guardNotNull
 				latitudeVal		<- (gpsDir findField GPS_TAG_GPS_LATITUDE).guardNotNull
-				latitude		<- part(latitudeVal, latitudeRef, scala.collection.immutable.Map("n" -> 1, "s" -> -1))
+				latitude		<- part(latitudeVal, latitudeRef, Map(
+										GPS_TAG_GPS_LATITUDE_REF_VALUE_NORTH -> +1,
+										GPS_TAG_GPS_LATITUDE_REF_VALUE_SOUTH -> -1))
 				
 				longitudeRef	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE_REF).guardNotNull
 				longitudeVal	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE).guardNotNull
-				longitude		<- part(longitudeVal, longitudeRef, scala.collection.immutable.Map("e" -> 1, "w" -> -1))
+				longitude		<- part(longitudeVal, longitudeRef, Map(
+										GPS_TAG_GPS_LONGITUDE_REF_VALUE_EAST -> +1,
+										GPS_TAG_GPS_LONGITUDE_REF_VALUE_WEST -> -1))
 			}
-			yield {
-				GPS(latitude, longitude)
+			yield GPS(latitude, longitude)
+			
+	private def getGpsDirectory(metaData:JpegImageMetadata):Option[TiffDirectory] =
+			for {
+				exif			<- metaData.getExif.guardNotNull
+				gpsDir			<- (exif findDirectory DIRECTORY_TYPE_GPS).guardNotNull
 			}
+			yield gpsDir
 	
 	private def part(valueField:TiffField, signField:TiffField, signCalc:PartialFunction[String,Int]):Option[BigDecimal] =
 			for {
 				sign	<- signCalc lift signField.getStringValue.trim.toLowerCase
 				value	<- decimal(valueField.getValue)
 			}
-			yield {
-				value * sign
-			}
+			yield value * sign
 	
 	// exif	 		34.00, 57.00, 57.03, 1.47
 	// galculator	34.9658498611
@@ -94,23 +114,24 @@ object EXIF extends Logging {
 	// mein code	34.9658479
 	// 14257/250	5703/100
 	
+	private def decimal(value:AnyRef):Option[BigDecimal] =
+			value match {
+				// case dms:Array[RationalNumber] if dms.length == 3	=>
+				// 	val	all	= dms map bigRational
+				// 	val sum	= all(0) / BigRational(1) + all(1) / BigRational(60) + all(2) / BigRational(3600)
+				// 	Some(bigDecimal(sum))
+				case dms:Array[RationalNumber] if dms.length > 0 =>
+					val	factors	= Stream.iterate(1)(60 * _) map { BigRational(_) }
+					val sum		= dms.toVector map bigRational zip factors map { case (v,f) => v / f } reduceLeft (_+_)
+					Some(bigDecimal(sum))
+				case d:RationalNumber =>
+					val	sum	= bigRational(d)
+					Some(bigDecimal(sum))
+				case x =>
+					DEBUG("unexpected value", x)
+					None			
+			}
 			
-	private def decimal(value:AnyRef):Option[BigDecimal] = value match {
-		// case dms:Array[RationalNumber] if dms.length == 3	=>
-		// 	val	all	= dms map bigRational
-		// 	val sum	= all(0) / BigRational(1) + all(1) / BigRational(60) + all(2) / BigRational(3600)
-		// 	Some(bigDecimal(sum))
-		case dms:Array[RationalNumber] if dms.length > 0 =>
-			val	factors	= Stream.iterate(1)(60 * _) map { BigRational(_) }
-			val sum		= dms.toList map bigRational zip factors map { case (v,f) => v / f } reduceLeft (_+_)
-			Some(bigDecimal(sum))
-		case d:RationalNumber =>
-			val	sum	= bigRational(d)
-			Some(bigDecimal(sum))
-		case x =>
-			DEBUG("unexpected value", x)
-			None			
-	}
 	private def bigRational(value:RationalNumber):BigRational	= BigRational(value.numerator, value.divisor)
 	private def bigDecimal(value:BigRational):BigDecimal		= new BigDecimal(value toBigDecimal gpsPrecision)
 	private val gpsPrecision:MathContext						= new MathContext(12, RoundingMode.HALF_EVEN)
@@ -144,5 +165,5 @@ object EXIF extends Logging {
 }
 
 // BETTER use name and description to fill the GUI
-case class EXIF(name:Option[String], description:Option[String], date:Option[Date], gps:Option[GPS])
-case class GPS(latitude:BigDecimal, longitude:BigDecimal)
+final case class EXIF(name:Option[String], description:Option[String], date:Option[Date], gps:Option[GPS], heading:Option[BigDecimal])
+final case class GPS(latitude:BigDecimal, longitude:BigDecimal)

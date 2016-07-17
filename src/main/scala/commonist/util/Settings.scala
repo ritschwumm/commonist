@@ -2,8 +2,6 @@ package commonist.util
 
 import java.io._
 
-import scala.collection.mutable
-
 import scutil.log._
 import scutil.io._
 

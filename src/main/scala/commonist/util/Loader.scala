@@ -12,10 +12,11 @@ final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePre
 			directoryURL(settingsDir, path) 		orElse
 			directoryURL(etcDir, path)				orElse
 			directoryURL(resourcesDir, path)		orElse
-			classloaderURL(resourcePrefix, path)	noneEffect
-			{ DEBUG(
+			classloaderURL(resourcePrefix, path)	noneEffect {
+				DEBUG(
 					"failed to access resource", path, "tried to find in",
-					settingsDir, etcDir, resourcesDir, so"classpath:${resourcePrefix}")
+					settingsDir, etcDir, resourcesDir, so"classpath:${resourcePrefix}"
+				)
 			}
 	
 	private def directoryURL(directory:File, path:String):Option[URL] =

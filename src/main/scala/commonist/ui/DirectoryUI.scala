@@ -1,7 +1,6 @@
 package commonist.ui
 
 import java.io.File
-import java.util.{ Stack => JUStack }
 import javax.swing._
 import javax.swing.tree._
 

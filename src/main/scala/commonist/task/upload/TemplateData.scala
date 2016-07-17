@@ -4,7 +4,7 @@ import java.util.{ List => JUList }
 
 import scala.beans.BeanProperty
 
-case class Common(
+final case class Common(
 	@BeanProperty description:String,
 	@BeanProperty date:String,
 	@BeanProperty source:String,
@@ -16,13 +16,13 @@ case class Common(
 	@BeanProperty categories:String
 )
 
-case class Batch(
+final case class Batch(
 	@BeanProperty uploads:JUList[Upload],
 	@BeanProperty successes:JUList[Upload],
 	@BeanProperty failures:JUList[Upload]
 )
 
-case class Upload(
+final case class Upload(
 	@BeanProperty name:String,			// without the File namespace
 	@BeanProperty title:String,			// to be used in a link
 	@BeanProperty error:String,			// null if upload went ok
@@ -35,5 +35,6 @@ case class Upload(
 	
 	@BeanProperty coordinates:String,	// raw string
 	@BeanProperty latitude:String,		// null if raw string could not be parsed
-	@BeanProperty longitude:String		// null if raw string could not be parsed
+	@BeanProperty longitude:String,		// null if raw string could not be parsed
+	@BeanProperty heading:String		// raw string
 )

@@ -1,7 +1,7 @@
 package commonist.ui
 
 import java.io.File
-import java.awt.{ List => AwtList, _ }
+import java.awt.{ List => _, _ }
 import javax.swing._
 
 import scala.collection.mutable
@@ -106,7 +106,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	}
 	
 	def getData:ImageListData =
-			ImageListData(imageUIs.toList map { _.getData })
+			ImageListData(imageUIs.toVector map { _.getData })
 	
 	/** set the upload state for the ImageUI representing the given file */
 	def uploadFinished(file:File, success:Boolean) {

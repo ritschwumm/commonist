@@ -48,33 +48,29 @@ object Parser extends Logging {
 
 	val WikiDataPattern	= """\s*(\S+)\s+(\S+)\s+(\S+)\s*""".r
 	def parseWikis(url:URL):ISeq[WikiData] = parseURL(url) {
-		_ match {
-			case WikiDataPattern(family, site, api)	=>
-				Some(WikiData(family, parseSite(site), api))
-			case x =>
-				WARN("could not parse line", x)
-				None
-		}
+		case WikiDataPattern(family, site, api)	=>
+			Some(WikiData(family, parseSite(site), api))
+		case x =>
+			WARN("could not parse line", x)
+			None
 	}
 	def parseSite(s:String):Option[String] = (s != "_") guard s
 	
 	val	LicenseDataPattern	= """(\{\{[^\}]+\}\})\s*(.*)""".r
 	def parseLicenses(url:URL):ISeq[LicenseData] = parseURL(url) {
-		_ match {
-			case LicenseDataPattern(template, description) =>
-				Some(LicenseData(template, description))
-			case x =>
-				WARN("could not parse line", x)
-				None
-		}
+		case LicenseDataPattern(template, description) =>
+			Some(LicenseData(template, description))
+		case x =>
+			WARN("could not parse line", x)
+			None
 	}
 	
-	private def parseURL[T](url:URL)(parseLine:String=>Iterable[T]):ISeq[T] =
+	private def parseURL[T](url:URL)(parseLine:String=>Option[T]):ISeq[T] =
 			slurpLines(url)
-			.map		{ _.trim }
-			.filter		{ _.nonEmpty }
-			.filter		{ !_.startsWith("#") }
-			.flatMap	{ parseLine }
+			.map			{ _.trim }
+			.filter			{ _.nonEmpty }
+			.filter			{ !_.startsWith("#") }
+			.collapseMap	{ parseLine }
 	
 	private def slurpLines(url:URL):ISeq[String] =
 			(url withReader utf_8) { _.readLines() }

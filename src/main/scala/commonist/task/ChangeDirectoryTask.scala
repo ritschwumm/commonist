@@ -1,7 +1,6 @@
 package commonist.task
 
 import java.io.File
-import javax.swing.Icon
 
 import scutil.implicits._
 import scutil.log._

@@ -2,7 +2,6 @@ package commonist.util
 
 import java.net.URL
 import java.text.MessageFormat
-import java.util.Properties
 
 import scutil.implicits._
 import scutil.log._

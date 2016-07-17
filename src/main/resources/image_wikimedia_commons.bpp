@@ -17,10 +17,15 @@ $(upload.description)
 $(upload.description)	
 #}
 # if (upload.latitude != null && upload.longitude != null) {
-{{Location dec|$(upload.latitude)|$(upload.longitude)|}}
+{{Location|$(upload.latitude)|$(upload.longitude)|$(upload.heading.equals("") ? "" : "heading:" + upload.heading)}}
 # }
-# else if (!upload.coordinates.equals("")) {
+# else {
+#	if (!upload.coordinates.equals("")) {
 $(upload.coordinates)
+#	}
+#	if (!upload.heading.equals("")) {
+$(upload.heading)
+#	}
 # }
 # if (!common.others.equals("")) {
 $(common.others)

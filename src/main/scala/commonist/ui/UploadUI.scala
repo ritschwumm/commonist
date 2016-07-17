@@ -1,6 +1,6 @@
 package commonist.ui
 
-import java.awt.{ List => AwtList, _ }
+import java.awt.{ List => _, _ }
 import javax.swing._
 
 import scutil.gui.GridBagDSL._
