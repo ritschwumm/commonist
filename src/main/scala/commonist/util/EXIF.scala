@@ -99,12 +99,14 @@ object EXIF extends Logging {
 			}
 			yield gpsDir
 	
-	private def part(valueField:TiffField, signField:TiffField, signCalc:PartialFunction[String,Int]):Option[BigDecimal] =
+	private def part(valueField:TiffField, signField:TiffField, signCalc:Map[String,Int]):Option[BigDecimal] =
 			for {
-				sign	<- signCalc lift signField.getStringValue.trim.toLowerCase
+				// TODO why is this case-insensitive?
+				sign	<- signCalc collectFirst { case (k,v) if k equalsIgnoreCase signField.getStringValue.trim => v }
 				value	<- decimal(valueField.getValue)
 			}
 			yield value * sign
+	
 	
 	// exif	 		34.00, 57.00, 57.03, 1.47
 	// galculator	34.9658498611

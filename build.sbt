@@ -1,6 +1,6 @@
 name			:= "commonist"
 organization	:= "de.djini"
-version			:= "1.6.0"
+version			:= "1.6.1"
 
 scalaVersion	:= "2.11.8"
 scalacOptions	++= Seq(
