@@ -1,8 +1,8 @@
 name			:= "commonist"
 organization	:= "de.djini"
-version			:= "1.6.1"
+version			:= "1.7.0"
 
-scalaVersion	:= "2.11.8"
+scalaVersion	:= "2.12.1"
 scalacOptions	++= Seq(
 	"-deprecation",
 	"-unchecked",
@@ -15,20 +15,21 @@ scalacOptions	++= Seq(
 	// "-language:experimental.macros"
 	"-feature",
 	"-Ywarn-unused-import",
-	"-Xfatal-warnings"
+	"-Xfatal-warnings",
+	"-Xlint"
 )
 
 conflictManager	:= ConflictManager.strict
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil-core"	% "0.84.0"			% "compile",
-	"de.djini"					%%	"scutil-swing"	% "0.84.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.85.0"			% "compile",
+	"de.djini"					%%	"scutil-core"	% "0.98.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.98.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.103.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )
 
 wartremoverErrors ++= Seq(
-	Wart.Any2StringAdd,
+	Wart.StringPlusAny,
 	Wart.EitherProjectionPartial,
 	Wart.OptionPartial,
 	Wart.Enumeration,
@@ -65,7 +66,7 @@ osxappVmOptions		:= Seq("-Xmx192m")
 
 capsuleMainClass		:= Some("commonist.Commonist")
 capsuleVmOptions		:= Seq("-Xmx192m")
-capsuleMinJavaVersion	:= Some("1.7.0")
+capsuleMinJavaVersion	:= Some("1.8.0")
 capsuleMakeExecutable	:= true
 
 //--------------------------------------------------------------------------------

@@ -17,8 +17,8 @@ import org.apache.sanselan.formats.tiff.constants.TiffTagConstants._
 import org.apache.sanselan.formats.tiff.constants.TiffDirectoryConstants._
 import org.apache.sanselan.formats.tiff.constants.GPSTagConstants._
 
-import scutil.implicits._
-import scutil.math.BigRational
+import scutil.base.implicits._
+import scutil.number.BigRational
 import scutil.log._
 
 object EXIF extends Logging {
@@ -107,14 +107,6 @@ object EXIF extends Logging {
 			}
 			yield value * sign
 	
-	
-	// exif	 		34.00, 57.00, 57.03, 1.47
-	// galculator	34.9658498611
-	
-	// sum			986036911/28200000
-	// galculator	34.9658479078
-	// mein code	34.9658479
-	// 14257/250	5703/100
 	
 	private def decimal(value:AnyRef):Option[BigDecimal] =
 			value match {

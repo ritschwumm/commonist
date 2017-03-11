@@ -2,7 +2,7 @@ package commonist.task
 
 import java.io.File
 
-import scutil.implicits._
+import scutil.core.implicits._
 import scutil.log._
 
 import commonist._

@@ -5,10 +5,10 @@ import javax.imageio.ImageIO
 
 import org.simplericity.macify.eawt._
 
+import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang.ISeq
-import scutil.implicits._
 import scutil.platform._
-import scutil.io.Files._
 import scutil.log._
 
 import commonist.data._
@@ -30,9 +30,9 @@ object CommonistMain extends Logging {
 	}
 	
 	private val settingsProp	= (System getProperty "commonist.settings").guardNotNull
-	private val settingsDir		= settingsProp map { new File(_) } getOrElse (HOME / ".commonist")
-	private val etcDir			= PWD / "etc"
-	private val resourcesDir	= PWD / "src" / "main" / "resources"
+	private val settingsDir		= settingsProp map { new File(_) } getOrElse (Platform.homeDir / ".commonist")
+	private val etcDir			= Platform.currentDir / "etc"
+	private val resourcesDir	= Platform.currentDir / "src" / "main" / "resources"
 	private val resourcePrefix	= "/"
 	INFO("settings directory",	settingsDir)
 	INFO("etc directory",		etcDir)

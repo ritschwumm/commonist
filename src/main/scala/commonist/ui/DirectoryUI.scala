@@ -4,10 +4,10 @@ import java.io.File
 import javax.swing._
 import javax.swing.tree._
 
+import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang.ISeq
-import scutil.implicits._
-import scutil.io.Files._
-import scutil.platform.SystemProperties
+import scutil.platform._
 import scutil.gui.CasterInstances._
 import scutil.log._
 
@@ -22,7 +22,7 @@ trait DirectoryUICallback {
 /** a JTree used to select a directory in the filesystem */
 final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with Logging {
 	// state
-	var currentDirectory	= HOME
+	var currentDirectory	= Platform.homeDir
 
 	// make a root tree node
 	private val (baseNode,fakeRoot)	=
@@ -31,7 +31,7 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 					val baseNode	= new FileNode(single) doto { _.update() }
 					(baseNode, false)
 				case many	=>
-					val baseNode	= new FileNode(UNIX_ROOT)	// fake
+					val baseNode	= new FileNode(Platform.unixRoot)	// fake
 					many map (new FileNode(_)) foreach baseNode.add
 					(baseNode, true)
 			}

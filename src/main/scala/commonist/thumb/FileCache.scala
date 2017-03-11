@@ -5,8 +5,9 @@ import java.lang.{ Math => JMath }
 
 import scala.collection.immutable.Queue
 
-import scutil.implicits._
-import scutil.io.Charsets._
+import scutil.base.implicits._
+import scutil.core.implicits._
+import scutil.lang.Charsets._
 import scutil.log._
 
 /** caches derived Files indexed by their original Files */

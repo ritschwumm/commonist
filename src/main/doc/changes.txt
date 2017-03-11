@@ -1,3 +1,6 @@
+1.7.0	21feb17
+	change		requires java 8
+
 1.6.1	31jul16
 	bugfix		last release broke gps coordinate parsing
 	

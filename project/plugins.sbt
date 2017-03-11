@@ -1,6 +1,6 @@
-addSbtPlugin("org.wartremover"	% "sbt-wartremover"		% "1.0.1")
+addSbtPlugin("org.wartremover"	% "sbt-wartremover"		% "1.2.1")
 addSbtPlugin("com.eed3si9n"		% "sbt-buildinfo"		% "0.6.1")
 addSbtPlugin("de.djini"			% "xsbt-webstart"		% "1.9.0")
 addSbtPlugin("de.djini"			% "xsbt-scriptstart"	% "1.9.0")
 addSbtPlugin("de.djini"			% "xsbt-osxapp"			% "1.10.0")
-addSbtPlugin("de.djini"			% "xsbt-capsule"		% "1.11.0")
+addSbtPlugin("de.djini"			% "xsbt-capsule"		% "1.12.0")

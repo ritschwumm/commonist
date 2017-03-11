@@ -2,9 +2,10 @@ package commonist
 
 import java.net._
 
+import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang.ISeq
-import scutil.implicits._
-import scutil.io.Charsets.utf_8
+import scutil.lang.Charsets.utf_8
 import scutil.log._
 
 import scmw._
@@ -73,5 +74,5 @@ object Parser extends Logging {
 			.collapseMap	{ parseLine }
 	
 	private def slurpLines(url:URL):ISeq[String] =
-			(url withReader utf_8) { _.readLines() }
+			(url withReader (None, utf_8)) { _.readLines() }
 }

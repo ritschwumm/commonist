@@ -3,7 +3,7 @@ package commonist.util
 import java.net.URL
 import java.text.MessageFormat
 
-import scutil.implicits._
+import scutil.base.implicits._
 import scutil.log._
 import scutil.io._
 
@@ -22,7 +22,11 @@ object Messages {
 /** encapsulates user messages loaded from a properties document */
 class Messages(defaultURL:URL, userLangURL:Option[URL]) extends Logging {
 	val defaultProps	= PropertiesUtil loadURL defaultURL
-	val userLangProps	= userLangURL cata (Map.empty[String,String], PropertiesUtil.loadURL)
+	val userLangProps	=
+			userLangURL cata (
+				Map.empty[String,String],
+				url => PropertiesUtil loadURL (url, None)
+			)
 
 	def getText(key:String):String = get(key)
 	

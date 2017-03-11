@@ -3,9 +3,10 @@ package commonist.task
 import java.io.File
 import javax.swing.JOptionPane
 
+import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang.ISeq
-import scutil.implicits._
-import scutil.io.Charsets
+import scutil.lang.Charsets
 import scutil.gui.SwingUtil._
 import scutil.log._
 
@@ -259,7 +260,7 @@ final class UploadFilesTask(
 	
 	//==============================================================================
 	
-	/** asks the user when somwething about a file upload is unclear */
+	/** asks the user when something about a file upload is unclear */
 	private class MyUploadCallback(mainWindow:MainWindow, statusUILater:StatusUILater, fileLength:Long, fileName:String, name:String) extends UploadCallback {
 		def progress(bytes:Long) {
 			// System.err.println("written " + bytes + " of " + ofBytes)

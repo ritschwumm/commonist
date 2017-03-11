@@ -6,7 +6,7 @@ import java.net._
 import net.psammead.minibpp.Compiler
 import bsh.Interpreter
 
-import scutil.implicits._
+import scutil.base.implicits._
 import scutil.log._
 
 import commonist.data._

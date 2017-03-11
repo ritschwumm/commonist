@@ -3,8 +3,8 @@ package commonist.ui
 import java.awt.{ List => _, _ }
 import javax.swing._
 
+import scutil.base.implicits._
 import scutil.lang.ISeq
-import scutil.implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 

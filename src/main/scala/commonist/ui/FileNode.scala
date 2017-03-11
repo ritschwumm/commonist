@@ -5,8 +5,9 @@ import java.util.{ Enumeration => JUEnumeration }
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.TreePath
 
+import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang.ISeq
-import scutil.implicits._
 
 /** a TreeNode for a File in the DirectoryTree */
 final class FileNode(val file:File) extends DefaultMutableTreeNode {

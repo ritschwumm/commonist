@@ -3,7 +3,8 @@ package commonist.util
 import java.io._
 import java.net._
 
-import scutil.implicits._
+import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.log._
 
 /** loads resources from a set of URL-paths */

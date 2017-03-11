@@ -8,7 +8,7 @@ import java.awt.image._
 import javax.swing._
 import javax.imageio._
 
-import scutil.implicits._
+import scutil.base.implicits._
 import scutil.log._
 import scutil.gui.implicits._
 

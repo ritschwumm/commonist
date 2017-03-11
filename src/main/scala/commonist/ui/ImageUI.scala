@@ -5,8 +5,9 @@ import java.awt.{ List => _, _ }
 import java.awt.event._
 import javax.swing._
 
+import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang._
-import scutil.implicits._
 import scutil.gui.implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
