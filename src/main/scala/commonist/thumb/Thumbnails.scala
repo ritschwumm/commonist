@@ -9,6 +9,7 @@ import javax.swing._
 import javax.imageio._
 
 import scutil.base.implicits._
+import scutil.io.implicits._
 import scutil.log._
 import scutil.gui.implicits._
 
@@ -107,7 +108,7 @@ final class Thumbnails(cache:FileCache) extends Logging {
 	private def readSubsampled(input:File):Option[BufferedImage] = {
 		val stream = ImageIO createImageInputStream input
 		if (stream == null)	{
-			ERROR(so"cannot create ImageInputStream for file", input)
+			ERROR(show"cannot create ImageInputStream for file", input)
 			return None
 		}
 		stream use { stream =>

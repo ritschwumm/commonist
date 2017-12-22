@@ -38,7 +38,6 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 			for (file <- readable) {
 				check()
 	
-//				DEBUG("loading: " + file.getName)
 				statusUILater determinate ("imageList.loading", cur, max, file.getPath, int2Integer(cur), int2Integer(max))
 				cur	= cur + 1
 	

@@ -47,7 +47,7 @@ object Parser extends Logging {
 	
 	//------------------------------------------------------------------------------
 
-	val WikiDataPattern	= """\s*(\S+)\s+(\S+)\s+(\S+)\s*""".r
+	val WikiDataPattern	= re"""\s*(\S+)\s+(\S+)\s+(\S+)\s*"""
 	def parseWikis(url:URL):ISeq[WikiData] = parseURL(url) {
 		case WikiDataPattern(family, site, api)	=>
 			Some(WikiData(family, parseSite(site), api))
@@ -55,9 +55,9 @@ object Parser extends Logging {
 			WARN("could not parse line", x)
 			None
 	}
-	def parseSite(s:String):Option[String] = (s != "_") guard s
+	def parseSite(s:String):Option[String] = (s != "_") option s
 	
-	val	LicenseDataPattern	= """(\{\{[^\}]+\}\})\s*(.*)""".r
+	val	LicenseDataPattern	= re"""(\{\{[^\}]+\}\})\s*(.*)"""
 	def parseLicenses(url:URL):ISeq[LicenseData] = parseURL(url) {
 		case LicenseDataPattern(template, description) =>
 			Some(LicenseData(template, description))

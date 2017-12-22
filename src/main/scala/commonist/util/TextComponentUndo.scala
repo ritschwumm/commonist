@@ -9,7 +9,7 @@ import javax.swing.undo._
 
 import scutil.log._
 
-/** adds undo to a {@link JTextComponent} */
+/** adds undo to a JTextComponent */
 trait TextComponentUndo extends Logging { self:JTextComponent =>
 	private val REDO_KEY_STROKE	= KeyStroke getKeyStroke "control Y"
 	private val UNDO_KEY_STROKE	= KeyStroke getKeyStroke "control Z"
@@ -81,6 +81,7 @@ trait TextComponentUndo extends Logging { self:JTextComponent =>
 		inputMap put(REDO_KEY_STROKE, REDO_ACTION)
 	}
 	
+	/*
 	private def uninstall(text:JTextComponent) {
 		text removePropertyChangeListener propertyListener
 		
@@ -95,6 +96,7 @@ trait TextComponentUndo extends Logging { self:JTextComponent =>
 		inputMap remove UNDO_KEY_STROKE
 		inputMap remove REDO_KEY_STROKE
 	}
+	*/
 	
 	install(self)
 }

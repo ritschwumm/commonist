@@ -2,6 +2,7 @@ package commonist.util
 
 import java.io._
 
+import scutil.io.implicits._
 import scutil.log._
 import scutil.io._
 
@@ -36,7 +37,7 @@ final class Settings(file:File) extends Logging {
 			propertiesMap = PropertiesUtil loadFile file
 		}
 		else {
-			INFO("setting file does not exist", file.getPath)
+			INFO("setting file does not exist", file)
 		}
 	}
 

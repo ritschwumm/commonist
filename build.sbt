@@ -1,8 +1,10 @@
+import xsbtUtil.{ util => xu }
+
 name			:= "commonist"
 organization	:= "de.djini"
-version			:= "1.7.0"
+version			:= "1.8.0"
 
-scalaVersion	:= "2.12.1"
+scalaVersion	:= "2.12.4"
 scalacOptions	++= Seq(
 	"-deprecation",
 	"-unchecked",
@@ -14,16 +16,15 @@ scalacOptions	++= Seq(
 	// "-language:postfixOps",
 	// "-language:experimental.macros"
 	"-feature",
-	"-Ywarn-unused-import",
 	"-Xfatal-warnings",
 	"-Xlint"
 )
 
 conflictManager	:= ConflictManager.strict
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil-core"	% "0.98.0"			% "compile",
-	"de.djini"					%%	"scutil-swing"	% "0.98.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.103.0"			% "compile",
+	"de.djini"					%%	"scutil-core"	% "0.132.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.132.0"			% "compile",
+	"de.djini"					%%	"scmw"			% "0.140.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
 )
@@ -79,7 +80,8 @@ webstartKeyConfig	:= Some(KeyConfig(
 	keyStore	= baseDirectory.value / "etc/keyStore",
 	storePass	= "0xDEADBEEF",
 	alias		= "signFiles",
-	keyPass		= "0xDEADBEEF"
+	keyPass		= "0xDEADBEEF",
+	tsaUrl		= Some("http://timestamp.comodoca.com")
 ))
 webstartManifest	:= Some(baseDirectory.value / "etc/manifest.mf")
 webstartJnlpConfigs	:= Seq(JnlpConfig(
@@ -104,7 +106,7 @@ webstartJnlpConfigs	:= Seq(JnlpConfig(
 				<application-desc main-class="commonist.Commonist"/>
 			</jnlp>
 ))
-webstartExtras	:= selectSubpaths((sourceDirectory in Compile).value / "webstart" , -DirectoryFilter) toSeq
+webstartExtras	:= xu.find filesMapped ((sourceDirectory in Compile).value / "webstart")
 
 //------------------------------------------------------------------------------
 

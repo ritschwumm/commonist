@@ -18,6 +18,7 @@ import org.apache.sanselan.formats.tiff.constants.TiffDirectoryConstants._
 import org.apache.sanselan.formats.tiff.constants.GPSTagConstants._
 
 import scutil.base.implicits._
+import scutil.io.implicits._
 import scutil.number.BigRational
 import scutil.log._
 
@@ -36,7 +37,7 @@ object EXIF extends Logging {
 							getGPS(meta),
 							getHeading(meta)
 						) doto { it =>
-							DEBUG("data found", it)
+							DEBUG("data found", it.toString)
 						}
 					case _ =>
 						INFO("no EXIF data found", file)
@@ -44,7 +45,7 @@ object EXIF extends Logging {
 				}
 			}
 			catch { case e:Exception	=>	// ImageReadException, IOException
-				DEBUG("cannot read file", file, e.getMessage)
+				DEBUG("cannot read file", file, e)
 				NONE
 			}
 	
@@ -54,9 +55,9 @@ object EXIF extends Logging {
 			for {
 				gpsDir			<- getGpsDirectory(metaData)
 				
-				directionVal	<- (gpsDir findField GPS_TAG_GPS_IMG_DIRECTION).guardNotNull
+				directionVal	<- (gpsDir findField GPS_TAG_GPS_IMG_DIRECTION).optionNotNull
 				direction		<- decimal(directionVal.getValue)
-				//directionRef	<- (gpsDir findField GPS_TAG_GPS_IMG_DIRECTION_REF).guardNotNull
+				//directionRef	<- (gpsDir findField GPS_TAG_GPS_IMG_DIRECTION_REF).optionNotNull
 				//GPS_TAG_GPS_IMG_DIRECTION_REF_VALUE_MAGNETIC_NORTH
 				//GPS_TAG_GPS_IMG_DIRECTION_REF_VALUE_TRUE_NORTH
 			}
@@ -78,14 +79,14 @@ object EXIF extends Logging {
 			for {
 				gpsDir			<- getGpsDirectory(metaData)
 				
-				latitudeRef		<- (gpsDir findField GPS_TAG_GPS_LATITUDE_REF).guardNotNull
-				latitudeVal		<- (gpsDir findField GPS_TAG_GPS_LATITUDE).guardNotNull
+				latitudeRef		<- (gpsDir findField GPS_TAG_GPS_LATITUDE_REF).optionNotNull
+				latitudeVal		<- (gpsDir findField GPS_TAG_GPS_LATITUDE).optionNotNull
 				latitude		<- part(latitudeVal, latitudeRef, Map(
 										GPS_TAG_GPS_LATITUDE_REF_VALUE_NORTH -> +1,
 										GPS_TAG_GPS_LATITUDE_REF_VALUE_SOUTH -> -1))
 				
-				longitudeRef	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE_REF).guardNotNull
-				longitudeVal	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE).guardNotNull
+				longitudeRef	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE_REF).optionNotNull
+				longitudeVal	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE).optionNotNull
 				longitude		<- part(longitudeVal, longitudeRef, Map(
 										GPS_TAG_GPS_LONGITUDE_REF_VALUE_EAST -> +1,
 										GPS_TAG_GPS_LONGITUDE_REF_VALUE_WEST -> -1))
@@ -94,8 +95,8 @@ object EXIF extends Logging {
 			
 	private def getGpsDirectory(metaData:JpegImageMetadata):Option[TiffDirectory] =
 			for {
-				exif			<- metaData.getExif.guardNotNull
-				gpsDir			<- (exif findDirectory DIRECTORY_TYPE_GPS).guardNotNull
+				exif			<- metaData.getExif.optionNotNull
+				gpsDir			<- (exif findDirectory DIRECTORY_TYPE_GPS).optionNotNull
 			}
 			yield gpsDir
 	
@@ -115,18 +116,19 @@ object EXIF extends Logging {
 				// 	val sum	= all(0) / BigRational(1) + all(1) / BigRational(60) + all(2) / BigRational(3600)
 				// 	Some(bigDecimal(sum))
 				case dms:Array[RationalNumber] if dms.length > 0 =>
-					val	factors	= Stream.iterate(1)(60 * _) map { BigRational(_) }
+					val	factors	= Stream.iterate(1)(60 * _) map (_.toLong) map BigRational.fromLong
 					val sum		= dms.toVector map bigRational zip factors map { case (v,f) => v / f } reduceLeft (_+_)
 					Some(bigDecimal(sum))
 				case d:RationalNumber =>
 					val	sum	= bigRational(d)
 					Some(bigDecimal(sum))
 				case x =>
-					DEBUG("unexpected value", x)
+					DEBUG("unexpected value", x.toString)
 					None			
 			}
 			
-	private def bigRational(value:RationalNumber):BigRational	= BigRational(value.numerator, value.divisor)
+	// NOTE we don't have a Show instance for RationalNumber
+	private def bigRational(value:RationalNumber):BigRational	= BigRational fromLongs (value.numerator, value.divisor) getOrError show"division by zero converting ${value.toString}"
 	private def bigDecimal(value:BigRational):BigDecimal		= new BigDecimal(value toBigDecimal gpsPrecision)
 	private val gpsPrecision:MathContext						= new MathContext(12, RoundingMode.HALF_EVEN)
 		

@@ -18,7 +18,7 @@ object UIUtil2 {
 	}
 	
 	private val TAB_PLAIN	= KeyStroke getKeyStroke (KeyEvent.VK_TAB, 0)
-	private val TAB_SHIFT	= KeyStroke getKeyStroke (KeyEvent.VK_TAB, InputEvent.SHIFT_MASK)
+	private val TAB_SHIFT	= KeyStroke getKeyStroke (KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK)
 	def tabMovesFocus(target:JComponent) {
 		target setFocusTraversalKeys (KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,  JUCollections singleton TAB_PLAIN)
 		target setFocusTraversalKeys (KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, JUCollections singleton TAB_SHIFT)

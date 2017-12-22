@@ -124,7 +124,7 @@ final class UploadFilesTask(
 			val	file		= imageData.file
 			val fileLength	= file.length
 			val fileName	= file.getName
-			val filePath	= file.getPath
+			//val filePath	= file.getPath
 			val	name		= Filename.normalizeTitle(Filename.fix(imageData.name))
 			val title		= Namespace.file(name)
 			val previous	= titleAt(index-1)
@@ -169,7 +169,7 @@ final class UploadFilesTask(
 					imageListUILater uploadFinished (file, false)
 					// TODO just remove it from the list?
 					// TODO more detail
-					upload copy (error = so"aborted: ${renderWarnings(warnings)}")
+					upload copy (error = show"aborted: ${renderWarnings(warnings)}")
 				case UploadFailure(code)	=>
 					// TODO more detail
 					ERROR("upload failed", fileName, code)
@@ -251,12 +251,14 @@ final class UploadFilesTask(
 	statusUILater halt ("status.logout.error", wikiName, e.getMessage)
 	if (!success) { statusUILater halt ("status.logout.failed", wikiName); return }
 	*/
+	/*
 	private def logout() {
 		INFO("logging out")
 		statusUILater indeterminate ("status.logout.started", wiki)
 		api.logout()
 		statusUILater halt ("status.logout.successful", wikiName)
 	}
+	*/
 	
 	//==============================================================================
 	

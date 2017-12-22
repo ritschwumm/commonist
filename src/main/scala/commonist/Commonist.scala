@@ -1,5 +1,6 @@
 package commonist
 
+import scutil.base.implicits._
 import scutil.gui.SwingUtil.edt
 import scutil.platform.ExceptionUtil
 import scutil.log._

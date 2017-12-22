@@ -26,7 +26,7 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 
 	// make a root tree node
 	private val (baseNode,fakeRoot)	=
-			File.listRoots.guardNotNull.flattenMany.toVector match {
+			File.listRoots.optionNotNull.flattenMany.toVector match {
 				case Vector(single)	=>
 					val baseNode	= new FileNode(single) doto { _.update() }
 					(baseNode, false)

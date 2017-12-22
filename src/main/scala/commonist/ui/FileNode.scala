@@ -38,5 +38,5 @@ final class FileNode(val file:File) extends DefaultMutableTreeNode {
 	
 	override def getAllowsChildren():Boolean	= allowsChildrenValue
 	override def isLeaf():Boolean				= false
-	override def toString():String				= file.getName.guardNonEmpty getOrElse file.getPath
+	override def toString():String				= file.getName.optionNonEmpty getOrElse file.getPath
 }

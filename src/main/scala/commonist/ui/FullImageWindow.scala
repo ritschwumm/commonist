@@ -6,6 +6,7 @@ import java.awt.event._
 import javax.swing._
 import javax.imageio._
 
+import scutil.io.implicits._
 import scutil.gui.SwingUtil._
 import scutil.log._
 

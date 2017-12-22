@@ -16,13 +16,13 @@ final class Loader(settingsDir:File, etcDir:File, resourcesDir:File, resourcePre
 			classloaderURL(resourcePrefix, path)	noneEffect {
 				DEBUG(
 					"failed to access resource", path, "tried to find in",
-					settingsDir, etcDir, resourcesDir, so"classpath:${resourcePrefix}"
+					settingsDir.getPath, etcDir.getPath, resourcesDir.getPath, show"classpath:${resourcePrefix}"
 				)
 			}
 	
 	private def directoryURL(directory:File, path:String):Option[URL] =
-			new File(directory, path).guardExists map { _.toURI.toURL }
+			new File(directory, path).optionExists map { _.toURI.toURL }
 			
 	private def classloaderURL(resourcePrefix:String, path:String):Option[URL] =
-			getClass.resources findUrl (resourcePrefix + path)
+			getClass.resourceProvider findUrl (resourcePrefix + path)
 }

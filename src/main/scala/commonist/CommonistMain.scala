@@ -29,7 +29,7 @@ object CommonistMain extends Logging {
 		throwable.printStackTrace()
 	}
 	
-	private val settingsProp	= (System getProperty "commonist.settings").guardNotNull
+	private val settingsProp	= (System getProperty "commonist.settings").optionNotNull
 	private val settingsDir		= settingsProp map { new File(_) } getOrElse (Platform.homeDir / ".commonist")
 	private val etcDir			= Platform.currentDir / "etc"
 	private val resourcesDir	= Platform.currentDir / "src" / "main" / "resources"
@@ -42,7 +42,7 @@ object CommonistMain extends Logging {
 	private val loader		= new Loader(settingsDir, etcDir, resourcesDir, resourcePrefix)
 	
 	val programIcon		= null
-	val programHeading	= so"The Commonist ${commonist.BuildInfo.version}"
+	val programHeading	= show"The Commonist ${commonist.BuildInfo.version}"
 	
 	private val userLanguage	= SystemProperties.user.language
 	INFO("using user language", userLanguage)
@@ -140,8 +140,8 @@ object CommonistMain extends Logging {
 		System exit 0
 	}
 	
-	private var changeDirectory	= new TaskVar[ChangeDirectoryTask]
-	private var uploadFiles		= new TaskVar[UploadFilesTask]
+	private val changeDirectory	= new TaskVar[ChangeDirectoryTask]
+	private val uploadFiles		= new TaskVar[UploadFilesTask]
 	
 	/**
 	 * Action: change to a new directory
@@ -172,7 +172,7 @@ object CommonistMain extends Logging {
 	/** load language file for the language or en if not successful and returns the used language */
 	private def loadMessages(language:String) {
 		val defaultURL	= loader resourceURL "messages_default.properties" getOrError "cannot load messages_default.properties"
-		val userLangURL	= loader resourceURL (so"messages_${language}.properties")
+		val userLangURL	= loader resourceURL (show"messages_${language}.properties")
 		Messages init (defaultURL, userLangURL)
 	}
 	
