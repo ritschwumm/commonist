@@ -1,4 +1,5 @@
-A file upload tool for mediawiki using its api.php interface
+A file upload tool for mediawiki using its api.php interface,
+see https://commons.wikimedia.org/wiki/Commons:Commonist
 
 To build this code, get and install SBT from
     https://github.com/sbt/sbt
