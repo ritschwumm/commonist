@@ -2,9 +2,9 @@ import xsbtUtil.{ util => xu }
 
 name			:= "commonist"
 organization	:= "de.djini"
-version			:= "1.8.0"
+version			:= "1.9.0"
 
-scalaVersion	:= "2.12.4"
+scalaVersion	:= "2.12.6"
 scalacOptions	++= Seq(
 	"-deprecation",
 	"-unchecked",
@@ -22,11 +22,13 @@ scalacOptions	++= Seq(
 
 conflictManager	:= ConflictManager.strict
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil-core"	% "0.132.0"			% "compile",
-	"de.djini"					%%	"scutil-swing"	% "0.132.0"			% "compile",
-	"de.djini"					%%	"scmw"			% "0.140.0"			% "compile",
+	"de.djini"					%%	"scutil-core"	% "0.145.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.145.0"			% "compile",
+	"de.djini"					%%	"scjson-codec"	% "0.159.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
-	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile"
+	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile",
+	"org.apache.httpcomponents"	%	"httpclient"	% "4.5.6"			% "compile",
+	"org.apache.httpcomponents"	%	"httpmime"		% "4.5.6"			% "compile"
 )
 
 wartremoverErrors ++= Seq(
@@ -44,7 +46,7 @@ enablePlugins(WebStartPlugin, ScriptStartPlugin, OsxAppPlugin, CapsulePlugin, Bu
 
 //--------------------------------------------------------------------------------
 
-buildInfoKeys		:= Seq[BuildInfoKey](version)	// name, version, scalaVersion, sbtVersion
+buildInfoKeys		:= Seq[BuildInfoKey](name, version)	// name, version, scalaVersion, sbtVersion
 buildInfoPackage	:= "commonist"
 
 //--------------------------------------------------------------------------------
@@ -87,7 +89,7 @@ webstartManifest	:= Some(baseDirectory.value / "etc/manifest.mf")
 webstartJnlpConfigs	:= Seq(JnlpConfig(
 	fileName	= "commonist.jnlp",
 	descriptor	= (fileName:String, assets:Seq[JnlpAsset]) =>
-			<jnlp spec="6.0+" codebase="http://neonstau.de/commonist/ws/" href={fileName}>
+			<jnlp spec="6.0+" codebase="https://djini.de/commonist/ws/" href={fileName}>
 				<information>
 					<title>The Commonist</title>
 					<vendor>FNORD! Inc.</vendor>
@@ -100,7 +102,7 @@ webstartJnlpConfigs	:= Seq(JnlpConfig(
 					<all-permissions/>
 				</security>
 				<resources>
-					<j2se version="1.7+" max-heap-size="192m"/>
+					<j2se version="1.8+" max-heap-size="192m"/>
 					{ assets map { _.toElem } }
 				</resources>
 				<application-desc main-class="commonist.Commonist"/>

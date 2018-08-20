@@ -8,9 +8,8 @@ import scutil.lang.ISeq
 import scutil.lang.Charsets.utf_8
 import scutil.log._
 
-import scmw._
-
 import commonist.data._
+import commonist.mediawiki._
 
 object Parser extends Logging {
 	def parseCategories(s:String):String = {

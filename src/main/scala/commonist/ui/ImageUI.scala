@@ -12,10 +12,9 @@ import scutil.gui.implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 
-import scmw._
-
 import commonist.Constants
 import commonist.data._
+import commonist.mediawiki._
 import commonist.util._
 
 trait ImageUICallback {

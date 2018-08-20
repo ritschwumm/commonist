@@ -13,7 +13,6 @@ Get and install these library/libraries before building:
     https://github.com/ritschwumm/xsbt-capsule
     https://github.com/ritschwumm/scutil
     https://github.com/ritschwumm/scjson
-    https://github.com/ritschwumm/scmw
 
 Use these commands to build:
     git clone git@github.com:ritschwumm/commonist.git

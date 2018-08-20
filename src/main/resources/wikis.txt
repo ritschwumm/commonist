@@ -94,7 +94,7 @@ wiktionary	pt				https://pt.wiktionary.org/w/api.php
 wiktionary	sv				https://sv.wiktionary.org/w/api.php
 
 # other
-# kamelopedia		_			http://kamelopedia.mormo.org/api.php
+# kamelopedia		_			https://kamelopedia.mormo.org/api.php
 mediawiki		_			https://www.mediawiki.org/w/api.php
 
 # wikia

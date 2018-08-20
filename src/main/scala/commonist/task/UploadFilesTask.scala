@@ -10,13 +10,12 @@ import scutil.lang.Charsets
 import scutil.gui.SwingUtil._
 import scutil.log._
 
-import scmw._
-
 import commonist._
 import commonist.data._
 import commonist.task.upload._
 import commonist.ui._
 import commonist.ui.later._
+import commonist.mediawiki._
 import commonist.util._
 
 /** upload files selected in the ImageListUI */
