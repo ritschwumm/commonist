@@ -3,7 +3,7 @@
 #// in: common:Common, upload:Upload
 #
 == {{int:filedesc}} ==
-# if (!upload.description.startsWith("{{Information")) {
+# if (!common.description.startsWith("{{Information") && !upload.description.startsWith("{{Information")) {
 {{Information
 |Description=$(common.description)
 $(upload.description)
@@ -14,7 +14,7 @@ $(upload.description)
 |other_versions=
 }}
 # } else {
-$(upload.description)	
+$(upload.description.startsWith("{{Information") ? upload.description : common.description)
 #}
 # if (upload.latitude != null && upload.longitude != null) {
 {{Location|$(upload.latitude)|$(upload.longitude)|$(upload.heading.equals("") ? "" : "heading:" + upload.heading)}}
