@@ -40,15 +40,15 @@ final class FullImageWindow(file:File, programHeading:String, programIcon:Image,
 	label setHorizontalAlignment	SwingConstants.CENTER
 	label setVerticalAlignment		SwingConstants.CENTER
 	label setIcon icon
-	
+
 	val scroll	= new JScrollPane(label)
-	
+
 	val heading	= file.getName + " - " + programHeading
 	val window	= new JFrame(heading)
 	window setIconImage programIcon
 	window.getContentPane add scroll
 	window.pack()
-	
+
 //		// TODO seems to break with small images
 //		Rectangle	bounds	= UIUtil.boundsInScreen(window.getBounds)
 //		bounds.width	= Math.max(bounds.width,	Constants.FULLSIZE_MIN_FRAME_SIZE)
@@ -56,14 +56,14 @@ final class FullImageWindow(file:File, programHeading:String, programIcon:Image,
 //		window.setBounds(bounds)
 	//window.MaximumSize				= window.Size
 	//statt dessen evtl. MaximizedBounds einsetzen
-	
+
 	UIUtil2 limitAndChangeBounds (window, window.getBounds)
-	
+
 	window setDefaultCloseOperation WindowConstants.DISPOSE_ON_CLOSE
 	window setLocationRelativeTo null
 	UIUtil2 scrollToCenter scroll
 	window setVisible true
-	
+
 	window.getRootPane.registerKeyboardAction(
 		new ActionListener {
 			def actionPerformed(ev:ActionEvent) {

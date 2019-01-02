@@ -35,22 +35,22 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 					many map (new FileNode(_)) foreach baseNode.add
 					(baseNode, true)
 			}
-		
+
 	//------------------------------------------------------------------------------
 	//## components
-	
+
 	private val directoryModel	= new DefaultTreeModel(baseNode)
 	private val directoryTree	= new JTree
 	directoryTree setModel directoryModel
 	//directoryTree setRootVisible false
 	directoryTree.getSelectionModel setSelectionMode TreeSelectionModel.SINGLE_TREE_SELECTION
-	
+
 	setViewportView(directoryTree)
 	setBorder(Constants.PANEL_BORDER)
-	
+
 	//------------------------------------------------------------------------------
 	//##  wiring
-	
+
 	directoryTree onTreeExpanded { ev =>
 		val node	= lastNode(ev.getPath)
 		node.update()
@@ -61,10 +61,10 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 		currentDirectory	= node.file
 		callback.changeDirectory(currentDirectory)
 	}
-	
+
 	private def lastNode(treePath:TreePath):FileNode	=
 			treePath.getLastPathComponent.asInstanceOf[FileNode]
-	
+
 	//------------------------------------------------------------------------------
 	//## BrowseDirectory action
 
@@ -88,12 +88,12 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 					WARN("node not found", chain.head)
 			}
 		}
-		
+
 		val fromRoot	= (directory :: directory.parentChain).reverse
 		if (fakeRoot)	loop(baseNode.childNodes,	fromRoot)
 		else 			loop(ISeq(baseNode),		fromRoot)
 	}
-	
+
 	//------------------------------------------------------------------------------
 	//## Settings
 
@@ -102,13 +102,13 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 		currentDirectory	=
 				new File(
 					settings getOrElse (
-						"directoryTree.currentDirectory", 	
+						"directoryTree.currentDirectory",
 						SystemProperties.user.home
 					)
 				)
 		browseDirectory(currentDirectory)
 	}
-	
+
 	/** stores this UI's state in the properties */
 	def saveSettings(settings:Settings) {
 		settings set ("directoryTree.currentDirectory",	currentDirectory.getPath)

@@ -8,7 +8,7 @@ object Filename {
 			trim			andThen
 			dashIllegal		andThen
 			ucFirst
-	
+
 	private val normalizeSpace	= (s:String) => s replaceAll ("_", " ")
 	private val undoubleSpace	= (s:String) => s replaceAll (" {2,}", " ")
 	private val trim			= (s:String) => s.trim
@@ -18,9 +18,9 @@ object Filename {
 	private val ucFirst			= (s:String) =>
 			if (s.length > 1)	Character.toUpperCase(s charAt 0).toString + (s substring 1)
 			else				s
-			
+
 	//------------------------------------------------------------------------------
-	
+
 	/** replaces forbidden characters with '_' */
 	def normalizeTitle(title:String):String =
 			title

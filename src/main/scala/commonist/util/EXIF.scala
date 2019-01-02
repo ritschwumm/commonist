@@ -24,7 +24,7 @@ import scutil.log._
 
 object EXIF extends Logging {
 	val NONE	= EXIF(None, None, None, None, None)
-	
+
 	def extract(file:File):EXIF =
 			try {
 				(Sanselan getMetadata file) match {
@@ -48,13 +48,13 @@ object EXIF extends Logging {
 				DEBUG("cannot read file", file, e)
 				NONE
 			}
-	
+
 	//------------------------------------------------------------------------------
 
 	private def getHeading(metaData:JpegImageMetadata):Option[BigDecimal] =
 			for {
 				gpsDir			<- getGpsDirectory(metaData)
-				
+
 				directionVal	<- (gpsDir findField GPS_TAG_GPS_IMG_DIRECTION).optionNotNull
 				direction		<- decimal(directionVal.getValue)
 				//directionRef	<- (gpsDir findField GPS_TAG_GPS_IMG_DIRECTION_REF).optionNotNull
@@ -62,7 +62,7 @@ object EXIF extends Logging {
 				//GPS_TAG_GPS_IMG_DIRECTION_REF_VALUE_TRUE_NORTH
 			}
 			yield direction
-			
+
 	/*
 	// NOTE this doesn't work in sanselan 0.97 because FieldTypeRational#getSimpleValue
 	// returns either a RationalNumber or an Array of RationalNumber whereas
@@ -74,17 +74,17 @@ object EXIF extends Logging {
 			}
 			yield GPS(gps.getLatitudeAsDegreesNorth, gps.getLongitudeAsDegreesEast)
 	*/
-	
+
 	private def getGPS(metaData:JpegImageMetadata):Option[GPS] =
 			for {
 				gpsDir			<- getGpsDirectory(metaData)
-				
+
 				latitudeRef		<- (gpsDir findField GPS_TAG_GPS_LATITUDE_REF).optionNotNull
 				latitudeVal		<- (gpsDir findField GPS_TAG_GPS_LATITUDE).optionNotNull
 				latitude		<- part(latitudeVal, latitudeRef, Map(
 										GPS_TAG_GPS_LATITUDE_REF_VALUE_NORTH -> +1,
 										GPS_TAG_GPS_LATITUDE_REF_VALUE_SOUTH -> -1))
-				
+
 				longitudeRef	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE_REF).optionNotNull
 				longitudeVal	<- (gpsDir findField GPS_TAG_GPS_LONGITUDE).optionNotNull
 				longitude		<- part(longitudeVal, longitudeRef, Map(
@@ -92,14 +92,14 @@ object EXIF extends Logging {
 										GPS_TAG_GPS_LONGITUDE_REF_VALUE_WEST -> -1))
 			}
 			yield GPS(latitude, longitude)
-			
+
 	private def getGpsDirectory(metaData:JpegImageMetadata):Option[TiffDirectory] =
 			for {
 				exif			<- metaData.getExif.optionNotNull
 				gpsDir			<- (exif findDirectory DIRECTORY_TYPE_GPS).optionNotNull
 			}
 			yield gpsDir
-	
+
 	private def part(valueField:TiffField, signField:TiffField, signCalc:Map[String,Int]):Option[BigDecimal] =
 			for {
 				// TODO why is this case-insensitive?
@@ -107,8 +107,8 @@ object EXIF extends Logging {
 				value	<- decimal(valueField.getValue)
 			}
 			yield value * sign
-	
-	
+
+
 	private def decimal(value:AnyRef):Option[BigDecimal] =
 			value match {
 				// case dms:Array[RationalNumber] if dms.length == 3	=>
@@ -124,38 +124,38 @@ object EXIF extends Logging {
 					Some(bigDecimal(sum))
 				case x =>
 					DEBUG("unexpected value", x.toString)
-					None			
+					None
 			}
-			
+
 	// NOTE we don't have a Show instance for RationalNumber
 	private def bigRational(value:RationalNumber):BigRational	= BigRational fromLongs (value.numerator, value.divisor) getOrError show"division by zero converting ${value.toString}"
 	private def bigDecimal(value:BigRational):BigDecimal		= new BigDecimal(value toBigDecimal gpsPrecision)
 	private val gpsPrecision:MathContext						= new MathContext(12, RoundingMode.HALF_EVEN)
-		
+
 	//------------------------------------------------------------------------------
-	
+
 	private def getImageDescription(metaData:JpegImageMetadata):Option[String] =
 			getString(metaData, EXIF_TAG_IMAGE_DESCRIPTION)
-	
+
 	private def getDocumentName(metaData:JpegImageMetadata):Option[String] =
 			getString(metaData, EXIF_TAG_DOCUMENT_NAME)
-	
+
 	private def getDate(metaData:JpegImageMetadata):Option[Date] =
 			getDate(metaData, EXIF_TAG_DATE_TIME_ORIGINAL)	orElse	// DateTimeOriginal
 			getDate(metaData, EXIF_TAG_CREATE_DATE)			orElse	// DateTimeDigitized
 			getDate(metaData, TIFF_TAG_DATE_TIME)					// DateTime
-			
+
 	private def getString(metaData:JpegImageMetadata, tagInfo:TagInfo):Option[String] =
 			getValueDescription(metaData, tagInfo) map { _ replaceAll ("^'|'$", "") }
-			
+
 	private def getDate(metaData:JpegImageMetadata, tagInfo:TagInfo):Option[Date] =
 			getValueDescription(metaData, tagInfo) flatMap parseDate _
-			
+
 	// @see http://www.awaresystems.be/imaging/tiff/tifftags/privateifd/exif/datetimeoriginal.html
 	private def parseDate(s:String):Option[Date] =
 			try { Some(new SimpleDateFormat("''yyyy:MM:dd HH:mm:ss''") parse s) }
 			catch { case e:ParseException => DEBUG("cannot parse date", s); None }
-			
+
 	private def getValueDescription(metaData:JpegImageMetadata, tagInfo:TagInfo):Option[String] =
 			Option(metaData findEXIFValue tagInfo) map { _.getValueDescription }
 }

@@ -13,7 +13,7 @@ import scutil.log._
 /** caches derived Files indexed by their original Files */
 final class FileCache(list:File, directory:File, cachedFiles:Int) extends Logging {
 	directory.mkdirs()
-	
+
 	var entryQueue:Queue[File]	= Queue.empty
 	var entryMap:Map[File,File]	= Map.empty
 
@@ -32,11 +32,11 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 			}
 		}
 	}
-	
+
 	/** create a new cachefile */
 	def put(original:File):File = {
 		flush()
-		
+
 		// insert a new entry
 		val	cached	= cacheFile()
 		INFO("caching original", original)
@@ -57,13 +57,13 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 			cached.delete()
 		}
 	}
-	
+
 	/** load cache metadata */
 	def load() {
 		INFO("loading")
 		clear()
 		if (!list.exists)	return
-		
+
 		DEBUG("reading metadata", list)
 		try {
 			list readLines utf_8 grouped 3 foreach { case Seq(s,o,c) =>
@@ -78,7 +78,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 			WARN("cannot load metadata cache", list, e)
 		}
 	}
-	
+
 	/** store cache metadata */
 	def save() {
 		INFO("saving")
@@ -88,13 +88,13 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 		val strs	= entryQueue map { original => show"\n${original.getPath}\n${entryMap(original).getPath}\n" }
 		list writeString (utf_8, strs.mkString)
 	}
-	
+
 	/** clear cache metadata */
 	private def clear() {
 		entryQueue	= Queue.empty
 		entryMap	= Map.empty
 	}
-	
+
 	/** remove the oldest cache entry and delete its file */
 	private def flush() {
 		if (entryQueue.nonEmpty && entryQueue.size > cachedFiles) {
@@ -112,7 +112,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 			}
 		}
 	}
-	
+
 	/**
 	  * delete stale entries from the entryList and entryMap
 	  * and all cachefiles not in the entryMap and
@@ -133,7 +133,7 @@ final class FileCache(list:File, directory:File, cachedFiles:Int) extends Loggin
 			cached.delete()
 		}
 	}
-	
+
 	/** create a new cachefile */
 	private def cacheFile():File = {
 		val cached	= directory / randomString("0123456789abcdefghijklmnopqrstuvwxyz", 14)

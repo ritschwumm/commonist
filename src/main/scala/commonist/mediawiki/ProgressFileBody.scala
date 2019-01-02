@@ -22,7 +22,7 @@ final class ProgressFileBody(file:File, contentType:ContentType, progress:Effect
 		getInputStream() use { _ transferToPre9 out }
 		out.flush()
 	}
-	
+
 	def getTransferEncoding():String	= MIME.ENC_BINARY
 	def getContentLength():Long			= file.length
 	def getFilename():String			= file.getName

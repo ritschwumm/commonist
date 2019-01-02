@@ -17,7 +17,7 @@ final class StatusUILater(ui:StatusUI) {
 			ui determinate (messageKey, cur, max, messageArgs:_*)
 		}
 	}
-	
+
 	def halt(messageKey:String, messageArgs:Object*) {
 		edtWait {
 			ui halt (messageKey, messageArgs:_*)

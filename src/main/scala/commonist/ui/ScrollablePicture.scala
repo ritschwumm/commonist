@@ -8,7 +8,7 @@ import commonist.Constants
 /** a JLabel used to display an image in fullsize */
 final class ScrollablePicture extends JLabel with Scrollable {
 	setAutoscrolls(true)
-	
+
 	val mouse	= new MouseScroller(this)
 	addMouseListener(mouse)
 	addMouseMotionListener(mouse)

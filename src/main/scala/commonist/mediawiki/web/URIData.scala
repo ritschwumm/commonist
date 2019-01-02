@@ -39,7 +39,7 @@ final case class URIData(
 				prt	<- port orElse defaultPort
 			}
 			yield Target(hst, prt)
-			
+
 	def cred:Option[Cred]	=
 			userInfo map { it =>
 				it indexOf ':' match {
@@ -50,7 +50,7 @@ final case class URIData(
 	def defaultPort:Option[Int] =
 			scheme map {
 				_ match {
-					case "http"		=> 80	
+					case "http"		=> 80
 					case "https"	=> 443
 					case x			=> sys error ("unexpected scheme: " + x)
 				}

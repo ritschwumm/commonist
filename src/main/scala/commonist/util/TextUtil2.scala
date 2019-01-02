@@ -6,16 +6,16 @@ import scutil.text.Human
 object TextUtil2 {
 	/** encode a number of bytes into a human readable form */
 	def human(bytes:Long):String = Human roundedBinary bytes
-	
+
 	/** returns a single-line throwable description */
 	def shortError(t:Throwable):String		= t.getClass.getName.replaceAll("^.*\\.", "") + " " + feedToSpace(t.getMessage)
-	
+
 	/** replaces every linefeeds with a space */
 	def feedToSpace(s:String):String 		= s replaceAll ("\r\n|\r|\n", " ")
-	
+
 	/** removes double empty lines */
 	def restrictEmptyLines(s:String):String	= s replaceAll ("\n\n\n+", "\n\n")
-	
+
 	/** removes linefeeds from both ends of a string */
 	def trimLF(s:String):String				= s replaceAll ("^\\n+", "") replaceAll ("\\n+$", "")
 

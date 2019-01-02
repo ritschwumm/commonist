@@ -16,16 +16,16 @@ object UIUtil2 {
 			visibleTarget.repaint()
 		}
 	}
-	
+
 	private val TAB_PLAIN	= KeyStroke getKeyStroke (KeyEvent.VK_TAB, 0)
 	private val TAB_SHIFT	= KeyStroke getKeyStroke (KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK)
 	def tabMovesFocus(target:JComponent) {
 		target setFocusTraversalKeys (KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,  JUCollections singleton TAB_PLAIN)
 		target setFocusTraversalKeys (KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, JUCollections singleton TAB_SHIFT)
-						
+
 		/*
 		// @see http://www.javalobby.org/java/forums/t20457.html
-		
+
 		import java.awt.Component
 		import java.awt.KeyboardFocusManager
 		import java.awt.event.ActionListener
@@ -44,12 +44,12 @@ object UIUtil2 {
 				ev.getSource.asInstanceOf[Component].transferFocusBackward()
 			}
 		}
-		
+
 		target.getActionMap put (nextFocusAction getValue Action.NAME, nextFocusAction)
 		target.getActionMap put (prevFocusAction getValue Action.NAME, prevFocusAction)
 		*/
 	}
-	
+
 	/** sets window bounds limited to the screen estate */
 	def limitAndChangeBounds(window:Window, bounds:Rectangle) {
 		val screen = screenRect(
@@ -58,7 +58,7 @@ object UIUtil2 {
 		val limited	= boundsWithinScreen(bounds, screen)
 		window setBounds limited
 	}
-	
+
 	/** limit a Rectangle to the screen boundaries */
 	def boundsWithinScreen(window:Rectangle, screen:Rectangle):Rectangle = {
 		val out	= new Rectangle(window)
@@ -81,7 +81,7 @@ object UIUtil2 {
 		bounds.height	-= insets.top  + insets.bottom
 		bounds
 	}
-	
+
 	/** scrolls a JScrollPane such that the center of the content is the center of the viewPort */
 	def scrollToCenter(scroll:JScrollPane) {
 		val vp			= scroll.getViewport
@@ -90,16 +90,16 @@ object UIUtil2 {
 		val left	= (viewSize.width  - extentSize.width)  / 2
 		val top		= (viewSize.height - extentSize.height) / 2
 		val pos		= vp.getViewPosition
-		if (left >= 0) pos.x	= left	
+		if (left >= 0) pos.x	= left
 		if (top  >= 0) pos.y	= top
 		vp setViewPosition pos
 	}
-	
+
 	/** limits a Point to the insides of a Rectangle */
 	def limitToBounds(point:Point, bounds:Dimension):Point = new Point(
 			limitToBounds(point.x, 0, bounds.width),
 			limitToBounds(point.y, 0, bounds.height))
-	
+
 	/** limits an int value to given lower and upper bounds */
 	private def limitToBounds(value:Int, minInclusive:Int, maxExclusive:Int):Int =
 				 if (value < minInclusive)	minInclusive

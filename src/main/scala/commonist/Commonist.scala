@@ -13,7 +13,7 @@ object Commonist extends Logging {
 		ExceptionUtil logAWTExceptions { (thread,throwable) =>
 			ERROR("unexpected error", thread, throwable)
 		}
-	
+
 		edt {
 			try {
 				CommonistMain

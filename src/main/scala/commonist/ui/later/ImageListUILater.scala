@@ -15,23 +15,23 @@ final class ImageListUILater(ui:ImageListUI) {
 			ui.clear()
 		}
 	}
-	
+
 	def add(file:File, thumbnail:Option[Icon], thumbnailMaxSize:Int) {
 		edtWait {
 			ui add (file, thumbnail, thumbnailMaxSize)
 		}
 	}
-	
+
 	def updateSelectStatus() {
 		edtWait {
 			ui updateSelectStatus ()
 		}
 	}
-	
+
 	def uploadFinished(file:File, success:Boolean) {
 		edtWait {
 			ui uploadFinished (file, success)
 		}
 	}
-		
+
 }

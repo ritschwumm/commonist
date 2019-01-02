@@ -16,7 +16,7 @@ final class ProgressInputStream(inputStream:InputStream, callback:Effect[Long]) 
 		}
 		tmp
 	}
-	
+
 	override def read(b:Array[Byte], off:Int, len:Int):Int = {
 		val tmp	= super.read(b, off, len)
 		if (tmp > 0)	{
@@ -25,6 +25,6 @@ final class ProgressInputStream(inputStream:InputStream, callback:Effect[Long]) 
 		}
 		tmp
 	}
-	
+
 	override def read(b:Array[Byte]):Int = read(b, 0, b.length)
 }

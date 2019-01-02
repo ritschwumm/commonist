@@ -16,11 +16,11 @@ object Parser extends Logging {
 		val SEPARATOR	= '|'
 		val LINK_START	= "[["
 		val LINK_END	= "]]"
-		
+
 		// if source contains link markers leave it unchanged
 		val maybeLink	= (s containsSlice LINK_START) || (s containsSlice LINK_END)
 		if (maybeLink)	return s
-		
+
 		// else compile wikitext
 		s
 		.splitAroundChar(SEPARATOR)
@@ -29,7 +29,7 @@ object Parser extends Logging {
 		.map { name => LINK_START + Namespace.category(name) + LINK_END }
 		.mkString("\n")
 	}
-	
+
 	def parseCoordinates(s:String):Option[(String,String)] =
 			s splitAroundChar ',' map parseCoordinate match {
 				case ISeq(Some(latitude), Some(longitude))	=>
@@ -43,7 +43,7 @@ object Parser extends Logging {
 				case ""	=> None
 				case x	=> Some(x)
 			}
-	
+
 	//------------------------------------------------------------------------------
 
 	val WikiDataPattern	= re"""\s*(\S+)\s+(\S+)\s+(\S+)\s*"""
@@ -55,7 +55,7 @@ object Parser extends Logging {
 			None
 	}
 	def parseSite(s:String):Option[String] = (s != "_") option s
-	
+
 	val	LicenseDataPattern	= re"""(\{\{[^\}]+\}\})\s*(.*)"""
 	def parseLicenses(url:URL):ISeq[LicenseData] = parseURL(url) {
 		case LicenseDataPattern(template, description) =>
@@ -64,14 +64,14 @@ object Parser extends Logging {
 			WARN("could not parse line", x)
 			None
 	}
-	
+
 	private def parseURL[T](url:URL)(parseLine:String=>Option[T]):ISeq[T] =
 			slurpLines(url)
 			.map			{ _.trim }
 			.filter			{ _.nonEmpty }
 			.filter			{ !_.startsWith("#") }
 			.collapseMap	{ parseLine }
-	
+
 	private def slurpLines(url:URL):ISeq[String] =
 			(url withReader (None, utf_8)) { _.readLines() }
 }

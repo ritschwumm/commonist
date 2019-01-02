@@ -16,13 +16,13 @@ import commonist.util._
 /** displays a scrollable List of ImageUIs */
 final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel { outer =>
 	private val imageUIs	= new mutable.ListBuffer[ImageUI]
-	
+
 	//------------------------------------------------------------------------------
 	//## components
 
 	private val listPanel	= new ListPanel()
 	listPanel setLayout new BoxLayout(listPanel, BoxLayout.Y_AXIS)
-	
+
 	private val scroll	=
 			new JScrollPane(
 				listPanel,
@@ -30,7 +30,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
 			)
 	scroll setBorder (BorderFactory createEmptyBorder (0,0,0,0))
-	
+
 	//var	bar	= scroll.getVerticalScrollBar
 
 	private val selectLabel			= new JLabel(Messages text "imageList.select")
@@ -38,10 +38,10 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	private val	selectNoneButton	= new JButton(Messages text "imageList.select.none")
 	private val	selectFailedButton	= new JButton(Messages text "imageList.select.failed")
 	private val selectStatus		= new JLabel
-	
+
 	//------------------------------------------------------------------------------
 	//## layout
-	
+
 	setBorder(Constants.PANEL_BORDER)
 
 	setLayout(new GridBagLayout)
@@ -54,7 +54,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 
 	//------------------------------------------------------------------------------
 	//## wiring
-	
+
 	selectAllButton onActionPerformed { _ =>
 		selectAll()
 	}
@@ -64,36 +64,36 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	selectFailedButton onActionPerformed { _ =>
 		selectFailed()
 	}
-	
+
 	//------------------------------------------------------------------------------
 	//## init
-	
+
 	updateSelectStatus()
-	
+
 	/** removes all ImageUI objects */
 	def clear() {
 		imageUIs.clear()
 		listPanel.removeAll()
 	}
-	
+
 	/** adds a File UI */
 	def add(file:File, icon:Option[Icon], thumbnailMaxSize:Int) {
 		val	imageUI	=
 				new ImageUI(file, icon, thumbnailMaxSize, programHeading, programIcon, new ImageUICallback {
 					def updateSelectStatus() { outer.updateSelectStatus() }
 				})
-		
+
 		imageUIs += imageUI
 		listPanel add imageUI
 	}
-	
+
 	/** get the select status and update the display */
 	def updateSelectStatus() {
 		val allFiles		= imageUIs									map { _.getData.file }
 		val selectedFiles	= imageUIs filter { _.isUploadSelected }	map { _.getData.file }
 		val allBytes		= (allFiles			map { _.length }).foldLeft (0L)(_+_)
 		val selectedBytes	= (selectedFiles	map { _.length }).foldLeft (0L)(_+_)
-	
+
 		selectStatus setText (
 			Messages message (
 				"imageList.selected",
@@ -104,32 +104,32 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 			)
 		)
 	}
-	
+
 	def getData:ImageListData =
 			ImageListData(imageUIs.toVector map { _.getData })
-	
+
 	/** set the upload state for the ImageUI representing the given file */
 	def uploadFinished(file:File, success:Boolean) {
 		imageUIs
 		.filter		{ _.getData.file == file }
 		.foreach	{ _ setUploadSuccessful Some(success) }
 	}
-	
+
 	//------------------------------------------------------------------------------
 	//## private methods
-	
+
 	/** checks the upload checkbox in all images */
 	private def selectAll() {
 		imageUIs foreach { _ setUploadSelected true }
 		updateSelectStatus()
 	}
-	
+
 	/** unchecks the upload checkbox in all images */
 	private def selectNone() {
 		imageUIs foreach { _ setUploadSelected false }
 		updateSelectStatus()
 	}
-	
+
 	/** checks for the upload checkbox in all failed images, unchecks it for the rest */
 	private def selectFailed() {
 		imageUIs foreach { it =>
@@ -137,10 +137,10 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 		}
 		updateSelectStatus()
 	}
-	
+
 	//------------------------------------------------------------------------------
 	//## private classes
-	
+
 	/** a Scrollable Panel scrolling to even tickets */
 	private class ListPanel extends JPanel with Scrollable {
 		/**	visibleRect	The view area visible within the viewport
@@ -163,7 +163,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 					val	target		= if (component != null) (component.getY + component.getHeight) else this.getHeight
 					target - visible
 				}
-		
+
 		/**	visibleRect	The view area visible within the viewport
 			orientation	SwingConstants.VERTICAL or SwingConstants.HORIZONTAL.
 			direction	Less than zero to scroll up/left, greater than zero for down/right.
@@ -178,7 +178,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 				else {
 					visibleRect.height min (this.getHeight  - (visibleRect.y + visibleRect.height))
 				}
-		
+
 		def getPreferredScrollableViewportSize():Dimension	= this.getPreferredSize
 		def getScrollableTracksViewportWidth():Boolean		= true
 		def getScrollableTracksViewportHeight():Boolean		= false

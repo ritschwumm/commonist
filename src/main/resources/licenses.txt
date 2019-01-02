@@ -35,7 +35,7 @@
 {{PD-GermanGov}}						For public domain images from Germany statutes or other regulations
 {{PD-US}}								First published in the United States before 1923 - public domain
 {{PD-USGov}}							Original work of the US Federal Government - public domain
-{{PD-USGov-Military}}					For public domain images from the US military or Department of Defense 
+{{PD-USGov-Military}}					For public domain images from the US military or Department of Defense
 {{PD-USGov-NASA}}						Original work of NASA - public domain
 {{PD-Soviet}}							Work published in the Soviet Union before May 27, 1973 - public domain
 {{PD}}									Public domain (generic - please give a reason in the description field!)

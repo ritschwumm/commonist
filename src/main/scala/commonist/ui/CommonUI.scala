@@ -19,9 +19,9 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 				300,
 				super.getMinimumSize.height
 			)
-			
+
 	//## components
-	
+
 	// ui sugar
 	private val commonLabel			= new JLabel(Messages text "common.header")
 
@@ -37,7 +37,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	private val othersLabel		    = new JLabel(Messages text "common.others", 		SwingConstants.RIGHT)
 	private val categoriesLabel		= new JLabel(Messages text "common.categories",		SwingConstants.RIGHT)
 	private val licenseLabel		= new JLabel(Messages text "common.license",		SwingConstants.RIGHT)
-	
+
 	// editors
 	private val wikiEditor			= new JComboBox(wikiList.toArray[Object])
 	private val userEditor			= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
@@ -57,10 +57,10 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 					super.getPreferredSize.height
 				)
 	}
-	
+
 	// NOTE licenseEditor#SelectedItem is String|LicenseData
 	licenseEditor setEditable true
-	
+
 	// separators
 	private val separator1	= new JPanel
 	private val separator2	= new JPanel
@@ -72,7 +72,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	descriptionEditor setLineWrap		true
 	descriptionEditor setWrapStyleWord	true
 	categoriesEditor setToolTipText (Messages text "common.categories.tooltip")
-	
+
 	// license contains the full text as a tooltip
 	private def updateLicenseTooltip() {
 		val	text	=
@@ -87,21 +87,21 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 		updateLicenseTooltip()
 	}
 	updateLicenseTooltip()
-	
+
 	//------------------------------------------------------------------------------
 	//## layout
-	
+
 	setBorder(Constants.PANEL_BORDER)
 	setLayout(new GridBagLayout)
-	
+
 	// header label
 	add(commonLabel,		GBC pos (1,0) size (1,1) weight (0,0) anchor WEST		fill NONE		insetsTLBR (0,0,4,0))
 
 	// part 1
-	
+
 	add(userLabel,			GBC pos (0,1) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
 	add(userEditor,			GBC pos (1,1) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
-	
+
 	add(passwordLabel,		GBC pos (0,2) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
 	add(passwordEditor,		GBC pos (1,2) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
@@ -110,9 +110,9 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 
 	// separator 1
 	add(separator1,			GBC pos (0,4) size (2,1) weight (1,0) anchor CENTER		fill HORIZONTAL	insetsTLBR (2,0,2,0))
-	
+
 	// part 2
-	
+
 	add(descriptionLabel,	GBC pos (0,5) size (1,1) weight (0,1) anchor NORTHEAST	fill NONE		insetsTLBR (0,4,0,4))
 	add(descriptionScroll,	GBC pos (1,5) size (1,1) weight (0,1) anchor WEST		fill BOTH		insetsTLBR (0,0,0,0))
 
@@ -127,7 +127,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 
 	add(permissionLabel, 	GBC pos (0,9) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
 	add(permissionEditor,	GBC pos (1,9) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
-	
+
 	add(othersLabel,	 	GBC pos (0,10) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
 	add(othersEditor,		GBC pos (1,10) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
 
@@ -139,7 +139,7 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 
 	// separator 2
 	add(separator2,			GBC pos (0,13) size (2,1) weight (1,0) anchor CENTER fill HORIZONTAL	insetsTLBR (0,0,0,0))
-	
+
 	/** gets all data edit in this UI */
 	def getData:CommonData =
 			CommonData(
@@ -159,10 +159,10 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 				},
 				categoriesEditor.getText
 			)
-	
+
 	//------------------------------------------------------------------------------
 	//## Settings
-	
+
 	/** loads this UI's state from the properties */
 	def loadSettings(settings:Settings) {
 		userEditor			setText (settings getOrElse ("userEditor.Text",			""))
@@ -174,18 +174,18 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 		othersEditor		setText (settings getOrElse ("othersEditor.Text",		""))
 		authorEditor		setText (settings getOrElse ("authorEditor.Text",		""))
 		categoriesEditor	setText (settings getOrElse ("categoriesEditor.Text",	""))
-		
+
 		val wikiSel		= settings get "wikiEditor.SelectedItem"
 		val wikiData	= wikiList find { it => Some(it.api) == wikiSel } getOrElse wikiList(0)
 		wikiEditor.setSelectedItem(wikiData)
-		
+
 		val licenseSel	= settings get "licenseEditor.SelectedItem"
 		val licenseData	= licenseList find { it => Some(it.template) == licenseSel } orElse licenseSel getOrElse ""
 		licenseEditor setSelectedItem licenseData
-		
+
 		userEditor.getText.isEmpty cata (passwordEditor, userEditor) requestFocusInWindow ()
 	}
-	
+
 	/** stores this UI's state in the properties */
 	def saveSettings(settings:Settings) {
 		settings set ("userEditor.Text",			userEditor.getText)
@@ -197,10 +197,10 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 		settings set ("permissionEditor.Text",		permissionEditor.getText)
 		settings set ("othersEditor.Text",			othersEditor.getText)
 		settings set ("categoriesEditor.Text",		categoriesEditor.getText)
-		
+
 		val wikiData	= wikiEditor.getSelectedItem.asInstanceOf[WikiData]
 		settings set ("wikiEditor.SelectedItem",	wikiData.api)
-		
+
 		val	licenseSel	=
 				licenseEditor.getSelectedItem match {
 					case x:LicenseData	=> x.template

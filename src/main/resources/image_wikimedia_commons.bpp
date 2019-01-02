@@ -14,7 +14,7 @@ $(upload.description)
 |other_versions=
 }}
 # } else {
-$(upload.description)	
+$(upload.description)
 #}
 # if (upload.latitude != null && upload.longitude != null) {
 {{Location|$(upload.latitude)|$(upload.longitude)|$(upload.heading.equals("") ? "" : "heading:" + upload.heading)}}

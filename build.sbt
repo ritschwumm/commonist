@@ -2,9 +2,9 @@ import xsbtUtil.{ util => xu }
 
 name			:= "commonist"
 organization	:= "de.djini"
-version			:= "1.9.0"
+version			:= "1.10.0"
 
-scalaVersion	:= "2.12.6"
+scalaVersion	:= "2.12.8"
 scalacOptions	++= Seq(
 	"-deprecation",
 	"-unchecked",
@@ -22,9 +22,9 @@ scalacOptions	++= Seq(
 
 conflictManager	:= ConflictManager.strict
 libraryDependencies	++= Seq(
-	"de.djini"					%%	"scutil-core"	% "0.145.0"			% "compile",
-	"de.djini"					%%	"scutil-swing"	% "0.145.0"			% "compile",
-	"de.djini"					%%	"scjson-codec"	% "0.159.0"			% "compile",
+	"de.djini"					%%	"scutil-core"	% "0.151.0"			% "compile",
+	"de.djini"					%%	"scutil-swing"	% "0.151.0"			% "compile",
+	"de.djini"					%%	"scjson-codec"	% "0.169.0"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile",
 	"org.apache.httpcomponents"	%	"httpclient"	% "4.5.6"			% "compile",
@@ -108,7 +108,7 @@ webstartJnlpConfigs	:= Seq(JnlpConfig(
 				<application-desc main-class="commonist.Commonist"/>
 			</jnlp>
 ))
-webstartExtras	:= xu.find filesMapped ((sourceDirectory in Compile).value / "webstart")
+webstartExtras	:= xu.find filesMapped ((Compile / sourceDirectory).value / "webstart")
 
 //------------------------------------------------------------------------------
 
