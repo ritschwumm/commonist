@@ -72,7 +72,7 @@ final class Thumbnails(cache:FileCache) extends Logging {
 		// TYPE_BYTE_INDEXED	works, but inverts color if converted to TYPE_3BYTE_BGR
 		
 		// normalize image type
-		val normalizeTypes	= Set(BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_BYTE_INDEXED)
+		val normalizeTypes	= Set(BufferedImage.TYPE_3BYTE_BGR, BufferedImage.TYPE_BYTE_INDEXED, BufferedImage.TYPE_CUSTOM)
 		val image2 =
 				if (normalizeTypes contains image.getType) {
 					val normalized	= new BufferedImage(
