@@ -148,7 +148,7 @@ object CommonistMain extends Logging {
 	 * load and display imageUIs for all files in the new directory
 	 */
 	private def doChangeDirectory(directory:File) {
-		changeDirectory change new ChangeDirectoryTask(mainWindow, imageListUI, statusUI, thumbnails, directory)
+		changeDirectory change new ChangeDirectoryTask(mainWindow, imageListUI, statusUI, thumbnails, directory, loader)
 	}
 
 	/** Action: start uploading selected files */
