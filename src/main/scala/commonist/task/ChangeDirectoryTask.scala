@@ -21,13 +21,9 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 	private val imageListUILater	= new ImageListUILater(imageListUI)
 	private val statusUILater		= new StatusUILater(statusUI)
 
-	private def isXml(name:String):Boolean = {
-	  ".xml" == name.substring(name.lastIndexOf('.'))
-	}
-
 	private def getOaiPmhProps():Map[String,String] = {
-    val propsURL = (loader resourceURL "oaipmh.properties") getOrError "cannot load oaipmh.properties"
-    return PropertiesUtil loadURL (propsURL, None)
+		val propsURL = loader resourceURL "oaipmh.properties" getOrError "cannot load oaipmh.properties"
+		PropertiesUtil loadURL (propsURL, None)
 	}
 
 	override protected def execute() {
@@ -46,8 +42,8 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 		val	(readable,unreadable)	= sorted partition { _.canRead }
 		unreadable foreach { it => WARN("cannot read", it) }
 
-		val (xmls,images) = readable partition { f => isXml(f.getName()) }
-		val oaipmh = xmls.map(XML loadFile).filter("OAI-PMH" == _.label).map(new OaiPmh2(_, getOaiPmhProps)).toList
+		val (xmls,images) = readable partition { f => f.getName() endsWith ".xml" }
+		val oaipmh = xmls.map(XML loadFile).filter("OAI-PMH" == _.label).map(new OaiPmh2(_, getOaiPmhProps)).toVector
 
 		val max		= images.length
 		var cur		= 0

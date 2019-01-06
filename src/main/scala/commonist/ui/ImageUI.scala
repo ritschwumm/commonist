@@ -22,7 +22,7 @@ trait ImageUICallback {
 }
 
 /** a data editor with a thumbnail preview for an image File */
-final class ImageUI(file:File, oaipmh:List[OaiPmh2], icon:Option[Icon], thumbnailMaxSize:Int, programHeading:String, programIcon:Image, callback:ImageUICallback) extends JPanel {
+final class ImageUI(file:File, oaipmh:Vector[OaiPmh2], icon:Option[Icon], thumbnailMaxSize:Int, programHeading:String, programIcon:Image, callback:ImageUICallback) extends JPanel {
 	private val thumbDimension = new Dimension(thumbnailMaxSize, thumbnailMaxSize)
 
 	private var uploadSuccessful:Option[Boolean]	= None
@@ -155,28 +155,28 @@ final class ImageUI(file:File, oaipmh:List[OaiPmh2], icon:Option[Icon], thumbnai
 
 	// BETTER move unparsers and parsers together
 
-	private def getExif():ImageData = {
-	  val	exif = EXIF extract file
-	  return new ImageData(
-	      file,
+	private def getExif:ImageData = {
+		val	exif = EXIF extract file
+		ImageData(
+				file,
 				false,
 				Filename fix file.getName,
 				exif.description getOrElse "",
-				exif.date		  cata ("", _ format "yyyy-MM-dd HH:mm:ss"),
-				exif.gps		  cata ("", it => it.latitude.toString + "," + it.longitude.toString),
+				exif.date			cata ("", _ format "yyyy-MM-dd HH:mm:ss"),
+				exif.gps			cata ("", it => it.latitude.toString + "," + it.longitude.toString),
 				exif.heading	cata ("", _.toString),
 				""
-	    )
+		)
 	}
 
 	def loadImageData(data:ImageData) {
-  	uploadEditor		  setSelected	data.upload
-  	nameEditor			  setText		data.name
-  	descriptionEditor	setText		data.description
-  	dateEditor			  setText		data.date
-  	coordinatesEditor	setText		data.coordinates
-  	headingEditor		  setText		data.heading
-  	categoriesEditor	setText		data.categories
+		uploadEditor      setSelected data.upload
+		nameEditor        setText     data.name
+		descriptionEditor setText     data.description
+		dateEditor        setText     data.date
+		coordinatesEditor setText     data.coordinates
+		headingEditor     setText     data.heading
+		categoriesEditor  setText     data.categories
 	}
 
 	private val exifData:ImageData = getExif

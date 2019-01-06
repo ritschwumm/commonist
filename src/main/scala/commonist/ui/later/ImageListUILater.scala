@@ -17,7 +17,7 @@ final class ImageListUILater(ui:ImageListUI) {
 		}
 	}
 
-	def add(file:File, oaipmh:List[OaiPmh2], thumbnail:Option[Icon], thumbnailMaxSize:Int) {
+	def add(file:File, oaipmh:Vector[OaiPmh2], thumbnail:Option[Icon], thumbnailMaxSize:Int) {
 		edtWait {
 			ui add (file, oaipmh, thumbnail, thumbnailMaxSize)
 		}

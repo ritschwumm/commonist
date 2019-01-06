@@ -77,7 +77,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	}
 
 	/** adds a File UI */
-	def add(file:File, oaipmh:List[OaiPmh2], icon:Option[Icon], thumbnailMaxSize:Int) {
+	def add(file:File, oaipmh:Vector[OaiPmh2], icon:Option[Icon], thumbnailMaxSize:Int) {
 		val	imageUI	=
 				new ImageUI(file, oaipmh, icon, thumbnailMaxSize, programHeading, programIcon, new ImageUICallback {
 					def updateSelectStatus() { outer.updateSelectStatus() }
