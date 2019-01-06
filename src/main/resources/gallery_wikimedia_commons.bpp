@@ -13,7 +13,7 @@
 # if (!batch.uploads.empty) {
 <gallery>
 # for (var upload : batch.uploads) {
-# if (!upload.description.startsWith("{{Information")) {
+# if (!upload.description.startsWith("{{Information") && !upload.description.startsWith("{{Artwork")) {
 $(upload.title)|$(upload.description.replaceAll("\n", " "))
 # } else {
 $(upload.title)

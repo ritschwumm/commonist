@@ -22,7 +22,7 @@ trait ImageUICallback {
 }
 
 /** a data editor with a thumbnail preview for an image File */
-final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programHeading:String, programIcon:Image, callback:ImageUICallback) extends JPanel {
+final class ImageUI(file:File, oaipmh:Vector[OaiPmh2], icon:Option[Icon], thumbnailMaxSize:Int, programHeading:String, programIcon:Image, callback:ImageUICallback) extends JPanel {
 	private val thumbDimension = new Dimension(thumbnailMaxSize, thumbnailMaxSize)
 
 	private var uploadSuccessful:Option[Boolean]	= None
@@ -155,20 +155,35 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 
 	// BETTER move unparsers and parsers together
 
-	private val	exif		= EXIF extract file
-	private val exifDate	= exif.date		cata ("", _ format "yyyy-MM-dd HH:mm:ss")
-	private val exifGPS		= exif.gps		cata ("", it => it.latitude.toString + "," + it.longitude.toString)
-	private val exifHeading	= exif.heading	cata ("", _.toString)
-	private val exifDesc	= exif.description getOrElse ""
-	private val fixedName	= Filename fix file.getName
+	private def getExif:ImageData = {
+		val	exif = EXIF extract file
+		ImageData(
+				file,
+				false,
+				Filename fix file.getName,
+				exif.description getOrElse "",
+				exif.date			cata ("", _ format "yyyy-MM-dd HH:mm:ss"),
+				exif.gps			cata ("", it => it.latitude.toString + "," + it.longitude.toString),
+				exif.heading	cata ("", _.toString),
+				""
+		)
+	}
 
-	uploadEditor		setSelected	false
-	nameEditor			setText		fixedName
-	descriptionEditor	setText		exifDesc
-	dateEditor			setText		exifDate
-	coordinatesEditor	setText		exifGPS
-	headingEditor		setText		exifHeading
-	categoriesEditor	setText		""
+	def loadImageData(data:ImageData) {
+		uploadEditor      setSelected data.upload
+		nameEditor        setText     data.name
+		descriptionEditor setText     data.description
+		dateEditor        setText     data.date
+		coordinatesEditor setText     data.coordinates
+		headingEditor     setText     data.heading
+		categoriesEditor  setText     data.categories
+	}
+
+	private val exifData:ImageData = getExif
+	// initialize from EXIF data, if any
+	loadImageData(exifData)
+	// initialize from OAI-PMH data, if any
+	oaipmh.map(_.getImageData(exifData)).filter(_.isDefined).map(_.map(loadImageData))
 
 	// BETTER could be a trait
 	override def getMaximumSize():Dimension =

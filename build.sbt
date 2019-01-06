@@ -25,6 +25,7 @@ libraryDependencies	++= Seq(
 	"de.djini"					%%	"scutil-core"	% "0.151.0"			% "compile",
 	"de.djini"					%%	"scutil-swing"	% "0.151.0"			% "compile",
 	"de.djini"					%%	"scjson-codec"	% "0.169.0"			% "compile",
+	"org.scala-lang.modules"	%%	"scala-xml"		% "1.1.1"			% "compile",
 	"org.apache.sanselan"		%	"sanselan"		% "0.97-incubator"	% "compile",
 	"org.simplericity.macify"	%	"macify"		% "1.6"				% "compile",
 	"org.apache.httpcomponents"	%	"httpclient"	% "4.5.6"			% "compile",

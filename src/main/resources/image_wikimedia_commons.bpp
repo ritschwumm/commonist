@@ -3,7 +3,7 @@
 #// in: common:Common, upload:Upload
 #
 == {{int:filedesc}} ==
-# if (!upload.description.startsWith("{{Information")) {
+# if (!upload.description.startsWith("{{Information") && !upload.description.startsWith("{{Artwork")) {
 {{Information
 |Description=$(common.description)
 $(upload.description)
