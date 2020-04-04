@@ -1,6 +1,7 @@
 target/
 project/boot/
 
+private.sbt
 /doc/
 /versatz/
 
