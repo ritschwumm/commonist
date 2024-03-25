@@ -7,6 +7,7 @@ import javax.swing.Icon
 import scutil.gui.SwingUtil._
 
 import commonist.ui.ImageListUI
+import commonist.util.OaiPmh2
 
 /** wraps a ImageListUI's methods in SwingUtilities.invokeAndWait */
 final class ImageListUILater(ui:ImageListUI) {
@@ -16,9 +17,9 @@ final class ImageListUILater(ui:ImageListUI) {
 		}
 	}
 
-	def add(file:File, thumbnail:Option[Icon], thumbnailMaxSize:Int) {
+	def add(file:File, oaipmh:Vector[OaiPmh2], thumbnail:Option[Icon], thumbnailMaxSize:Int) {
 		edtWait {
-			ui add (file, thumbnail, thumbnailMaxSize)
+			ui add (file, oaipmh, thumbnail, thumbnailMaxSize)
 		}
 	}
 

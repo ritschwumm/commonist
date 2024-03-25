@@ -2,18 +2,29 @@ package commonist.task
 
 import java.io.File
 
+import scala.language.postfixOps
+import scala.xml._
+
+import scutil.base.implicits._
 import scutil.core.implicits._
+import scutil.io._
 import scutil.log._
 
 import commonist._
 import commonist.thumb._
 import commonist.ui._
 import commonist.ui.later._
+import commonist.util._
 
 /** change the directory displayed in the ImageListUI */
-final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, statusUI:StatusUI, thumbnails:Thumbnails, directory:File) extends Task {
+final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, statusUI:StatusUI, thumbnails:Thumbnails, directory:File, loader:Loader) extends Task {
 	private val imageListUILater	= new ImageListUILater(imageListUI)
 	private val statusUILater		= new StatusUILater(statusUI)
+
+	private def getOaiPmhProps():Map[String,String] = {
+		val propsURL = loader resourceURL "oaipmh.properties" getOrError "cannot load oaipmh.properties"
+		PropertiesUtil loadURL (propsURL, None)
+	}
 
 	override protected def execute() {
 		DEBUG("clear")
@@ -31,11 +42,14 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 		val	(readable,unreadable)	= sorted partition { _.canRead }
 		unreadable foreach { it => WARN("cannot read", it) }
 
-		val max		= readable.length
+		val (xmls,images) = readable partition { f => f.getName() endsWith ".xml" }
+		val oaipmh = xmls.map(XML loadFile).filter("OAI-PMH" == _.label).map(new OaiPmh2(_, getOaiPmhProps)).toVector
+
+		val max		= images.length
 		var cur		= 0
 		var last	= 0L
 		try {
-			for (file <- readable) {
+			for (file <- images) {
 				check()
 
 				statusUILater determinate ("imageList.loading", cur, max, file.getPath, int2Integer(cur), int2Integer(max))
@@ -44,7 +58,7 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 				// using Thread.interrupt while this is running kills the EDT??
 				val thumbnail			= thumbnails thumbnail file
 				val thumbnailMaxSize	= thumbnails.getMaxSize
-				imageListUILater add (file, thumbnail, thumbnailMaxSize)
+				imageListUILater add (file, oaipmh, thumbnail, thumbnailMaxSize)
 				try { Thread.sleep(100) }
 				catch { case e:InterruptedException => WARN("interrupted", e) }
 
