@@ -25,7 +25,7 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager
 import org.apache.http.impl.auth.BasicScheme
 import org.apache.http.util.EntityUtils
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang._
 import scutil.log._
 
@@ -48,67 +48,67 @@ final class Connection(apiURL:String) extends Logging {
 	manager setMaxTotal				18
 
 	private val routePlanner	= new SystemDefaultRoutePlanner(
-			ProxySelector.getDefault)
+		ProxySelector.getDefault)
 
 	// NOTE new for 4.3.1
 	private object PreemptiveInterceptor extends HttpRequestInterceptor  {
 		@throws(classOf[HttpException])
-		def process(request:HttpRequest, context:HttpContext) {
+		def process(request:HttpRequest, context:HttpContext):Unit	= {
 			cred foreach { cred =>
 				val credentials	= new UsernamePasswordCredentials(cred.user, cred.password)
 				val scheme		= new BasicScheme(charSet)
-				val header		= scheme authenticate (credentials, request, context)
+				val header		= scheme.authenticate(credentials, request, context)
 				request addHeader header
 			}
 		}
 	}
 
 	private val client	=
-			HttpClientBuilder
-			.create()
-			.setConnectionManager(manager)
-			.setRoutePlanner(routePlanner)
-			.addInterceptorLast(PreemptiveInterceptor)
-			.disableRedirectHandling()
-			.setDefaultHeaders(arrayList(ISeq(new BasicHeader("User-Agent", userAgent))))
-			.build()
+		HttpClientBuilder
+		.create()
+		.setConnectionManager(manager)
+		.setRoutePlanner(routePlanner)
+		.addInterceptorLast(PreemptiveInterceptor)
+		.disableRedirectHandling()
+		.setDefaultHeaders(arrayList(Seq(new BasicHeader("User-Agent", userAgent))))
+		.build()
 	// TODO check we can do without this
 	// client.getParams setParameter (ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY)
 
-	def dispose() {
+	def close():Unit	= {
 		manager.shutdown()
 	}
 
 	//------------------------------------------------------------------------------
 
 	/**  set credentials to be used for authentication */
-	def identify(cred:Option[Cred]) {
+	def identify(cred:Option[Cred]):Unit	= {
 		this.cred	= cred
 	}
 
-	def GET(params:ISeq[(String,String)]):Option[JsonValue] = {
-		val	queryString	= URLEncodedUtils format (nameValueList(params), charSet.name)
+	def GET(params:Seq[(String,String)]):Option[JsonValue] = {
+		val	queryString	= URLEncodedUtils.format(nameValueList(params), charSet.name)
 		val	request		= new HttpGet(apiURL + "?" + queryString)
 		handle(request)
 	}
 
-	def POST(params:ISeq[(String,String)]):Option[JsonValue] = {
+	def POST(params:Seq[(String,String)]):Option[JsonValue] = {
 		val	requestEntity	= new UrlEncodedFormEntity(nameValueList(params), charSet.name)
 		val request			= new HttpPost(apiURL)
 		request	setEntity	requestEntity
 		handle(request)
 	}
 
-	def POST_multipart(params:ISeq[(String,String)], fileField:String, file:File, progress:Long=>Unit):Option[JsonValue] = {
+	def POST_multipart(params:Seq[(String,String)], fileField:String, file:File, progress:Long=>Unit):Option[JsonValue] = {
 		// val requestEntity	= new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, null, null)
 
 		val builder	= MultipartEntityBuilder.create()
 		params foreach { case (key, value)	=>
 			// NOTE was Content-Transfer-Encoding: 8bit
-			builder addTextBody (key, value, ContentType.TEXT_PLAIN withCharset charSet)
+			builder.addTextBody(key, value, ContentType.TEXT_PLAIN withCharset charSet)
 		}
 		// NOTE was Content-Transfer-Encoding: binary
-		builder addPart(fileField, new ProgressFileBody(file, ContentType.APPLICATION_OCTET_STREAM, progress))
+		builder.addPart(fileField, new ProgressFileBody(file, ContentType.APPLICATION_OCTET_STREAM, progress))
 		val requestEntity	= builder.build()
 
 		val request			= new HttpPost(apiURL)
@@ -122,8 +122,9 @@ final class Connection(apiURL:String) extends Logging {
 		try {
 			DEBUG(response.getStatusLine.toString)
 			require(
-					response.getStatusLine.getStatusCode == 200,
-					"unexpected response: " + response.getStatusLine.toString)
+				response.getStatusLine.getStatusCode == 200,
+				"unexpected response: " + response.getStatusLine.toString
+			)
 			response.getEntity.optionNotNull map EntityUtils.toString flatMap { it => (JsonCodec decode it).toOption }
 		}
 		finally {
@@ -131,12 +132,12 @@ final class Connection(apiURL:String) extends Logging {
 		}
 	}
 
-	private def nameValueList(kv:ISeq[(String,String)]):JList[NameValuePair]	=
-			arrayList(kv map nameValue)
+	private def nameValueList(kv:Seq[(String,String)]):JList[NameValuePair]	=
+		arrayList(kv map nameValue)
 
 	private def nameValue(kv:(String,String)):NameValuePair	=
-			new BasicNameValuePair(kv._1, kv._2)
+		new BasicNameValuePair(kv._1, kv._2)
 
-	private def arrayList[T](elements:ISeq[T]):JList[T]	=
-			new JList[T] |>> { al => elements foreach al.add }
+	private def arrayList[T](elements:Seq[T]):JList[T]	=
+		new JList[T] doto { al => elements foreach al.add }
 }

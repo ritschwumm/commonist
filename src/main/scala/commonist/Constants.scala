@@ -4,7 +4,6 @@ import javax.swing.BorderFactory
 
 /** constants used throughout the application */
 object Constants {
-	val ENABLE_API_WRITE			= true	// if false the API is dry-running
 	val ENABLE_GALLERY				= true
 
 	val THUMBNAIL_DEFAULT_SIZE		= 192
@@ -20,5 +19,5 @@ object Constants {
 	val INPUT_FIELD_WIDTH			= 24	// columns
 	val INPUT_FIELD_HEIGHT			= 5 	// rows
 
-	val PANEL_BORDER				= BorderFactory createEmptyBorder (2,2,2,2)
+	val PANEL_BORDER				= BorderFactory.createEmptyBorder(2,2,2,2)
 }

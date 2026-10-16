@@ -4,9 +4,8 @@ import java.io.File
 import javax.swing._
 import javax.swing.tree._
 
-import scutil.base.implicits._
 import scutil.core.implicits._
-import scutil.lang.ISeq
+import scutil.jdk.implicits._
 import scutil.platform._
 import scutil.gui.CasterInstances._
 import scutil.log._
@@ -16,7 +15,7 @@ import commonist.util._
 
 /** action events this UI sends */
 trait DirectoryUICallback {
-	def changeDirectory(currentDirectory:File)
+	def changeDirectory(currentDirectory:File):Unit
 }
 
 /** a JTree used to select a directory in the filesystem */
@@ -26,15 +25,15 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 
 	// make a root tree node
 	private val (baseNode,fakeRoot)	=
-			File.listRoots.optionNotNull.flattenMany.toVector match {
-				case Vector(single)	=>
-					val baseNode	= new FileNode(single) doto { _.update() }
-					(baseNode, false)
-				case many	=>
-					val baseNode	= new FileNode(Platform.unixRoot)	// fake
-					many map (new FileNode(_)) foreach baseNode.add
-					(baseNode, true)
-			}
+		File.listRoots.optionNotNull.flattenMany.toVector match {
+			case Vector(single)	=>
+				val baseNode	= new FileNode(single) doto { _.update() }
+				(baseNode, false)
+			case many	=>
+				val baseNode	= new FileNode(Platform.unixRoot)	// fake
+				many map (new FileNode(_)) foreach baseNode.add
+				(baseNode, true)
+		}
 
 	//------------------------------------------------------------------------------
 	//## components
@@ -63,14 +62,14 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 	}
 
 	private def lastNode(treePath:TreePath):FileNode	=
-			treePath.getLastPathComponent.asInstanceOf[FileNode]
+		treePath.getLastPathComponent.asInstanceOf[FileNode]
 
 	//------------------------------------------------------------------------------
 	//## BrowseDirectory action
 
 	/** open all directories from the root to a given node and select it */
-	def browseDirectory(directory:File) {
-		def loop(search:ISeq[FileNode], chain:List[File]) {
+	def browseDirectory(directory:File):Unit	= {
+		def loop(search:Seq[FileNode], chain:List[File]):Unit	= {
 			search find { _.file == chain.head } match {
 				case Some(node)	=>
 					val treePath	= node.treePathClone
@@ -91,26 +90,26 @@ final class DirectoryUI(callback:DirectoryUICallback) extends JScrollPane with L
 
 		val fromRoot	= (directory :: directory.parentChain).reverse
 		if (fakeRoot)	loop(baseNode.childNodes,	fromRoot)
-		else 			loop(ISeq(baseNode),		fromRoot)
+		else 			loop(Seq(baseNode),		fromRoot)
 	}
 
 	//------------------------------------------------------------------------------
 	//## Settings
 
 	/** loads this UI's state from the properties */
-	def loadSettings(settings:Settings) {
+	def loadSettings(settings:Settings):Unit	= {
 		currentDirectory	=
-				new File(
-					settings getOrElse (
-						"directoryTree.currentDirectory",
-						SystemProperties.user.home
-					)
+			new File(
+				settings.getOrElse(
+					"directoryTree.currentDirectory",
+					SystemProperties.user.home
 				)
+			)
 		browseDirectory(currentDirectory)
 	}
 
 	/** stores this UI's state in the properties */
-	def saveSettings(settings:Settings) {
-		settings set ("directoryTree.currentDirectory",	currentDirectory.getPath)
+	def saveSettings(settings:Settings):Unit	= {
+		settings.set("directoryTree.currentDirectory",	currentDirectory.getPath)
 	}
 }

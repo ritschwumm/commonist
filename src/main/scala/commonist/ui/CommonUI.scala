@@ -3,8 +3,7 @@ package commonist.ui
 import java.awt.{ List => _, _ }
 import javax.swing._
 
-import scutil.base.implicits._
-import scutil.lang.ISeq
+import scutil.core.implicits._
 import scutil.gui.GridBagDSL._
 import scutil.gui.CasterInstances._
 
@@ -13,7 +12,7 @@ import commonist.data._
 import commonist.util._
 
 /** an editor for Data common to all images */
-final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) extends JPanel {
+final class CommonUI(wikiList:Seq[WikiData], licenseList:Seq[LicenseData]) extends JPanel {
 	override def getMinimumSize():Dimension =
 			new Dimension(
 				300,
@@ -50,13 +49,14 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	private val permissionEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val othersEditor	    = new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
 	private val categoriesEditor	= new JTextField(Constants.INPUT_FIELD_WIDTH) with TextComponentUndo
-	private val licenseEditor		= new JComboBox(licenseList.toArray[Object]) {
-		override def getPreferredSize():Dimension =
+	private val licenseEditor		=
+		new JComboBox(licenseList.toArray[Object]) {
+			override def getPreferredSize():Dimension =
 				new Dimension(
 					10,
 					super.getPreferredSize.height
 				)
-	}
+		}
 
 	// NOTE licenseEditor#SelectedItem is String|LicenseData
 	licenseEditor setEditable true
@@ -74,13 +74,13 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	categoriesEditor setToolTipText (Messages text "common.categories.tooltip")
 
 	// license contains the full text as a tooltip
-	private def updateLicenseTooltip() {
+	private def updateLicenseTooltip():Unit	= {
 		val	text	=
-				licenseEditor.getSelectedItem match {
-					case x:LicenseData	=> x.description
-					case x:String		=> x
-					case x				=> sys error show"unexpected license type: ${x.toString}"
-				}
+			licenseEditor.getSelectedItem match {
+				case x:LicenseData	=> x.description
+				case x:String		=> x
+				case x				=> sys error show"unexpected license type: ${x.toString}"
+			}
 		licenseEditor setToolTipText text
 	}
 	licenseEditor onActionPerformed { _ =>
@@ -95,85 +95,85 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 	setLayout(new GridBagLayout)
 
 	// header label
-	add(commonLabel,		GBC pos (1,0) size (1,1) weight (0,0) anchor WEST		fill NONE		insetsTLBR (0,0,4,0))
+	add(commonLabel,		GBC .pos (1,0)	.size (1,1)	.weight(0,0)	.anchor(WEST)		.fill(NONE)			.insetsTLBR(0,0,4,0))
 
 	// part 1
 
-	add(userLabel,			GBC pos (0,1) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
-	add(userEditor,			GBC pos (1,1) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(userLabel,			GBC .pos(0,1)	.size(1,1)	.weight(0,0)	.anchor(EAST)		.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(userEditor,			GBC .pos(1,1)	.size(1,1)	.weight(0,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(passwordLabel,		GBC pos (0,2) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(passwordEditor,		GBC pos (1,2) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(passwordLabel,		GBC .pos(0,2)	.size(1,1)	.weight(0,0)	.anchor(EAST)		.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(passwordEditor,		GBC .pos(1,2)	.size(1,1)	.weight(0,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(wikiLabel,			GBC pos (0,3) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(wikiEditor,			GBC pos (1,3) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(wikiLabel,			GBC .pos(0,3)	.size(1,1)	.weight(0,0)	.anchor(EAST)		.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(wikiEditor,			GBC .pos(1,3)	.size(1,1)	.weight(0,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
 	// separator 1
-	add(separator1,			GBC pos (0,4) size (2,1) weight (1,0) anchor CENTER		fill HORIZONTAL	insetsTLBR (2,0,2,0))
+	add(separator1,			GBC .pos(0,4)	.size(2,1)	.weight(1,0)	.anchor(CENTER)		.fill(HORIZONTAL)	.insetsTLBR(2,0,2,0))
 
 	// part 2
 
-	add(descriptionLabel,	GBC pos (0,5) size (1,1) weight (0,1) anchor NORTHEAST	fill NONE		insetsTLBR (0,4,0,4))
-	add(descriptionScroll,	GBC pos (1,5) size (1,1) weight (0,1) anchor WEST		fill BOTH		insetsTLBR (0,0,0,0))
+	add(descriptionLabel,	GBC .pos(0,5)	.size(1,1)	.weight(0,1)	.anchor(NORTHEAST)	.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(descriptionScroll,	GBC .pos(1,5)	.size(1,1)	.weight(0,1)	.anchor(WEST)		.fill(BOTH)			.insetsTLBR(0,0,0,0))
 
-	add(sourceLabel,		GBC pos (0,6) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(sourceEditor,		GBC pos (1,6) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(sourceLabel,		GBC .pos(0,6)	.size(1,1)	.weight(0,0)	.anchor(EAST)		.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(sourceEditor,		GBC .pos(1,6)	.size(1,1)	.weight(0,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(dateLabel,			GBC pos (0,7) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(dateEditor,			GBC pos (1,7) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(dateLabel,			GBC .pos(0,7)	.size(1,1)	.weight(0,0)	.anchor(EAST)		.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(dateEditor,			GBC .pos(1,7)	.size(1,1)	.weight(0,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(authorLabel,		GBC pos (0,8) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(authorEditor,		GBC pos (1,8) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(authorLabel,		GBC .pos(0,8)	.size(1,1)	.weight(0,0)	.anchor(EAST)		.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(authorEditor,		GBC .pos(1,8)	.size(1,1)	.weight(0,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(permissionLabel, 	GBC pos (0,9) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(permissionEditor,	GBC pos (1,9) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(permissionLabel, 	GBC .pos(0,9)	.size(1,1)	.weight(0,0)	.anchor(EAST)		.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(permissionEditor,	GBC .pos(1,9)	.size(1,1)	.weight(1,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(othersLabel,	 	GBC pos (0,10) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(othersEditor,		GBC pos (1,10) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(othersLabel,	 	GBC .pos(0,10)	.size(1,1)	.weight(0,0)	.anchor(EAST)		.fill(NONE)	.insetsTLBR(0,4,0,4))
+	add(othersEditor,		GBC .pos(1,10)	.size(1,1)	.weight(1,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(categoriesLabel,	GBC pos (0,11) size (1,1) weight (0,0) anchor NORTHEAST	fill NONE		insetsTLBR (0,4,0,4))
-	add(categoriesEditor,	GBC pos (1,11) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(categoriesLabel,	GBC .pos(0,11)	.size(1,1)	.weight(0,0)	.anchor(NORTHEAST)	.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(categoriesEditor,	GBC .pos(1,11)	.size(1,1)	.weight(0,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(licenseLabel,		GBC pos (0,12) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(licenseEditor,		GBC pos (1,12) size (1,1) weight (0,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(licenseLabel,		GBC .pos(0,12)	.size(1,1)	.weight(0,0)	.anchor(EAST)		.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(licenseEditor,		GBC .pos(1,12)	.size(1,1)	.weight(0,0)	.anchor(WEST)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
 	// separator 2
-	add(separator2,			GBC pos (0,13) size (2,1) weight (1,0) anchor CENTER fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(separator2,			GBC .pos(0,13)	.size(2,1)	.weight(1,0)	.anchor(CENTER)		.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
 	/** gets all data edit in this UI */
-	def getData:CommonData =
-			CommonData(
-				wikiEditor.getSelectedItem.asInstanceOf[WikiData],
-				userEditor.getText.trim,
-				new String(passwordEditor.getPassword),
-				descriptionEditor.getText,
-				dateEditor.getText,
-				sourceEditor.getText,
-				authorEditor.getText,
-				permissionEditor.getText,
-				othersEditor.getText,
-				licenseEditor.getSelectedItem match {
-					case x:String		=> LicenseData(x, "")
-					case x:LicenseData	=> x
-					case x				=> sys error show"unexpected license type: ${x.toString}"
-				},
-				categoriesEditor.getText
-			)
+	def getData():CommonData =
+		CommonData(
+			wikiEditor.getSelectedItem.asInstanceOf[WikiData],
+			userEditor.getText.trim,
+			new String(passwordEditor.getPassword),
+			descriptionEditor.getText,
+			dateEditor.getText,
+			sourceEditor.getText,
+			authorEditor.getText,
+			permissionEditor.getText,
+			othersEditor.getText,
+			licenseEditor.getSelectedItem match {
+				case x:String		=> LicenseData(x, "")
+				case x:LicenseData	=> x
+				case x				=> sys error show"unexpected license type: ${x.toString}"
+			},
+			categoriesEditor.getText
+		)
 
 	//------------------------------------------------------------------------------
 	//## Settings
 
 	/** loads this UI's state from the properties */
-	def loadSettings(settings:Settings) {
-		userEditor			setText (settings getOrElse ("userEditor.Text",			""))
-		passwordEditor		setText (settings getOrElse ("passwordEditor.Text",		""))
-		descriptionEditor	setText (settings getOrElse ("descriptionEditor.Text",	""))
-		sourceEditor		setText (settings getOrElse ("sourceEditor.Text",		""))
-		dateEditor			setText (settings getOrElse ("dateEditor.Text",			""))
-		permissionEditor	setText (settings getOrElse ("permissionEditor.Text",	""))
-		othersEditor		setText (settings getOrElse ("othersEditor.Text",		""))
-		authorEditor		setText (settings getOrElse ("authorEditor.Text",		""))
-		categoriesEditor	setText (settings getOrElse ("categoriesEditor.Text",	""))
+	def loadSettings(settings:Settings):Unit	= {
+		userEditor			setText settings.getOrElse ("userEditor.Text",			"")
+		passwordEditor		setText settings.getOrElse ("passwordEditor.Text",		"")
+		descriptionEditor	setText settings.getOrElse ("descriptionEditor.Text",	"")
+		sourceEditor		setText settings.getOrElse ("sourceEditor.Text",		"")
+		dateEditor			setText settings.getOrElse ("dateEditor.Text",			"")
+		permissionEditor	setText settings.getOrElse ("permissionEditor.Text",	"")
+		othersEditor		setText settings.getOrElse ("othersEditor.Text",		"")
+		authorEditor		setText settings.getOrElse ("authorEditor.Text",		"")
+		categoriesEditor	setText settings.getOrElse ("categoriesEditor.Text",	"")
 
 		val wikiSel		= settings get "wikiEditor.SelectedItem"
 		val wikiData	= wikiList find { it => Some(it.api) == wikiSel } getOrElse wikiList(0)
@@ -183,30 +183,30 @@ final class CommonUI(wikiList:ISeq[WikiData], licenseList:ISeq[LicenseData]) ext
 		val licenseData	= licenseList find { it => Some(it.template) == licenseSel } orElse licenseSel getOrElse ""
 		licenseEditor setSelectedItem licenseData
 
-		userEditor.getText.isEmpty cata (passwordEditor, userEditor) requestFocusInWindow ()
+		userEditor.getText.isEmpty .cata (passwordEditor, userEditor) .requestFocusInWindow ()
 	}
 
 	/** stores this UI's state in the properties */
-	def saveSettings(settings:Settings) {
-		settings set ("userEditor.Text",			userEditor.getText)
-		//settings set ("passwordEditor.Text",		passwordEditor.getText)
-		settings set ("descriptionEditor.Text",		descriptionEditor.getText)
-		settings set ("sourceEditor.Text",			sourceEditor.getText)
-		settings set ("dateEditor.Text",			dateEditor.getText)
-		settings set ("authorEditor.Text",			authorEditor.getText)
-		settings set ("permissionEditor.Text",		permissionEditor.getText)
-		settings set ("othersEditor.Text",			othersEditor.getText)
-		settings set ("categoriesEditor.Text",		categoriesEditor.getText)
+	def saveSettings(settings:Settings):Unit	= {
+		settings.set("userEditor.Text",			userEditor.getText)
+		//settings.set("passwordEditor.Text",		passwordEditor.getText)
+		settings.set("descriptionEditor.Text",		descriptionEditor.getText)
+		settings.set("sourceEditor.Text",			sourceEditor.getText)
+		settings.set("dateEditor.Text",			dateEditor.getText)
+		settings.set("authorEditor.Text",			authorEditor.getText)
+		settings.set("permissionEditor.Text",		permissionEditor.getText)
+		settings.set("othersEditor.Text",			othersEditor.getText)
+		settings.set("categoriesEditor.Text",		categoriesEditor.getText)
 
 		val wikiData	= wikiEditor.getSelectedItem.asInstanceOf[WikiData]
-		settings set ("wikiEditor.SelectedItem",	wikiData.api)
+		settings.set("wikiEditor.SelectedItem",	wikiData.api)
 
 		val	licenseSel	=
-				licenseEditor.getSelectedItem match {
-					case x:LicenseData	=> x.template
-					case x:String		=> x
-					case x				=> sys error show"unexpected license type: ${x.toString}"
-				}
-		settings set ("licenseEditor.SelectedItem",	licenseSel)
+			licenseEditor.getSelectedItem match {
+				case x:LicenseData	=> x.template
+				case x:String		=> x
+				case x				=> sys error show"unexpected license type: ${x.toString}"
+			}
+		settings.set("licenseEditor.SelectedItem",	licenseSel)
 	}
 }

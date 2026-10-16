@@ -10,8 +10,8 @@ import commonist.util._
 
 /** action events this UI sends */
 trait UploadUICallback {
-	def startUpload()
-	def stopUpload()
+	def startUpload():Unit
+	def stopUpload():Unit
 }
 
 final class UploadUI(callback:UploadUICallback) extends JPanel {
@@ -19,8 +19,8 @@ final class UploadUI(callback:UploadUICallback) extends JPanel {
 	private val abortButton		= new JButton(Messages text "upload.abort")
 
 	setLayout(new GridBagLayout)
-	add(abortButton,	GBC pos (0,0) size (1,1) weight (1,0) fill HORIZONTAL)
-	add(uploadButton,	GBC pos (1,0) size (1,1) weight (1,0) fill HORIZONTAL)
+	add(abortButton,	GBC .pos (0,0) .size (1,1) .weight (1,0) .fill(HORIZONTAL))
+	add(uploadButton,	GBC .pos (1,0) .size (1,1) .weight (1,0) .fill(HORIZONTAL))
 
 	uploadButton onActionPerformed { _ =>
 		callback.startUpload()

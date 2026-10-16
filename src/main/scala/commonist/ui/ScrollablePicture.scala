@@ -13,36 +13,36 @@ final class ScrollablePicture extends JLabel with Scrollable {
 	addMouseListener(mouse)
 	addMouseMotionListener(mouse)
 
-    def getScrollableUnitIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int = {
-    	val currentPosition	= if (orientation == SwingConstants.HORIZONTAL)	visibleRect.x else visibleRect.y
-        if (direction < 0) {
-        	val newPosition = currentPosition - (currentPosition / Constants.FULLSIZE_MAX_UNIT_INCREMENT) * Constants.FULLSIZE_MAX_UNIT_INCREMENT
-            if (newPosition == 0) Constants.FULLSIZE_MAX_UNIT_INCREMENT else newPosition
-        }
+	def getScrollableUnitIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int = {
+		val currentPosition = if (orientation == SwingConstants.HORIZONTAL) visibleRect.x else visibleRect.y
+		if (direction < 0) {
+			val newPosition = currentPosition - (currentPosition / Constants.FULLSIZE_MAX_UNIT_INCREMENT) * Constants.FULLSIZE_MAX_UNIT_INCREMENT
+			if (newPosition == 0) Constants.FULLSIZE_MAX_UNIT_INCREMENT else newPosition
+		}
 		else {
-            ((currentPosition / Constants.FULLSIZE_MAX_UNIT_INCREMENT) + 1) * Constants.FULLSIZE_MAX_UNIT_INCREMENT - currentPosition
-        }
-    }
+			((currentPosition / Constants.FULLSIZE_MAX_UNIT_INCREMENT) + 1) * Constants.FULLSIZE_MAX_UNIT_INCREMENT - currentPosition
+		}
+	}
 
-    def getScrollableBlockIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int = {
+	def getScrollableBlockIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int = {
 		if (orientation == SwingConstants.HORIZONTAL) {
 			visibleRect.width  - Constants.FULLSIZE_MAX_UNIT_INCREMENT
 		}
 		else {
 			visibleRect.height - Constants.FULLSIZE_MAX_UNIT_INCREMENT
 		}
-    }
+	}
 
-    def getPreferredScrollableViewportSize():Dimension = getPreferredSize
-    def getScrollableTracksViewportWidth():Boolean	= false
-    def getScrollableTracksViewportHeight():Boolean	= false
+	def getPreferredScrollableViewportSize():Dimension = getPreferredSize
+	def getScrollableTracksViewportWidth():Boolean	= false
+	def getScrollableTracksViewportHeight():Boolean = false
 
-    /*
-    private class MouseBorderScroll extends MouseInputAdapter {
-    	def mouseDragged(MouseEvent ev) {
-    		Rectangle r = new Rectangle(ev.getX, ev.getY, 1, 1)
-    		scrollRectToVisible(r)
-    	}
-    }
-    */
+	/*
+	private class MouseBorderScroll extends MouseInputAdapter {
+		def mouseDragged(MouseEvent ev) {
+			Rectangle r = new Rectangle(ev.getX, ev.getY, 1, 1)
+			scrollRectToVisible(r)
+		}
+	}
+	*/
 }

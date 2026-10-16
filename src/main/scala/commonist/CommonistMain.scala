@@ -1,13 +1,11 @@
 package commonist
 
 import java.io._
+import java.awt._
 import javax.imageio.ImageIO
 
-import org.simplericity.macify.eawt._
-
-import scutil.base.implicits._
 import scutil.core.implicits._
-import scutil.lang.ISeq
+import scutil.jdk.implicits._
 import scutil.platform._
 import scutil.log._
 
@@ -19,7 +17,7 @@ import commonist.util._
 
 /** the main application class */
 object CommonistMain extends Logging {
-	def onStartupError(e:Exception) {
+	def onStartupError(e:Exception):Unit	= {
 		e.printStackTrace()
 	}
 	ExceptionUtil logAllExceptions { (thread,throwable) =>
@@ -62,7 +60,7 @@ object CommonistMain extends Logging {
 	private val commonUI	= new CommonUI(wikis, licenses)
 
 	private val directoryUI	= new DirectoryUI(new DirectoryUICallback {
-		def changeDirectory(currentDirectory:File) {
+		def changeDirectory(currentDirectory:File):Unit	= {
 			doChangeDirectory(currentDirectory)
 		}
 	})
@@ -70,33 +68,44 @@ object CommonistMain extends Logging {
 	private val statusUI	= new StatusUI()
 
 	private val uploadUI	= new UploadUI(new UploadUICallback {
-		def startUpload()	{ doStartUpload()	}
-		def stopUpload()	{ doStopUpload()	}
+		def startUpload():Unit	=	{ doStartUpload()	}
+		def stopUpload():Unit	=	{ doStopUpload()	}
 	})
 
 	private val imageListUI	= new ImageListUI(programHeading, programIcon)
 
-	private val mainWindow	= new MainWindow(
+	private val mainWindow	=
+		new MainWindow(
 			commonUI, directoryUI, imageListUI, statusUI, uploadUI,
-			programHeading, programIcon, new MainWindowCallback {
-		def quit() { doQuit() }
-	})
+			programHeading, programIcon,
+			new MainWindowCallback {
+				def quit():Unit	= { doQuit() }
+			}
+		)
 
-	private val macifyApplication	= new DefaultApplication
-	macifyApplication addApplicationListener new ApplicationAdapter {
-		override def handleQuit(ev:ApplicationEvent) {
+	// TODO use setAboutHandler to display out own dialog
+
+	try {
+		Desktop.getDesktop setQuitHandler { (ev, res) =>
 			doQuit()
 		}
 	}
-	macifyApplication setApplicationIconImage ("/commonist-128.png" |> getClass.getResource |> ImageIO.read)
-	macifyApplication.removeAboutMenuItem()
-	macifyApplication.removePreferencesMenuItem()
+	catch { case e:UnsupportedOperationException =>
+		//e.printStackTrace()
+	}
+
+	try {
+		Taskbar.getTaskbar setIconImage ("/commonist-128.png" |> getClass.getResource |> ImageIO.read)
+	}
+	catch { case e:UnsupportedOperationException =>
+		//e.printStackTrace()
+	}
 
 	//-------------------------------------------------------------------------
 	//## life cycle
 
 	/** startup, called after UI constructors */
-	def init() {
+	def init():Unit	= {
 		INFO("starting up")
 
 		try { cache.load() }
@@ -115,7 +124,7 @@ object CommonistMain extends Logging {
 	}
 
 	/** shutdown */
-	def exit() {
+	def exit():Unit	= {
 		INFO("shutting down")
 
 		thumbnails	saveSettings settings
@@ -135,7 +144,7 @@ object CommonistMain extends Logging {
 	//## actions
 
 	/** Action: quit the program */
-	private def doQuit() {
+	private def doQuit():Unit	= {
 		exit()
 		System exit 0
 	}
@@ -147,22 +156,22 @@ object CommonistMain extends Logging {
 	 * Action: change to a new directory
 	 * load and display imageUIs for all files in the new directory
 	 */
-	private def doChangeDirectory(directory:File) {
+	private def doChangeDirectory(directory:File):Unit	= {
 		changeDirectory change new ChangeDirectoryTask(mainWindow, imageListUI, statusUI, thumbnails, directory)
 	}
 
 	/** Action: start uploading selected files */
-	private def doStartUpload() {
+	private def doStartUpload():Unit	= {
 		// TODO hack
 		if (!imageListUI.getData.hasSelected) {
 			INFO("uploading does not make sense when no file is selected")
 			return
 		}
-		uploadFiles change new UploadFilesTask(settingsDir, loader, commonUI.getData, imageListUI.getData, mainWindow, imageListUI, statusUI)
+		uploadFiles change new UploadFilesTask(settingsDir, loader, commonUI.getData(), imageListUI.getData, mainWindow, imageListUI, statusUI)
 	}
 
 	/** Action: stop uploading selected files */
-	private def doStopUpload() {
+	private def doStopUpload():Unit	= {
 		uploadFiles.abort()
 	}
 
@@ -170,19 +179,19 @@ object CommonistMain extends Logging {
 	//## init
 
 	/** load language file for the language or en if not successful and returns the used language */
-	private def loadMessages(language:String) {
+	private def loadMessages(language:String):Unit	= {
 		val defaultURL	= loader resourceURL "messages_default.properties" getOrError "cannot load messages_default.properties"
 		val userLangURL	= loader resourceURL (show"messages_${language}.properties")
-		Messages init (defaultURL, userLangURL)
+		Messages.init(defaultURL, userLangURL)
 	}
 
 	/** load licenses */
-	private def loadLicenses():ISeq[LicenseData] =
-			Parser parseLicenses (loader resourceURL "licenses.txt" getOrError "cannot load licenses.txt")
+	private def loadLicenses():Seq[LicenseData] =
+		Parser parseLicenses (loader resourceURL "licenses.txt" getOrError "cannot load licenses.txt")
 
 	/** load wikis */
-	private def loadWikis():ISeq[WikiData] =
-			Parser parseWikis (loader resourceURL "wikis.txt" getOrError "cannot load wikis.txt")
+	private def loadWikis():Seq[WikiData] =
+		Parser parseWikis (loader resourceURL "wikis.txt" getOrError "cannot load wikis.txt")
 
 	/*
 	// loads and executes startup.bsh

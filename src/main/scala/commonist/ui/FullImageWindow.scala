@@ -13,7 +13,7 @@ import scutil.log._
 import commonist.util._
 
 object FullImageWindow extends Logging {
-	def display(file:File, programHeading:String, programIcon:Image) {
+	def display(file:File, programHeading:String, programIcon:Image):Unit	= {
 		worker {
 			try {
 				val image = ImageIO read file
@@ -57,7 +57,7 @@ final class FullImageWindow(file:File, programHeading:String, programIcon:Image,
 	//window.MaximumSize				= window.Size
 	//statt dessen evtl. MaximizedBounds einsetzen
 
-	UIUtil2 limitAndChangeBounds (window, window.getBounds)
+	UIUtil2.limitAndChangeBounds(window, window.getBounds)
 
 	window setDefaultCloseOperation WindowConstants.DISPOSE_ON_CLOSE
 	window setLocationRelativeTo null
@@ -66,7 +66,7 @@ final class FullImageWindow(file:File, programHeading:String, programIcon:Image,
 
 	window.getRootPane.registerKeyboardAction(
 		new ActionListener {
-			def actionPerformed(ev:ActionEvent) {
+			def actionPerformed(ev:ActionEvent):Unit	= {
 				window.dispose()
 			}
 		},

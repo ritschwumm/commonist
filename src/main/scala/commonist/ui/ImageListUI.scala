@@ -24,12 +24,12 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	listPanel setLayout new BoxLayout(listPanel, BoxLayout.Y_AXIS)
 
 	private val scroll	=
-			new JScrollPane(
-				listPanel,
-				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
-			)
-	scroll setBorder (BorderFactory createEmptyBorder (0,0,0,0))
+		new JScrollPane(
+			listPanel,
+			ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+		)
+	scroll setBorder BorderFactory.createEmptyBorder (0,0,0,0)
 
 	//var	bar	= scroll.getVerticalScrollBar
 
@@ -45,12 +45,12 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	setBorder(Constants.PANEL_BORDER)
 
 	setLayout(new GridBagLayout)
-	add(selectLabel,		GBC pos(0,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL insetsTLBR (0,0,0,2))
-	add(selectNoneButton,	GBC pos(1,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL	insetsTLBR (0,0,0,2))
-	add(selectAllButton,	GBC pos(2,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL	insetsTLBR (0,2,0,2))
-	add(selectFailedButton,	GBC pos(3,0) size(1,1) weight(0.001,0)	anchor CENTER	fill HORIZONTAL	insetsTLBR (0,2,0,0))
-	add(selectStatus,		GBC pos(4,0) size(1,1) weight(1,0)		anchor CENTER	fill HORIZONTAL	insetsTLBR (0,8,0,4))
-	add(scroll,				GBC pos(0,1) size(5,1) weight(1,1)		anchor CENTER	fill BOTH		insetsTLBR (4,0,0,0))
+	add(selectLabel,		GBC .pos(0,0) .size(1,1) .weight(0.001,0)	.anchor(CENTER)	.fill(HORIZONTAL) 	.insetsTLBR(0,0,0,2))
+	add(selectNoneButton,	GBC .pos(1,0) .size(1,1) .weight(0.001,0)	.anchor(CENTER)	.fill(HORIZONTAL)	.insetsTLBR(0,0,0,2))
+	add(selectAllButton,	GBC .pos(2,0) .size(1,1) .weight(0.001,0)	.anchor(CENTER)	.fill(HORIZONTAL)	.insetsTLBR(0,2,0,2))
+	add(selectFailedButton,	GBC .pos(3,0) .size(1,1) .weight(0.001,0)	.anchor(CENTER)	.fill(HORIZONTAL)	.insetsTLBR(0,2,0,0))
+	add(selectStatus,		GBC .pos(4,0) .size(1,1) .weight(1,0)		.anchor(CENTER)	.fill(HORIZONTAL)	.insetsTLBR(0,8,0,4))
+	add(scroll,				GBC .pos(0,1) .size(5,1) .weight(1,1)		.anchor(CENTER)	.fill(BOTH)			.insetsTLBR(4,0,0,0))
 
 	//------------------------------------------------------------------------------
 	//## wiring
@@ -71,31 +71,31 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	updateSelectStatus()
 
 	/** removes all ImageUI objects */
-	def clear() {
+	def clear():Unit	= {
 		imageUIs.clear()
 		listPanel.removeAll()
 	}
 
 	/** adds a File UI */
-	def add(file:File, icon:Option[Icon], thumbnailMaxSize:Int) {
+	def add(file:File, icon:Option[Icon], thumbnailMaxSize:Int):Unit	= {
 		val	imageUI	=
-				new ImageUI(file, icon, thumbnailMaxSize, programHeading, programIcon, new ImageUICallback {
-					def updateSelectStatus() { outer.updateSelectStatus() }
-				})
+			new ImageUI(file, icon, thumbnailMaxSize, programHeading, programIcon, new ImageUICallback {
+				def updateSelectStatus():Unit	= { outer.updateSelectStatus() }
+			})
 
 		imageUIs += imageUI
 		listPanel add imageUI
 	}
 
 	/** get the select status and update the display */
-	def updateSelectStatus() {
+	def updateSelectStatus():Unit	= {
 		val allFiles		= imageUIs									map { _.getData.file }
-		val selectedFiles	= imageUIs filter { _.isUploadSelected }	map { _.getData.file }
+		val selectedFiles	= imageUIs filter { _.isUploadSelected() }	map { _.getData.file }
 		val allBytes		= (allFiles			map { _.length }).foldLeft (0L)(_+_)
 		val selectedBytes	= (selectedFiles	map { _.length }).foldLeft (0L)(_+_)
 
 		selectStatus setText (
-			Messages message (
+			Messages.message(
 				"imageList.selected",
 				int2Integer(selectedFiles.size),
 				int2Integer(allFiles.size),
@@ -109,7 +109,7 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 			ImageListData(imageUIs.toVector map { _.getData })
 
 	/** set the upload state for the ImageUI representing the given file */
-	def uploadFinished(file:File, success:Boolean) {
+	def uploadFinished(file:File, success:Boolean):Unit	= {
 		imageUIs
 		.filter		{ _.getData.file == file }
 		.foreach	{ _ setUploadSuccessful Some(success) }
@@ -119,19 +119,19 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 	//## private methods
 
 	/** checks the upload checkbox in all images */
-	private def selectAll() {
+	private def selectAll():Unit	= {
 		imageUIs foreach { _ setUploadSelected true }
 		updateSelectStatus()
 	}
 
 	/** unchecks the upload checkbox in all images */
-	private def selectNone() {
+	private def selectNone():Unit	= {
 		imageUIs foreach { _ setUploadSelected false }
 		updateSelectStatus()
 	}
 
 	/** checks for the upload checkbox in all failed images, unchecks it for the rest */
-	private def selectFailed() {
+	private def selectFailed():Unit	= {
 		imageUIs foreach { it =>
 			it setUploadSelected (it.getUploadSuccessful == Some(false))
 		}
@@ -148,36 +148,36 @@ final class ImageListUI(programHeading:String, programIcon:Image) extends JPanel
 			direction	Less than zero to scroll up/left, greater than zero for down/right.
 		*/
 		def getScrollableUnitIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int =
-				if (orientation == SwingConstants.HORIZONTAL) {
-					1
-				}
-				else if (direction < 0) {
-					val component	= getComponentAt(visibleRect.x, visibleRect.y - 2)
-					val	visible		= visibleRect.y
-					val	target		= if (component != null) component.getY else 0
-					visible - target
-				}
-				else {
-					val component	= getComponentAt(visibleRect.x, visibleRect.y + visibleRect.height)
-					val	visible		= visibleRect.y + visibleRect.height
-					val	target		= if (component != null) (component.getY + component.getHeight) else this.getHeight
-					target - visible
-				}
+			if (orientation == SwingConstants.HORIZONTAL) {
+				1
+			}
+			else if (direction < 0) {
+				val component	= getComponentAt(visibleRect.x, visibleRect.y - 2)
+				val	visible		= visibleRect.y
+				val	target		= if (component != null) component.getY else 0
+				visible - target
+			}
+			else {
+				val component	= getComponentAt(visibleRect.x, visibleRect.y + visibleRect.height)
+				val	visible		= visibleRect.y + visibleRect.height
+				val	target		= if (component != null) (component.getY + component.getHeight) else this.getHeight
+				target - visible
+			}
 
 		/**	visibleRect	The view area visible within the viewport
 			orientation	SwingConstants.VERTICAL or SwingConstants.HORIZONTAL.
 			direction	Less than zero to scroll up/left, greater than zero for down/right.
 		*/
 		def getScrollableBlockIncrement(visibleRect:Rectangle, orientation:Int, direction:Int):Int =
-				if (orientation == SwingConstants.HORIZONTAL) {
-					1
-				}
-				else if (direction < 0)	{
-					visibleRect.height min (visibleRect.y - 0)
-				}
-				else {
-					visibleRect.height min (this.getHeight  - (visibleRect.y + visibleRect.height))
-				}
+			if (orientation == SwingConstants.HORIZONTAL) {
+				1
+			}
+			else if (direction < 0)	{
+				visibleRect.height min (visibleRect.y - 0)
+			}
+			else {
+				visibleRect.height min (this.getHeight  - (visibleRect.y + visibleRect.height))
+			}
 
 		def getPreferredScrollableViewportSize():Dimension	= this.getPreferredSize
 		def getScrollableTracksViewportWidth():Boolean		= true

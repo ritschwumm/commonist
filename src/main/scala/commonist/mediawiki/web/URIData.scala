@@ -2,7 +2,7 @@ package commonist.mediawiki.web
 
 import java.net.URI
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 
 /*
 [scheme:][//authority][path][?query][#fragment]
@@ -33,26 +33,27 @@ final case class URIData(
 	port:Option[Int]
 ) {
 	def target:Option[Target]	=
-			for {
-				sch	<- scheme
-				hst	<- host
-				prt	<- port orElse defaultPort
-			}
-			yield Target(hst, prt)
+		for {
+			sch	<- scheme
+			hst	<- host
+			prt	<- port orElse defaultPort
+		}
+		yield Target(hst, prt)
 
 	def cred:Option[Cred]	=
-			userInfo map { it =>
-				it indexOf ':' match {
-					case -1	=> Cred(it, "")
-					case x	=> Cred(it.substring(0,x), it.substring(x+1))
-				}
+		userInfo map { it =>
+			it indexOf ':' match {
+				case -1	=> Cred(it, "")
+				case x	=> Cred(it.substring(0,x), it.substring(x+1))
 			}
+		}
+
 	def defaultPort:Option[Int] =
-			scheme map {
-				_ match {
-					case "http"		=> 80
-					case "https"	=> 443
-					case x			=> sys error ("unexpected scheme: " + x)
-				}
+		scheme map {
+			_ match {
+				case "http"		=> 80
+				case "https"	=> 443
+				case x			=> sys error ("unexpected scheme: " + x)
 			}
+		}
 }

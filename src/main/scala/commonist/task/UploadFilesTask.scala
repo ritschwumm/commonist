@@ -3,9 +3,8 @@ package commonist.task
 import java.io.File
 import javax.swing.JOptionPane
 
-import scutil.base.implicits._
 import scutil.core.implicits._
-import scutil.lang.ISeq
+import scutil.jdk.implicits._
 import scutil.lang.Charsets
 import scutil.gui.SwingUtil._
 import scutil.log._
@@ -32,14 +31,14 @@ final class UploadFilesTask(
 	private val imageListUILater	= new ImageListUILater(imageListUI)
 
 	private val	wiki			= commonData.wiki
-	private val	api				= new API(wiki.api, Constants.ENABLE_API_WRITE)
+	private val	api				= new API(wiki.api)
 	private val wikiName		= wiki.toString
 	private val uploadTemplates	= new UploadTemplates(loader, wiki)
 
-	override protected def execute() {
+	override protected def execute():Unit	= {
 		if (!imageListData.hasSelected) {
 			INFO("nothing to upload")
-			statusUILater halt ("status.upload.empty")
+			statusUILater.halt("status.upload.empty")
 			return
 		}
 
@@ -65,57 +64,57 @@ final class UploadFilesTask(
 		catch {
 			case e:AbortedException =>
 				ERROR("upload task aborted")
-				statusUILater halt ("status.upload.aborted")
+				statusUILater.halt("status.upload.aborted")
 			case e:Exception =>
 				ERROR("upload task error", e)
 				// TODO hack
 				// status.upload.error=Hochladen von {0} fehlgeschlagen ({1})
-				statusUILater halt ("status.upload.error", "", e.getMessage)
+				statusUILater.halt("status.upload.error", "", e.getMessage)
 		}
 	}
 
 	/*
-	statusUILater halt ("status.login.successful", wikiName)
-	statusUILater halt ("status.login.aborted")
-	statusUILater halt ("status.login.error", wikiName, e.getMessage)
-	statusUILater halt ("status.login.wrongpw", wikiName)
+	statusUILater.halt("status.login.successful", wikiName)
+	statusUILater.halt("status.login.aborted")
+	statusUILater.halt("status.login.error", wikiName, e.getMessage)
+	statusUILater.halt("status.login.wrongpw", wikiName)
 	*/
 	private def login():Boolean = {
 		INFO("logging in")
-		statusUILater indeterminate ("status.login.started", wikiName)
+		statusUILater.indeterminate("status.login.started", wikiName)
 		check()
 
-		val loginResult	= api login (commonData.user.trim, commonData.password)
+		val loginResult	= api.login(commonData.user.trim, commonData.password)
 		loginResult match {
-			case LoginSuccess(userName)	=>
+			case LoginResult.Success(userName)	=>
 				INFO("login successful", userName)
-				statusUILater halt ("status.login.successful", wikiName)
+				statusUILater.halt("status.login.successful", wikiName)
 				true
-			case LoginFailure(code)	=>
+			case LoginResult.Failure(code)	=>
 				INFO("login failed", code)
 				// TODO more detail
-				statusUILater halt ("status.login.wrongpw", wikiName)
+				statusUILater.halt("status.login.wrongpw", wikiName)
 				false
-			case LoginError(code)	=>
+			case LoginResult.Error(code)	=>
 				INFO("login error", code)
-				statusUILater halt ("status.login.error", wikiName, code)
+				statusUILater.halt("status.login.error", wikiName, code)
 				false
 		}
 	}
 
 	/*
-	statusUILater halt ("status.upload.aborted")
-	statusUILater halt ("status.upload.error", path, e.getMessage)
+	statusUILater.halt("status.upload.aborted")
+	statusUILater.halt("status.upload.error", path, e.getMessage)
 	*/
-	private def upload(common:Common):ISeq[Upload] = {
+	private def upload(common:Common):Seq[Upload] = {
 		INFO("uploading files")
 
 		// TODO normalizeTitle(FileName.fix( is stupid
 		val	selected	= imageListData.selected
 		def titleAt(index:Int):String	=
-					 if (index < 0)					null
-				else if (index >= selected.size)	null
-				else selected(index).name |> Filename.fix |> Filename.normalizeTitle |> Namespace.file
+			if		(index < 0)					null
+			else if	(index >= selected.size)	null
+			else selected(index).name |> Filename.fix |> Filename.normalizeTitle |> Namespace.file
 
 		selected.zipWithIndex map { case (imageData, index) =>
 			check()
@@ -130,132 +129,133 @@ final class UploadFilesTask(
 			val next		= titleAt(index+1)
 			val coords		= imageData.coordinates
 			val coordParts	= Parser parseCoordinates imageData.coordinates
-			val latitude	= coordParts map { _._1 } orNull;
-			val longitude	= coordParts map { _._2 } orNull;
+			val latitude	= coordParts.map { _._1 }.orNull
+			val longitude	= coordParts.map { _._2 }.orNull
 			val heading		= imageData.heading
 			val categories	= Parser parseCategories imageData.categories
 
-			val upload	= Upload(
-				name,
-				title,
-				null,
-				previous,
-				next,
-				imageData.description.trim,
-				imageData.date.trim,
-				categories,
-				coords.trim,
-				latitude,
-				longitude,
-				heading.trim
-			)
+			val upload	=
+				Upload(
+					name,
+					title,
+					null,
+					previous,
+					next,
+					imageData.description.trim,
+					imageData.date.trim,
+					categories,
+					coords.trim,
+					latitude,
+					longitude,
+					heading.trim
+				)
 
-			statusUILater halt ("status.upload.started", fileName)
+			statusUILater.halt("status.upload.started", fileName)
 			val callback	= new MyUploadCallback(mainWindow, statusUILater, fileLength, fileName, name)
-			val text		= uploadTemplates imageDescription (common, upload)
-			val	watch		= true
+			val text		= uploadTemplates.imageDescription(common, upload)
 
-			val uploaded	= api upload (name, "", text, watch, file, callback)
+			val uploaded	= api.upload(name, "", text, file, callback)
 			uploaded match {
-				case UploadSuccess(fileName, pageTitle)	=>
+				case UploadResult.Success(fileName, pageTitle)	=>
 					INFO("upload successful", fileName, pageTitle)
-					statusUILater halt ("status.upload.successful", fileName, pageTitle)
-					imageListUILater uploadFinished (file, true)
-					upload copy (name=fileName, title=pageTitle)
-				case UploadAborted(warnings)	=>
+					statusUILater.halt("status.upload.successful", fileName, pageTitle)
+					imageListUILater.uploadFinished(file, true)
+					upload.copy(name=fileName, title=pageTitle)
+				case UploadResult.Aborted(warnings)	=>
 					ERROR("upload aborted", fileName)
-					statusUILater halt ("status.upload.error", fileName, "aborted")
-					imageListUILater uploadFinished (file, false)
+					statusUILater.halt("status.upload.error", fileName, "aborted")
+					imageListUILater.uploadFinished(file, false)
 					// TODO just remove it from the list?
 					// TODO more detail
 					upload copy (error = show"aborted: ${renderWarnings(warnings)}")
-				case UploadFailure(code)	=>
+				case UploadResult.Failure(code)	=>
 					// TODO more detail
 					ERROR("upload failed", fileName, code)
-					statusUILater halt ("status.upload.error", fileName, code)
-					imageListUILater uploadFinished (file, false)
+					statusUILater.halt("status.upload.error", fileName, code)
+					imageListUILater.uploadFinished(file, false)
 					upload copy (error=code)
-				case UploadError(code)	=>
+				case UploadResult.Error(code)	=>
 					ERROR("upload error", fileName, code)
-					statusUILater halt ("status.upload.error", fileName, code)
-					imageListUILater uploadFinished (file, false)
+					statusUILater.halt("status.upload.error", fileName, code)
+					imageListUILater.uploadFinished(file, false)
 					upload copy (error=code)
 			}
 		}
 	}
 
 	private def renderWarnings(warnings:Set[UploadWarning]):String	=
-			warnings map renderWarning mkString ", "
+		warnings map renderWarning mkString ", "
 
 	private def renderWarning(warning:UploadWarning):String	= warning match {
-		case UploadWarningWasDeleted(name)			=> renderWarning("was-deleted", name)
-		case UploadWarningExists(name)				=> renderWarning("exists", name)
-		case UploadWarningDuplicate(names)			=> names map { renderWarning("duplicate", _) } mkString ", "
-		case UploadWarningDuplicateArchive(name)	=> renderWarning("duplicate-archive", name)
+		case UploadWarning.WasDeleted(name)			=> renderWarning("was-deleted", name)
+		case UploadWarning.Exists(name)				=> renderWarning("exists", name)
+		case UploadWarning.Duplicate(names)			=> names map { renderWarning("duplicate", _) } mkString ", "
+		case UploadWarning.DuplicateArchive(name)	=> renderWarning("duplicate-archive", name)
 	}
 
 	private def renderWarning(key:String, conflict:String):String	=
-			key + ": " + renderFile(conflict)
+		key + ": " + renderFile(conflict)
 
 	private def renderFile(name:String):String	=
-			"[[:" + (Namespace file name) + "]]"
+		"[[:" + (Namespace file name) + "]]"
 
 	private def renderLink(s:String):String	=
-			"[[" + s + "]]"
+		"[[" + s + "]]"
 
 	/*
-	statusUILater halt ("status.gallery.error", e.getMessage)
-	statusUILater halt ("status.gallery.editConflict",	"[[" + title + "]]")
+	statusUILater.halt("status.gallery.error", e.getMessage)
+	statusUILater.halt("status.gallery.editConflict",	"[[" + title + "]]")
 	*/
-	def gallery(common:Common, uploads:ISeq[Upload]) = {
+	def gallery(common:Common, uploads:Seq[Upload]) = {
 		INFO("changing gallery")
 		check()
 
 		val	title	= Namespace user (commonData.user + "/gallery")
 		val (sucesses, failures)	= uploads partition { _.error == null }
 
-		val	batch	= Batch(
-			uploads.toJList,
-			sucesses.toJList,
-			failures.toJList
-		)
-		val summary	= uploadTemplates gallerySummary		(commonist.BuildInfo.version, failures.size)
-		val text	= uploadTemplates galleryDescription	(common, batch)
+		val	batch	=
+			Batch(
+				uploads.toJList,
+				sucesses.toJList,
+				failures.toJList
+			)
+		val summary	= uploadTemplates.gallerySummary		(commonist.BuildInfo.version, failures.size)
+		val text	= uploadTemplates.galleryDescription	(common, batch)
 
 		// backup gallery text
 		val backup	= settingsDir / "gallery.txt"
 		INFO("writing gallery", backup)
-		backup writeString (Charsets.utf_8, text)
+		backup.writeString(Charsets.utf_8, text)
 
-		statusUILater indeterminate ("status.gallery.loading", renderLink(title))
-		val editResult	= api edit (title, summary, None, { oldText =>
-			statusUILater indeterminate ("status.gallery.storing", renderLink(title))
+		statusUILater.indeterminate("status.gallery.loading", renderLink(title))
+		val editResult	= api.edit(title, summary, None, { oldText =>
+			statusUILater.indeterminate("status.gallery.storing", renderLink(title))
 			val newText	= text + "\n\n" + (TextUtil2 trimLF oldText)
 			Some(newText)
 		})
 		editResult match {
-			case EditSuccess(pageTitle)	=>
-				statusUILater halt ("status.gallery.updated",	renderLink(title))
-			case EditAborted		=>
+			case EditResult.Success(pageTitle)	=>
+				statusUILater.halt("status.gallery.updated",	renderLink(title))
+			case EditResult.Aborted		=>
 				// will not happen
-			case EditFailure(code)	=>
+			case EditResult.Failure(code)	=>
 				// TODO more detail
-				statusUILater halt ("status.gallery.error",		code + " in " + renderLink(title))
-			case EditError(code)	=>
-				statusUILater halt ("status.gallery.error",		code + " in " + renderLink(title))
+				statusUILater.halt("status.gallery.error",		code + " in " + renderLink(title))
+			case EditResult.Error(code)	=>
+				statusUILater.halt("status.gallery.error",		code + " in " + renderLink(title))
 		}
 	}
 
 	/*
-	statusUILater halt ("status.logout.error", wikiName, e.getMessage)
-	if (!success) { statusUILater halt ("status.logout.failed", wikiName); return }
+	statusUILater.halt("status.logout.error", wikiName, e.getMessage)
+	if (!success) { statusUILater.halt("status.logout.failed", wikiName); return }
 	*/
 	/*
 	private def logout() {
 		INFO("logging out")
-		statusUILater indeterminate ("status.logout.started", wiki)
+		statusUILater.indeterminate("status.logout.started", wiki)
 		api.logout()
-		statusUILater halt ("status.logout.successful", wikiName)
+		statusUILater.halt("status.logout.successful", wikiName)
 	}
 	*/
 
@@ -263,10 +263,10 @@ final class UploadFilesTask(
 
 	/** asks the user when something about a file upload is unclear */
 	private class MyUploadCallback(mainWindow:MainWindow, statusUILater:StatusUILater, fileLength:Long, fileName:String, name:String) extends UploadCallback {
-		def progress(bytes:Long) {
+		def progress(bytes:Long):Unit	= {
 			// System.err.println("written " + bytes + " of " + ofBytes)
 			val percent	= (bytes * 100 / fileLength).toInt
-			statusUILater determinate ("status.upload.progress", percent, 100, fileName, int2Integer(percent))
+			statusUILater.determinate("status.upload.progress", percent, 100, fileName, int2Integer(percent))
 			// rate = (bytes - oldBytes) / (time  - oldTime)
 		}
 
@@ -274,27 +274,28 @@ final class UploadFilesTask(
 		def ignore(problems:Set[UploadWarning]):Boolean	= {
 			require(problems.nonEmpty,	"asking the user about no problem is problematic")
 
-			val title	= Messages message ("query.upload.title", name)
+			val title	= Messages.message("query.upload.title", name)
 
-			val content	= problems
-					.map {
-						case UploadWarningExists(conflict)				=> (0, "query.upload.ignoreFileexists.message",			conflict)
-						case UploadWarningWasDeleted(conflict)			=> (1, "query.upload.ignoreFilewasdeleted.message",		conflict)
-						case UploadWarningDuplicate(conflicts)			=> (2, "query.upload.ignoreDuplicate.message",			conflicts mkString ", ")
-						case UploadWarningDuplicateArchive(conflict)	=> (3, "query.upload.ignoreDuplicateArchive.message",	conflict)
-					}
-					.toVector
-					.sortBy	{ case (prio, _, _)			=> prio	}
-					.map	{ case (_, key, conflict)	=> Messages message (key, name, conflict)	}
-					.mkString ("\n")
+			val content	=
+				problems
+				.map {
+					case UploadWarning.Exists(conflict)				=> (0, "query.upload.ignoreFileexists.message",			conflict)
+					case UploadWarning.WasDeleted(conflict)			=> (1, "query.upload.ignoreFilewasdeleted.message",		conflict)
+					case UploadWarning.Duplicate(conflicts)			=> (2, "query.upload.ignoreDuplicate.message",			conflicts mkString ", ")
+					case UploadWarning.DuplicateArchive(conflict)	=> (3, "query.upload.ignoreDuplicateArchive.message",	conflict)
+				}
+				.toVector
+				.sortBy	{ case (prio, _, _)			=> prio	}
+				.map	{ case (_, key, conflict)	=> Messages.message(key, name, conflict)	}
+				.mkString ("\n")
 
-			val body	= Messages message ("query.upload.body", name, content)
+			val body	= Messages.message("query.upload.body", name, content)
 
 			try {
-				edtWait {
+				edt {
 					JOptionPane.YES_OPTION ==
-					(JOptionPane showConfirmDialog (mainWindow.window, body, title, JOptionPane.YES_NO_OPTION))
-				}
+					JOptionPane.showConfirmDialog(mainWindow.window, body, title, JOptionPane.YES_NO_OPTION)
+				}()
 			}
 			catch { case e:Exception =>
 				ERROR("callback error", e)

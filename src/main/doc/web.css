@@ -91,14 +91,6 @@ ul#navigation li {
 
 /*----------------------------------------------------------------------------*/
 
-#webstart {
-	font-size: 3em;
-	float: right;
-	margin: 0;
-	padding: 0.5em 1em;
-	background: #eeeeee;
-}
-
 .hint {
 	font-style: italic;
 }

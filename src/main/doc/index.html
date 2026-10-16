@@ -9,7 +9,6 @@
 <body>
 <h1>commonist</h1>
 
-<div id="webstart"><a href="ws/commonist.jnlp">start</a></div>
 <h2>abstract</h2>
 <p>
 the commonist is a simple upload client for <a href="https://www.mediawiki.org/">mediawiki</a> sites, primarily <a href="https://commons.wikimedia.org">wikimedia commons</a>.
@@ -23,14 +22,14 @@ the commonist is released under the <a href="https://www.gnu.org/copyleft/gpl.ht
 
 <h2>requirements</h2>
 <table>
-<tr><td>JDK 1.8.0 or newer</td><td><a href="https://www.oracle.com/technetwork/java/javase/overview/index.html">https://www.oracle.com/technetwork/java/javase/overview/index.html</a></td></tr>
+<tr><td>JDK 11 or newer</td><td><a href="https://adoptopenjdk.net/">https://adoptopenjdk.net/</a></td></tr>
 <tr><td>MediaWiki 1.16 or newer</td><td><a href="https://www.mediawiki.org/">https://www.mediawiki.org</a></td></tr>
 </table>
 
 <h2>download</h2>
 <ul>
 <li><a href="$(project)-$(version).zip">$(project)-$(version).zip</a> generic binary</li>
-<li><a href="$(project)-$(version).jar">$(project)-$(version).jar</a> capsule binary</li>
+<li><a href="$(project)-$(version).jar">$(project)-$(version).jar</a> kapsel binary</li>
 <li><a href="$(project)-$(version).app.zip">$(project)-$(version).app.zip</a> osx application</li>
 </ul>
 <p>
@@ -38,14 +37,12 @@ see <a href="changes.txt">changes.txt</a> for changes in version $(version).
 </p>
 
 <h2>usage</h2>
-<ol>
-<li>click <a href="ws/commonist.jnlp">this link</a> to start the commonist if you have <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/javaws/">webstart</a> installed.
-	the webstart files of the commonist are signed with a snake oil certificate, so an ugly warning will pop up.</li>
-<li>alternatively, you can download <code>$(project)-$(version).zip</code> and unpack it into a new directory.
-	cd into this directory and start the commonist with <code>bin/commonist</code> (on linux or mac os x),
-    or <code>bin\commonist.bat</code> (on windows).<br />
-	note: on windows, you may have to click away a requester at program startup with <code>continue</code>.</li>
-</ol>
+<p>
+you can download <code>$(project)-$(version).zip</code> and unpack it into a new directory.
+cd into this directory and start the commonist with <code>bin/commonist</code> (on linux or mac os x),
+or <code>bin\commonist.bat</code> (on windows).<br />
+note: on windows, you may have to click away a requester at program startup with <code>continue</code>.
+</p>
 
 <h2>customization</h2>
 <h3>settings directory</h3>

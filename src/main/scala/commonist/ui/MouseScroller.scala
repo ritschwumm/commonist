@@ -17,7 +17,7 @@ final class MouseScroller(picture:JComponent) extends MouseInputAdapter {
 
 	//def mouseClicked(ev:MouseEvent) {}
 
-	override def mousePressed(ev:MouseEvent) {
+	override def mousePressed(ev:MouseEvent):Unit	= {
 		x	= ev.getX
 		y	= ev.getY
 	}
@@ -27,27 +27,27 @@ final class MouseScroller(picture:JComponent) extends MouseInputAdapter {
 	//def mouseExited(ev:MouseEvent) {}
 
 	override def mouseDragged(ev:MouseEvent):Unit	=
-			this.picture.getParent match {
-				case parent:JViewport =>
-					val viewPort	= parent.asInstanceOf[JViewport]
+		this.picture.getParent match {
+			case parent:JViewport =>
+				val viewPort	= parent.asInstanceOf[JViewport]
 
-					val full	= this.picture.getSize()
-					val extent	= viewPort.getExtentSize
-					val pos		= viewPort.getViewPosition
+				val full	= this.picture.getSize()
+				val extent	= viewPort.getExtentSize
+				val pos		= viewPort.getViewPosition
 
-					pos translate (x - ev.getX, y - ev.getY)
+				pos.translate(x - ev.getX, y - ev.getY)
 
-					val posLimits	=
-							new Dimension(
-								full.width  - extent.width,
-								full.height - extent.height
-							)
-					val posLimited	= UIUtil2 limitToBounds (pos, posLimits)
+				val posLimits	=
+						new Dimension(
+							full.width  - extent.width,
+							full.height - extent.height
+						)
+				val posLimited	= UIUtil2.limitToBounds(pos, posLimits)
 
-					viewPort setViewPosition posLimited
+				viewPort setViewPosition posLimited
 
-				case _ =>
-			}
+			case _ =>
+		}
 
 	//def mouseMoved(ev:MouseEvent) {}
 }

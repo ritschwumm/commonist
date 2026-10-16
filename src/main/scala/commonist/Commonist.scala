@@ -1,12 +1,11 @@
 package commonist
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.gui.SwingUtil.edt
 import scutil.platform.ExceptionUtil
 import scutil.log._
-
 object Commonist extends Logging {
-	def main(args:Array[String]) {
+	def main(args:Array[String]):Unit	= {
 		ExceptionUtil logAllExceptions { (thread,throwable) =>
 			ERROR("unexpected error", thread, throwable)
 		}

@@ -8,7 +8,7 @@ import java.awt.image._
 import javax.swing._
 import javax.imageio._
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.io.implicits._
 import scutil.log._
 import scutil.gui.implicits._
@@ -20,43 +20,43 @@ import commonist.util.Settings
 final class Thumbnails(cache:FileCache) extends Logging {
 	var	maxSize	= Constants.THUMBNAIL_DEFAULT_SIZE
 
-	def loadSettings(settings:Settings) {
-		maxSize	= settings getIntOrElse ("thumbnails.maxSize", maxSize)
+	def loadSettings(settings:Settings):Unit	= {
+		maxSize	= settings.getIntOrElse("thumbnails.maxSize", maxSize)
 	}
 
-	def saveSettings(settings:Settings) {
-		settings setInt ("thumbnails.maxSize", maxSize)
+	def saveSettings(settings:Settings):Unit	= {
+		settings.setInt("thumbnails.maxSize", maxSize)
 	}
 
 	def getMaxSize:Int	= maxSize
 
 	/** creates a thumbnail Icon from an image File or returns null */
 	def thumbnail(file:File):Option[Icon] =
-			try {
-				cachedThumbnail(file) map { new ImageIcon(_) }
-			}
-			catch { case e:Exception =>
-				INFO("cannot create thumbnail", file, e)
-				None
-			}
+		try {
+			cachedThumbnail(file) map { new ImageIcon(_) }
+		}
+		catch { case e:Exception =>
+			INFO("cannot create thumbnail", file, e)
+			None
+		}
 
 	/** make a thumbnail or return a cached version */
 	private def cachedThumbnail(file:File):Option[Image] =
-			// BETTER give the cache a loader instead of talking to it here
-			// try to get cached thumb
-			(cache get file) map { ImageIO read _ } orElse
-			// read original and make thumb
-			readSubsampled(file) map makeThumbnail doto {
-				_ foreach { thumb =>
-					// cache thumb
-					val thumbFile2	= cache put file
-					val	success		= ImageIO write (thumb, "jpg", thumbFile2)
-					if (!success) {
-						WARN("could not create thumbnail", thumbFile2)
-						cache remove file
-					}
+		// BETTER give the cache a loader instead of talking to it here
+		// try to get cached thumb
+		(cache get file) map { ImageIO read _ } orElse
+		// read original and make thumb
+		readSubsampled(file) map makeThumbnail doto {
+			_ foreach { thumb =>
+				// cache thumb
+				val thumbFile2	= cache put file
+				val	success		= ImageIO.write(thumb, "jpg", thumbFile2)
+				if (!success) {
+					WARN("could not create thumbnail", thumbFile2)
+					cache remove file
 				}
 			}
+		}
 
 	/** makes a thumbnail from an image */
 	private def makeThumbnail(image:BufferedImage):BufferedImage = {
@@ -74,45 +74,47 @@ final class Thumbnails(cache:FileCache) extends Logging {
 
 		// normalize image type
 		val normalizeTypes	=
-				Set(
-					BufferedImage.TYPE_3BYTE_BGR,
-					BufferedImage.TYPE_BYTE_INDEXED,
-					BufferedImage.TYPE_CUSTOM
-				)
+			Set(
+				BufferedImage.TYPE_3BYTE_BGR,
+				BufferedImage.TYPE_BYTE_INDEXED,
+				BufferedImage.TYPE_CUSTOM
+			)
 		val image2 =
-				if (normalizeTypes contains image.getType) {
-					val normalized	=
-							new BufferedImage(
-								image.getWidth,
-								image.getHeight,
-								BufferedImage.TYPE_3BYTE_BGR
-							)
-					normalized doto {
-						_.getGraphics use { g =>
-							g drawImage (image, 0, 0, null)
-						}
+			if (normalizeTypes contains image.getType) {
+				val normalized	=
+					new BufferedImage(
+						image.getWidth,
+						image.getHeight,
+						BufferedImage.TYPE_3BYTE_BGR
+					)
+				normalized doto {
+					_.getGraphics use { g =>
+						g.drawImage(image, 0, 0, null)
 					}
 				}
-				else {
-					image
-				}
+			}
+			else {
+				image
+			}
 
-		val size	= new Dimension(
-				(image2.getWidth * scale).toInt,
-				(image2.getHeight * scale).toInt)
+		val size	=
+			new Dimension(
+				(image2.getWidth	* scale).toInt,
+				(image2.getHeight	* scale).toInt
+			)
 		val	thumb	=
-				new BufferedImage(
-					size.width,
-					size.height,
-					image2.getType
-				)
+			new BufferedImage(
+				size.width,
+				size.height,
+				image2.getType
+			)
 		val op		=
-				new AffineTransformOp(
-					new AffineTransform(scale, 0, 0, scale, 0, 0),	// AffineTransform.getScaleInstance(sx, sy)
-					AffineTransformOp.TYPE_BILINEAR					// TYPE_NEAREST_NEIGHBOR, TYPE_BILINEAR, TYPE_BICUBIC
-				)
+			new AffineTransformOp(
+				new AffineTransform(scale, 0, 0, scale, 0, 0),	// AffineTransform.getScaleInstance(sx, sy)
+				AffineTransformOp.TYPE_BILINEAR					// TYPE_NEAREST_NEIGHBOR, TYPE_BILINEAR, TYPE_BICUBIC
+			)
 
-		op filter (image2, thumb)
+		op.filter(image2, thumb)
 		thumb
 	}
 
@@ -125,29 +127,31 @@ final class Thumbnails(cache:FileCache) extends Logging {
 		}
 		stream use { stream =>
 			val it	= ImageIO getImageReaders stream
+			// BETTER more elegant
 			if (!it.hasNext) {
 				ERROR("cannot get ImageReader for file", input)
-				return None
+				None
 			}
+			else {
+				it.next use { reader =>
+					reader.setInput(stream, true, true)
 
-			it.next use { reader =>
-				reader setInput (stream, true, true)
+					val param		= reader.getDefaultReadParam
 
-				val param		= reader.getDefaultReadParam
+					val imageIndex	= 0
 
-				val imageIndex	= 0
+					val sizeX		= reader getWidth	imageIndex
+					val sizeY		= reader getHeight	imageIndex
+					val size		= sizeX min sizeY
+					val scale		= size / maxSize
+					val sampling	= JInteger highestOneBit (scale * 100 / Constants.THUMBNAIL_SCALE_HEADROOM)
 
-				val sizeX		= reader getWidth	imageIndex
-				val sizeY		= reader getHeight	imageIndex
-				val size		= sizeX min sizeY
-				val scale		= size / maxSize
-				val sampling	= JInteger highestOneBit (scale * 100 / Constants.THUMBNAIL_SCALE_HEADROOM)
+					// BETTER could scale at load time!
+					if (sampling > 1)	param.setSourceSubsampling(sampling, sampling, 0, 0)
+					val image	= reader.read(imageIndex, param)
 
-				// BETTER could scale at load time!
-				if (sampling > 1)	param setSourceSubsampling (sampling, sampling, 0, 0)
-				val image	= reader read	(imageIndex, param)
-
-				Some(image)
+					Some(image)
+				}
 			}
 		}
 	}

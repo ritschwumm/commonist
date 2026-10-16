@@ -17,22 +17,22 @@ final class Settings(file:File) extends Logging {
 	def getOrElse(name:String, defaultValue:String):String = get(name) getOrElse defaultValue
 
 	/** set a property */
-	def set(name:String, value:String) {
-		propertiesMap	= propertiesMap updated (name, value)
+	def set(name:String, value:String):Unit	= {
+		propertiesMap	= propertiesMap.updated(name, value)
 	}
 
 	def getInt(name:String):Option[Int]	=
-			get(name) map { Integer.parseInt(_) }
+		get(name) map { Integer.parseInt(_) }
 
 	def getIntOrElse(name:String, defaultValue:Int):Int	=
-			getInt(name) getOrElse defaultValue
+		getInt(name) getOrElse defaultValue
 
-	def setInt(name:String, value:Int) {
+	def setInt(name:String, value:Int):Unit	= {
 		set(name, value.toString)
 	}
 
 	/** loads our properties file */
-	def load() {
+	def load():Unit	= {
 		if (file.exists) {
 			propertiesMap = PropertiesUtil loadFile file
 		}
@@ -42,7 +42,7 @@ final class Settings(file:File) extends Logging {
 	}
 
 	/** saves our properties file */
-	def save() {
-		PropertiesUtil saveFile (file, propertiesMap)
+	def save():Unit	= {
+		PropertiesUtil.saveFile(file, propertiesMap)
 	}
 }

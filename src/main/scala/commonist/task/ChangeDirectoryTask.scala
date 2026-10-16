@@ -2,7 +2,7 @@ package commonist.task
 
 import java.io.File
 
-import scutil.core.implicits._
+import scutil.jdk.implicits._
 import scutil.log._
 
 import commonist._
@@ -15,7 +15,7 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 	private val imageListUILater	= new ImageListUILater(imageListUI)
 	private val statusUILater		= new StatusUILater(statusUI)
 
-	override protected def execute() {
+	override protected def execute():Unit	= {
 		DEBUG("clear")
 
 		imageListUILater.clear()
@@ -23,8 +23,13 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 
 		DEBUG("listFiles")
 		val listed	= directory
-				.childrenWhere	{ file:File => file.isFile && !file.isHidden }
-				.getOrElse		{ WARN("directory does not exist", directory); return }
+			.childrenWhere	{ (file:File) => file.isFile && !file.isHidden }
+			match {
+				case Some(x)	=> x
+				case None	=>
+					WARN("directory does not exist", directory)
+					return
+			}
 
 		val sorted	= listed sortBy { _.getPath }
 
@@ -38,13 +43,13 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 			for (file <- readable) {
 				check()
 
-				statusUILater determinate ("imageList.loading", cur, max, file.getPath, int2Integer(cur), int2Integer(max))
+				statusUILater.determinate("imageList.loading", cur, max, file.getPath, int2Integer(cur), int2Integer(max))
 				cur	= cur + 1
 
 				// using Thread.interrupt while this is running kills the EDT??
 				val thumbnail			= thumbnails thumbnail file
 				val thumbnailMaxSize	= thumbnails.getMaxSize
-				imageListUILater add (file, thumbnail, thumbnailMaxSize)
+				imageListUILater.add(file, thumbnail, thumbnailMaxSize)
 				try { Thread.sleep(100) }
 				catch { case e:InterruptedException => WARN("interrupted", e) }
 
@@ -61,7 +66,7 @@ final class ChangeDirectoryTask(mainWindow:MainWindow, imageListUI:ImageListUI, 
 				}
 			}
 
-			statusUILater halt ("imageList.loaded", directory.getPath, int2Integer(max))
+			statusUILater.halt("imageList.loaded", directory.getPath, int2Integer(max))
 		}
 		catch { case e:AbortedException =>
 			INFO("loading image list aborted")

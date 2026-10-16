@@ -1,7 +1,7 @@
 package commonist.mediawiki
 
 trait UploadCallback {
-	def progress(bytes:Long)
+	def progress(bytes:Long):Unit
 
 	/** whether to ignore the given warnings, if false the upload is aborted */
 	def ignore(warnings:Set[UploadWarning]):Boolean

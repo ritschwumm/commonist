@@ -21,7 +21,7 @@ trait TextComponentUndo extends Logging { self:JTextComponent =>
 	undoManager setLimit LIMIT
 
 	private val propertyListener	= new PropertyChangeListener {
-		def propertyChange(ev:PropertyChangeEvent) {
+		def propertyChange(ev:PropertyChangeEvent):Unit	= {
 			if (ev.getPropertyName == "document") {
 				val oldDocument	= ev.getOldValue.asInstanceOf[Document]
 				val newDocument	= ev.getNewValue.asInstanceOf[Document]
@@ -32,13 +32,13 @@ trait TextComponentUndo extends Logging { self:JTextComponent =>
 	}
 
 	private val undoableEditListener = new UndoableEditListener() {
-		def undoableEditHappened(ev:UndoableEditEvent) {
+		def undoableEditHappened(ev:UndoableEditEvent):Unit	= {
 			undoManager addEdit ev.getEdit
 		}
 	}
 
 	private val undoAction = new AbstractAction {
-		def actionPerformed(ev:ActionEvent) {
+		def actionPerformed(ev:ActionEvent):Unit	= {
 			try {
 				if (undoManager.canUndo) {
 					undoManager.undo()
@@ -51,7 +51,7 @@ trait TextComponentUndo extends Logging { self:JTextComponent =>
 	}
 
 	private val redoAction = new AbstractAction {
-		def actionPerformed(ev:ActionEvent) {
+		def actionPerformed(ev:ActionEvent):Unit	= {
 			try {
 				if (undoManager.canRedo) {
 					undoManager.redo()
@@ -66,19 +66,19 @@ trait TextComponentUndo extends Logging { self:JTextComponent =>
 	// def getLimit	= undoManager.getLimit
 	// def setLimit(limit:Int) { undoManager setLimit limit }
 
-	private def install(text:JTextComponent) {
+	private def install(text:JTextComponent):Unit	= {
 		text addPropertyChangeListener propertyListener
 
 		val document	= text.getDocument
 		document addUndoableEditListener undoableEditListener
 
 		val actionMap	= text.getActionMap
-		actionMap put (UNDO_ACTION,	undoAction)
-		actionMap put (REDO_ACTION,	redoAction)
+		actionMap.put(UNDO_ACTION,	undoAction)
+		actionMap.put(REDO_ACTION,	redoAction)
 
 		val inputMap	= text.getInputMap
-		inputMap put(UNDO_KEY_STROKE, UNDO_ACTION)
-		inputMap put(REDO_KEY_STROKE, REDO_ACTION)
+		inputMap.put(UNDO_KEY_STROKE, UNDO_ACTION)
+		inputMap.put(REDO_KEY_STROKE, REDO_ACTION)
 	}
 
 	/*

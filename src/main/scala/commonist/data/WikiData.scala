@@ -4,8 +4,8 @@ package commonist.data
 final case class WikiData(family:String, site:Option[String],	api:String) {
 	// used in the combo box
 	override def toString =
-			site match {
-				case Some(name)	=> family + ":" + name
-				case None		=> family
-			}
+		site match {
+			case Some(name)	=> family + ":" + name
+			case None		=> family
+		}
 }

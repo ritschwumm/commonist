@@ -9,7 +9,7 @@ import scutil.gui.CasterInstances._
 
 /** swing UI utility functions */
 object UIUtil2 {
-	def scrollVisibleOnFocus(focusSource:JComponent, visibleTarget:JComponent) {
+	def scrollVisibleOnFocus(focusSource:JComponent, visibleTarget:JComponent):Unit	= {
 		focusSource onFocusGained { _ =>
 			val bounds	= new Rectangle(0, 0, visibleTarget.getWidth, visibleTarget.getHeight)
 			visibleTarget scrollRectToVisible bounds
@@ -17,11 +17,12 @@ object UIUtil2 {
 		}
 	}
 
-	private val TAB_PLAIN	= KeyStroke getKeyStroke (KeyEvent.VK_TAB, 0)
-	private val TAB_SHIFT	= KeyStroke getKeyStroke (KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK)
-	def tabMovesFocus(target:JComponent) {
-		target setFocusTraversalKeys (KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,  JUCollections singleton TAB_PLAIN)
-		target setFocusTraversalKeys (KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, JUCollections singleton TAB_SHIFT)
+	private val TAB_PLAIN	= KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0)
+	private val TAB_SHIFT	= KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_DOWN_MASK)
+
+	def tabMovesFocus(target:JComponent):Unit	= {
+		target.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,  JUCollections singleton TAB_PLAIN)
+		target.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, JUCollections singleton TAB_SHIFT)
 
 		/*
 		// @see http://www.javalobby.org/java/forums/t20457.html
@@ -51,7 +52,7 @@ object UIUtil2 {
 	}
 
 	/** sets window bounds limited to the screen estate */
-	def limitAndChangeBounds(window:Window, bounds:Rectangle) {
+	def limitAndChangeBounds(window:Window, bounds:Rectangle):Unit	= {
 		val screen = screenRect(
 				Toolkit.getDefaultToolkit,
 				window.getGraphicsConfiguration)
@@ -83,7 +84,7 @@ object UIUtil2 {
 	}
 
 	/** scrolls a JScrollPane such that the center of the content is the center of the viewPort */
-	def scrollToCenter(scroll:JScrollPane) {
+	def scrollToCenter(scroll:JScrollPane):Unit	= {
 		val vp			= scroll.getViewport
 		val viewSize	= vp.getViewSize
 		val extentSize	= vp.getExtentSize
@@ -96,13 +97,15 @@ object UIUtil2 {
 	}
 
 	/** limits a Point to the insides of a Rectangle */
-	def limitToBounds(point:Point, bounds:Dimension):Point = new Point(
+	def limitToBounds(point:Point, bounds:Dimension):Point =
+		new Point(
 			limitToBounds(point.x, 0, bounds.width),
-			limitToBounds(point.y, 0, bounds.height))
+			limitToBounds(point.y, 0, bounds.height)
+		)
 
 	/** limits an int value to given lower and upper bounds */
 	private def limitToBounds(value:Int, minInclusive:Int, maxExclusive:Int):Int =
-				 if (value < minInclusive)	minInclusive
-			else if (value >= maxExclusive)	maxExclusive-1
-			else							value
+		if		(value < minInclusive)	minInclusive
+		else if	(value >= maxExclusive)	maxExclusive-1
+		else							value
 }

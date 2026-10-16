@@ -4,7 +4,7 @@ import scutil.log._
 
 final class TaskVar[T <: Task] {
 	private var	current:Option[T]	= None
-	def change(newTask:T) {
+	def change(newTask:T):Unit	= {
 		val	old	= current
 		current	= Some(newTask)
 		old match {
@@ -12,7 +12,7 @@ final class TaskVar[T <: Task] {
 			case None		=> newTask.start()
 		}
 	}
-	def abort() {
+	def abort():Unit	= {
 		current foreach { _.abort() }
 	}
 }
@@ -24,53 +24,52 @@ abstract class Task extends Logging { outer =>
 	private var alive:Boolean	= false
 	private var aborted:Boolean	= false
 
-	private val thread:Thread = new Thread(
-		new Runnable {
-			def run() {
-				outer.run()
-			}
-		}
-	)
+	private val thread:Thread = new Thread(() => outer.run())
 	// see http://java.sun.com/developer/JDCTechTips/2005/tt0727.html#1
 	thread setPriority Thread.NORM_PRIORITY
 
 	private var waitFor:Thread	= null
 
 	/** start the task in its own thread */
-	def start():Unit = synchronized {
-		aborted	= false
-		alive	= true
-		thread.start()
-	}
+	def start():Unit =
+		synchronized {
+			aborted	= false
+			alive	= true
+			thread.start()
+		}
 
 	/** request the task to abort */
-	def abort():Unit = synchronized {
-		if (!alive)	return
-		aborted	= true
-	}
+	def abort():Unit =
+		synchronized {
+			if (!alive)	return
+			aborted	= true
+		}
 
 	/** start another task and request this one to stop */
-	def replace(task:Task):Unit = synchronized {
-		task.start(thread)
-		abort()
-	}
+	def replace(task:Task):Unit =
+		synchronized {
+			task.start(thread)
+			abort()
+		}
 
 	/** for use within the task */
-	protected def check():Unit = synchronized {
-		if (aborted)	throw new AbortedException
-	}
+	protected def check():Unit =
+		synchronized {
+			if (aborted)	throw new AbortedException
+		}
 
 	/** this method does the real work, implement in subclasses */
-	protected def execute()
+	protected def execute():Unit
 
 	/** optionally waits until another Task has finished and start this Task */
-	private def start(waitFor:Thread):Unit = synchronized {
-		this.waitFor	= waitFor
-		start()
-	}
+	private def start(waitFor:Thread):Unit =
+		synchronized {
+			this.waitFor	= waitFor
+			start()
+		}
 
 	/** executes this Task, but waits until a Task to be replaced is finished before */
-	private def run() {
+	private def run():Unit	= {
 		if (maybeWaitForReplaced()) {
 			execute()
 		}

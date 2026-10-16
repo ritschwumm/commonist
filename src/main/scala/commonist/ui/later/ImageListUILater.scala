@@ -10,28 +10,23 @@ import commonist.ui.ImageListUI
 
 /** wraps a ImageListUI's methods in SwingUtilities.invokeAndWait */
 final class ImageListUILater(ui:ImageListUI) {
-	def clear() {
-		edtWait {
+	def clear():Unit	=
+		edt {
 			ui.clear()
-		}
-	}
+		}()
 
-	def add(file:File, thumbnail:Option[Icon], thumbnailMaxSize:Int) {
-		edtWait {
-			ui add (file, thumbnail, thumbnailMaxSize)
-		}
-	}
+	def add(file:File, thumbnail:Option[Icon], thumbnailMaxSize:Int):Unit	=
+		edt {
+			ui.add(file, thumbnail, thumbnailMaxSize)
+		}()
 
-	def updateSelectStatus() {
-		edtWait {
-			ui updateSelectStatus ()
-		}
-	}
+	def updateSelectStatus():Unit	=
+		edt {
+			ui .updateSelectStatus ()
+		}()
 
-	def uploadFinished(file:File, success:Boolean) {
-		edtWait {
-			ui uploadFinished (file, success)
-		}
-	}
-
+	def uploadFinished(file:File, success:Boolean):Unit	=
+		edt {
+			ui.uploadFinished(file, success)
+		}()
 }

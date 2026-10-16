@@ -9,13 +9,13 @@ final class StatusUI extends JProgressBar(SwingConstants.HORIZONTAL) {
 	setStringPainted(true)
 
 	/** changes the upload progressbar to indeterminate state */
-	def indeterminate(messageKey:String, data:Object*) {
+	def indeterminate(messageKey:String, data:Object*):Unit	= {
 		setIndeterminate(true)
 		setString(Messages.message(messageKey, data:_*))
 	}
 
 	/** changes the upload progressbar to determinate state */
-	def determinate(messageKey:String, value:Int, maximum:Int, data:Object*) {
+	def determinate(messageKey:String, value:Int, maximum:Int, data:Object*):Unit	= {
 		setIndeterminate(false)
 		setString(Messages.message(messageKey, data:_*))
 		setMaximum(maximum)
@@ -23,7 +23,7 @@ final class StatusUI extends JProgressBar(SwingConstants.HORIZONTAL) {
 	}
 
 	/** changes the upload progressbar to determinate state */
-	def halt(messageKey:String, data:Object*) {
+	def halt(messageKey:String, data:Object*):Unit	= {
 		setIndeterminate(false)
 		setString(Messages.message(messageKey, data:_*))
 		setMaximum(0)

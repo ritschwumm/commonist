@@ -1,3 +1,10 @@
+1.11.0	03nov21
+	change		various code cleanups
+	change		removed dependency on macify, use builtin methods instead
+	change		removed webstart support
+	change		requires java 11 now
+	change		update scala, sbt and dependencies
+
 1.10.0	02jan19
 	feature		support displaying TIFF thumbnails courtesy of don-vip
 	feature		included french translation courtesy of tbertels

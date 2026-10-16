@@ -10,7 +10,7 @@ import commonist.util.UIUtil2
 
 /** action events this UI sends */
 trait MainWindowCallback {
-	def quit()
+	def quit():Unit
 }
 
 /** the application window */
@@ -22,23 +22,23 @@ final class MainWindow(
 	//------------------------------------------------------------------------------
 	//## panels
 
-	private val commonPanel	= new JPanel
+	private val commonPanel = new JPanel
 	commonPanel setLayout	new BorderLayout
-	commonPanel add	(commonUI,		BorderLayout.NORTH)
-	commonPanel add	(directoryUI,	BorderLayout.CENTER)
+	commonPanel.add(commonUI,		BorderLayout.NORTH)
+	commonPanel.add(directoryUI,	BorderLayout.CENTER)
 
 	private val mainSplit	= new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, commonPanel, imageListUI)
 	mainSplit.setResizeWeight(0)
 
-	private val	uploadPanel	= new JPanel
+	private val uploadPanel = new JPanel
 	uploadPanel setLayout	new BorderLayout
-	uploadPanel add	(statusUI,	BorderLayout.CENTER)
-	uploadPanel add	(uploadUI,	BorderLayout.EAST)
+	uploadPanel.add(statusUI,	BorderLayout.CENTER)
+	uploadPanel.add(uploadUI,	BorderLayout.EAST)
 
-	private val	windowPanel	= new JPanel
+	private val windowPanel = new JPanel
 	windowPanel setLayout	new BorderLayout
-	windowPanel add	(mainSplit, 	BorderLayout.CENTER)
-	windowPanel add	(uploadPanel,	BorderLayout.SOUTH)
+	windowPanel.add(mainSplit,		BorderLayout.CENTER)
+	windowPanel.add(uploadPanel,	BorderLayout.SOUTH)
 
 	//------------------------------------------------------------------------------
 	//## frame
@@ -48,7 +48,7 @@ final class MainWindow(
 	window.getContentPane add windowPanel
 	window.pack()
 	window setSize new Dimension(800, 600)
-	window setDefaultCloseOperation WindowConstants.DO_NOTHING_ON_CLOSE	// EXIT_ON_CLOSE or DISPOSE_ON_CLOSE
+	window setDefaultCloseOperation WindowConstants.DO_NOTHING_ON_CLOSE // EXIT_ON_CLOSE or DISPOSE_ON_CLOSE
 
 	window setLocationRelativeTo null
 
@@ -59,12 +59,12 @@ final class MainWindow(
 	}
 
 	/** should be called after loadProperties */
-	def makeVisible() {
+	def makeVisible():Unit	= {
 		window.setVisible(true)
 	}
 
 	/** call when ImageUIs have been added or removed */
-	def revalidate() {
+	def revalidate():Unit	= {
 		mainSplit.revalidate()
 	}
 
@@ -72,21 +72,21 @@ final class MainWindow(
 	//## Settings
 
 	/** loads this UI's state from the properties */
-	def loadSettings(settings:Settings) {
+	def loadSettings(settings:Settings):Unit	= {
 		val bounds	= window.getBounds
-		bounds.x		= settings getIntOrElse ("mainUI.x", bounds.x)
-		bounds.y		= settings getIntOrElse ("mainUI.y", bounds.y)
-		bounds.width	= settings getIntOrElse ("mainUI.w", bounds.width)
-		bounds.height	= settings getIntOrElse ("mainUI.h", bounds.height)
-        UIUtil2 limitAndChangeBounds (window, bounds)
+		bounds.x		= settings.getIntOrElse("mainUI.x", bounds.x)
+		bounds.y		= settings.getIntOrElse("mainUI.y", bounds.y)
+		bounds.width	= settings.getIntOrElse("mainUI.w", bounds.width)
+		bounds.height	= settings.getIntOrElse("mainUI.h", bounds.height)
+		UIUtil2.limitAndChangeBounds(window, bounds)
 	}
 
 	/** stores this UI's state in the properties */
-	def saveSettings(settings:Settings) {
+	def saveSettings(settings:Settings):Unit	= {
 		val bounds	= window.getBounds
-		settings setInt ("mainUI.x",	bounds.x)
-		settings setInt ("mainUI.y",	bounds.y)
-		settings setInt ("mainUI.w",	bounds.width)
-		settings setInt ("mainUI.h",	bounds.height)
+		settings.setInt("mainUI.x", bounds.x)
+		settings.setInt("mainUI.y", bounds.y)
+		settings.setInt("mainUI.w", bounds.width)
+		settings.setInt("mainUI.h", bounds.height)
 	}
 }

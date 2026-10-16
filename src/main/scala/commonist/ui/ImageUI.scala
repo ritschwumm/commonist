@@ -5,8 +5,8 @@ import java.awt.{ List => _, _ }
 import java.awt.event._
 import javax.swing._
 
-import scutil.base.implicits._
 import scutil.core.implicits._
+import scutil.jdk.implicits._
 import scutil.lang._
 import scutil.gui.implicits._
 import scutil.gui.GridBagDSL._
@@ -18,7 +18,7 @@ import commonist.mediawiki._
 import commonist.util._
 
 trait ImageUICallback {
-	def updateSelectStatus()
+	def updateSelectStatus():Unit
 }
 
 /** a data editor with a thumbnail preview for an image File */
@@ -71,20 +71,20 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	coordinatesEditor setToolTipText 	(Messages text "image.coordinates.tooltip")
 	categoriesEditor  setToolTipText	(Messages text "image.categories.tooltip")
 
-	UIUtil2 scrollVisibleOnFocus (uploadEditor,			this)
-	UIUtil2 scrollVisibleOnFocus (nameEditor,			this)
-	UIUtil2 scrollVisibleOnFocus (descriptionEditor,	this)
-	UIUtil2 scrollVisibleOnFocus (dateEditor,			this)
-	UIUtil2 scrollVisibleOnFocus (coordinatesEditor,	this)
-	UIUtil2 scrollVisibleOnFocus (headingEditor,		this)
-	UIUtil2 scrollVisibleOnFocus (categoriesEditor,		this)
+	UIUtil2.scrollVisibleOnFocus(uploadEditor,			this)
+	UIUtil2.scrollVisibleOnFocus(nameEditor,			this)
+	UIUtil2.scrollVisibleOnFocus(descriptionEditor,	this)
+	UIUtil2.scrollVisibleOnFocus(dateEditor,			this)
+	UIUtil2.scrollVisibleOnFocus(coordinatesEditor,	this)
+	UIUtil2.scrollVisibleOnFocus(headingEditor,		this)
+	UIUtil2.scrollVisibleOnFocus(categoriesEditor,		this)
 
 	private val descriptionScroll	=
-			new JScrollPane(
-				descriptionEditor,
-				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED
-			)
+		new JScrollPane(
+			descriptionEditor,
+			ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED
+		)
 
 //		setBorder(
 //			BorderFactory.createCompoundBorder(
@@ -104,31 +104,31 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 
 	// labels and editors
 
-	add(uploadLabel,		GBC pos (0,0) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(uploadEditor,		GBC pos (1,0) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
+	add(uploadLabel,		GBC .pos(0,0) .size(1,1) .weight(0,0) .anchor(EAST)			.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(uploadEditor,		GBC .pos(1,0) .size(1,1) .weight(1,0) .anchor(WEST)			.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(nameLabel,			GBC pos (0,1) size (1,1) weight (0,0) anchor EAST		fill NONE		insetsTLBR (0,4,0,4))
-	add(nameEditor,			GBC pos (1,1) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL	insetsTLBR (0,0,0,0))
+	add(nameLabel,			GBC .pos(0,1) .size(1,1) .weight(0,0) .anchor(EAST)			.fill(NONE)			.insetsTLBR(0,4,0,4))
+	add(nameEditor,			GBC .pos(1,1) .size(1,1) .weight(1,0) .anchor(WEST)			.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(descriptionLabel, 	GBC pos (0,2) size (1,1) weight (0,0) anchor NORTHEAST	fill NONE 		insetsTLBR (0,4,0,4))
-	add(descriptionScroll,	GBC pos (1,2) size (1,1) weight (1,1) anchor WEST		fill BOTH 		insetsTLBR (0,0,0,0))
+	add(descriptionLabel, 	GBC .pos(0,2) .size(1,1) .weight(0,0) .anchor(NORTHEAST)	.fill(NONE) 		.insetsTLBR(0,4,0,4))
+	add(descriptionScroll,	GBC .pos(1,2) .size(1,1) .weight(1,1) .anchor(WEST)			.fill(BOTH) 			.insetsTLBR(0,0,0,0))
 
-	add(dateLabel, 			GBC pos (0,3) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
-	add(dateEditor,			GBC pos (1,3) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
+	add(dateLabel, 			GBC .pos(0,3) .size(1,1) .weight(0,0) .anchor(EAST)			.fill(NONE) 		.insetsTLBR(0,4,0,4))
+	add(dateEditor,			GBC .pos(1,3) .size(1,1) .weight(1,0) .anchor(WEST)			.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(coordinatesLabel, 	GBC pos (0,4) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
-	add(coordinatesEditor,	GBC pos (1,4) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
+	add(coordinatesLabel, 	GBC .pos(0,4) .size(1,1) .weight(0,0) .anchor(EAST)			.fill(NONE) 		.insetsTLBR(0,4,0,4))
+	add(coordinatesEditor,	GBC .pos(1,4) .size(1,1) .weight(1,0) .anchor(WEST)			.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(headingLabel, 		GBC pos (0,5) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
-	add(headingEditor,		GBC pos (1,5) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
+	add(headingLabel, 		GBC .pos(0,5) .size(1,1) .weight(0,0) .anchor(EAST)			.fill(NONE) 		.insetsTLBR(0,4,0,4))
+	add(headingEditor,		GBC .pos(1,5) .size(1,1) .weight(1,0) .anchor(WEST)			.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
-	add(categoriesLabel,	GBC pos (0,6) size (1,1) weight (0,0) anchor EAST		fill NONE 		insetsTLBR (0,4,0,4))
-	add(categoriesEditor,	GBC pos (1,6) size (1,1) weight (1,0) anchor WEST		fill HORIZONTAL insetsTLBR (0,0,0,0))
+	add(categoriesLabel,	GBC .pos(0,6) .size(1,1) .weight(0,0) .anchor(EAST)			.fill(NONE) 		.insetsTLBR(0,4,0,4))
+	add(categoriesEditor,	GBC .pos(1,6) .size(1,1) .weight(1,0) .anchor(WEST)			.fill(HORIZONTAL)	.insetsTLBR(0,0,0,0))
 
 	// state and image
 
-	add(stateView,			GBC pos (2,0) size (1,1) weight (0,0) anchor CENTER		fill NONE 		insetsTLBR (0,4,0,4))
-	add(imageView,			GBC pos (2,1) size (1,6) weight (0,0) anchor SOUTHWEST	fill NONE 		insetsTLBR (0,4,0,4))
+	add(stateView,			GBC .pos(2,0) .size(1,1) .weight (0,0) .anchor(CENTER)		.fill(NONE) 		.insetsTLBR(0,4,0,4))
+	add(imageView,			GBC .pos(2,1) .size(1,6) .weight (0,0) .anchor(SOUTHWEST)	.fill(NONE) 		.insetsTLBR(0,4,0,4))
 
 	//------------------------------------------------------------------------------
 	//## wiring
@@ -149,16 +149,16 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	//------------------------------------------------------------------------------
 	//## init
 
-	imageView setToolTipText (Messages message ("image.tooltip", file.getName, TextUtil2.human(file.length)))
+	imageView setToolTipText Messages.message("image.tooltip", file.getName, TextUtil2.human(file.length))
 	imageView setIcon		icon.orNull
-	imageView setText		(icon cata (Messages text "image.nothumb", constant("")))
+	imageView setText		icon.cata(Messages text "image.nothumb", constant(""))
 
 	// BETTER move unparsers and parsers together
 
 	private val	exif		= EXIF extract file
-	private val exifDate	= exif.date		cata ("", _ format "yyyy-MM-dd HH:mm:ss")
-	private val exifGPS		= exif.gps		cata ("", it => it.latitude.toString + "," + it.longitude.toString)
-	private val exifHeading	= exif.heading	cata ("", _.toString)
+	private val exifDate	= exif.date		.cata ("", _ format "yyyy-MM-dd HH:mm:ss")
+	private val exifGPS		= exif.gps		.cata ("", it => it.latitude.toString + "," + it.longitude.toString)
+	private val exifHeading	= exif.heading	.cata ("", _.toString)
 	private val exifDesc	= exif.description getOrElse ""
 	private val fixedName	= Filename fix file.getName
 
@@ -181,16 +181,16 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 	def isUploadSelected():Boolean = uploadEditor.isSelected
 
 	/** sets whether this file should be uploaded */
-	def setUploadSelected(selected:Boolean) { uploadEditor.setSelected(selected) }
+	def setUploadSelected(selected:Boolean):Unit	= { uploadEditor.setSelected(selected) }
 
 	def getUploadSuccessful:Option[Boolean] = uploadSuccessful
 
-	def setUploadSuccessful(uploadSuccessful:Option[Boolean]) {
+	def setUploadSuccessful(uploadSuccessful:Option[Boolean]):Unit	= {
 		this.uploadSuccessful = uploadSuccessful
 		updateStateView()
 	}
 
-	private def updateStateView() {
+	private def updateStateView():Unit	= {
 		val	label	=
 				Messages text (
 					uploadSuccessful match {
@@ -215,7 +215,7 @@ final class ImageUI(file:File, icon:Option[Icon], thumbnailMaxSize:Int, programH
 				categoriesEditor.getText
 			)
 
-	private def displayFullImage() {
-		FullImageWindow display (file, programHeading, programIcon)
+	private def displayFullImage():Unit	= {
+		FullImageWindow.display(file, programHeading, programIcon)
 	}
 }
